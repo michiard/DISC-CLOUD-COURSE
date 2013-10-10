@@ -1,0 +1,15 @@
+\beamer@endinputifotherversion {3.10pt}
+\select@language {english}
+\beamer@sectionintoc {1}{Sources and Acks}{2}{0}{1}
+\beamer@sectionintoc {2}{Introduction and Motivations}{3}{0}{2}
+\beamer@sectionintoc {3}{Key Principles}{7}{0}{3}
+\beamer@sectionintoc {4}{The Programming Model}{17}{0}{4}
+\beamer@sectionintoc {5}{Basic Design Patterns}{29}{0}{5}
+\beamer@subsectionintoc {5}{1}{Local Aggregation}{33}{0}{5}
+\beamer@subsectionintoc {5}{2}{Pairs and Stripes}{52}{0}{5}
+\beamer@subsectionintoc {5}{3}{Order Inversion}{60}{0}{5}
+\beamer@sectionintoc {6}{Graph Algorithms [Optional]}{66}{0}{6}
+\beamer@subsectionintoc {6}{1}{Preliminaries}{67}{0}{6}
+\beamer@subsectionintoc {6}{2}{Breadth-First Search}{69}{0}{6}
+\beamer@subsectionintoc {6}{3}{PageRank}{76}{0}{6}
+\beamer@sectionintoc {7}{References}{83}{0}{7}

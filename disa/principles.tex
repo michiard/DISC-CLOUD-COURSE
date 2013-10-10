@@ -1,0 +1,304 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{
+    \begin{beamerboxesrounded}[shadow=true]{}
+      \begin{center}
+      Scale out, not up!        
+      \end{center}
+    \end{beamerboxesrounded}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+  \item \textbf{For data-intensive workloads, a large number of commodity
+    servers is preferred over a small number of high-end servers}
+    \begin{itemize}
+    \item Cost of super-computers is not linear
+    \item But datacenter efficiency is a difficult problem to solve
+      \cite{barroso09, hamilton09}
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Some numbers ($\sim$ 2012):}
+    \begin{itemize}
+    \item Data processed by Google every day: 100+ PB
+    \item Data processed by Facebook every day: 10+ PB
+    \end{itemize}
+
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Implications of Scaling Out}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+  \item \textbf{Processing data is quick, I/O is very slow}
+    \begin{itemize}
+    \item 1 HDD = 75 MB/sec
+    \item 1000 HDDs = 75 GB/sec
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Sharing vs. Shared nothing}:
+    \begin{itemize}
+    \item Sharing: manage a common/global state
+    \item Shared nothing: {\color{red} independent} entities, no common state
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Sharing is difficult}:
+    \begin{itemize}
+    \item Synchronization, deadlocks
+    \item Finite bandwidth to access data from SAN
+    \item Temporal dependencies are complicated (restarts)
+    \end{itemize}
+  \end{itemize}
+
+
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{
+    \begin{beamerboxesrounded}[shadow=true]{}
+      \begin{center}
+        Failures are the norm, not the exception
+      \end{center}
+    \end{beamerboxesrounded}
+  }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \begin{itemize}
+  \item LALN data [DSN 2006]
+    \begin{itemize}
+    \item Data for ~ 5000 machines, for 9 years
+    \item Hardware: 60\%, Software: 20\%, Network 5\%
+    \end{itemize}
+
+\vspace{20pt}
+
+  \item DRAM error analysis [Sigmetrics 2009]
+    \begin{itemize}
+    \item Data for 2.5 years
+    \item 8\% of DIMMs affected by errors
+    \end{itemize}
+
+\vspace{20pt}
+
+  \item Disk drive failure analysis [FAST 2007]
+    \begin{itemize}
+    \item Utilization and temperature major causes of failures
+    \end{itemize}
+
+\vspace{20pt}
+
+  \item Amazon Web Service(s) failures [Several!]
+    \begin{itemize}
+    \item Cascading effect
+    \end{itemize}
+
+  \end{itemize}
+  
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Implications of Failures}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+  \item \textbf{Failures are part of everyday life}
+    \begin{itemize}
+    \item Mostly due to the scale and shared environment
+    \end{itemize}
+
+\vspace{20pt}
+
+  \item \textbf{Sources of Failures}
+    \begin{itemize}
+    \item Hardware / Software
+    \item Electrical, Cooling, ...
+    \item Unavailability of a resource due to overload
+    \end{itemize}
+
+\vspace{20pt} 
+
+  \item \textbf{Failure Types}
+    \begin{itemize}
+    \item Permanent
+    \item Transient
+    \end{itemize}
+  \end{itemize}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{
+    \begin{beamerboxesrounded}[shadow=true]{}
+      \begin{center}
+        Move Processing to the Data
+      \end{center}
+    \end{beamerboxesrounded}
+  }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \begin{itemize}
+  \item \textbf{Drastic departure from high-performance computing model}
+    \begin{itemize}
+    \item HPC: distinction between processing nodes and storage nodes
+    \item HPC: CPU intensive tasks
+    \end{itemize}
+
+\vspace{20pt}
+
+  \item \textbf{Data intensive workloads}
+    \begin{itemize}
+    \item Generally not processor demanding
+    \item The network becomes the bottleneck
+    \item MapReduce assumes processing and storage nodes to be
+      collocated
+    \item[$\to$] {\color{red}\textbf{Data Locality Principle}}
+    \end{itemize}
+
+    \vspace{20pt}
+    
+  \item \textbf{Distributed filesystems are necessary}
+  \end{itemize}
+} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{
+    \begin{beamerboxesrounded}[shadow=true]{}
+      \begin{center}
+        Process Data Sequentially and Avoid Random Access
+      \end{center}
+    \end{beamerboxesrounded}
+  }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \begin{itemize}
+  \item \textbf{Data intensive workloads}
+    \begin{itemize}
+    \item Relevant datasets are too large to fit in memory
+    \item Such data resides on disks
+    \end{itemize}
+
+\vspace{20pt}
+
+  \item \textbf{Disk performance is a bottleneck}
+    \begin{itemize}
+    \item \textbf{Seek times} for random disk access are \textbf{the problem}
+      \begin{itemize}
+    \item Example: 1 TB DB with $10^{10}$ 100-byte records. Updates on
+      1\% requires 1 month, reading and rewriting the whole DB would
+      take 1 day\footnote{From a post by Ted Dunning on the Hadoop mailing list}
+      \end{itemize}
+    \item Organize computation for sequential reads
+   \end{itemize}
+
+  \end{itemize}
+
+} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Implications of Data Access Patterns}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+  \item \textbf{MapReduce is designed for:} 
+    \begin{itemize}
+    \item {\color{red}\textbf{Batch processing}}
+    \item involving  (mostly) {\color{red}\textbf{full scans}} of the data
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item\textbf{ Typically, data is collected ``elsewhere'' and copied to the
+    distributed filesystem}
+    \begin{itemize}
+      \item E.g.: Apache Flume, Hadoop Sqoop, $\cdots$
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Data-intensive applications}
+    \begin{itemize}
+    \item Read and process the whole Web (e.g. PageRank)
+    \item Read and process the whole Social Graph (e.g. LinkPrediction, a.k.a. ``friend suggest'')
+    \item Log analysis (e.g. Network traces, Smart-meter data, $\cdots$)
+    \end{itemize}
+
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{
+    \begin{beamerboxesrounded}[shadow=true]{}
+      \begin{center}
+        Hide System-level Details
+      \end{center}
+    \end{beamerboxesrounded}
+  }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \begin{itemize}
+  \item \textbf{Separate the \textit{what} from the \textit{how}}
+    \begin{itemize}
+    \item MapReduce abstracts away the ``distributed'' part of the system
+    \item Such details are handled by the framework
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item {\color{red}\textbf{BUT: }}\textbf{In-depth knowledge of the framework is key}
+    \begin{itemize}
+    \item Custom data reader/writer
+    \item Custom {\color{red}data partitioning}
+    \item Memory utilization
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Auxiliary components}
+    \begin{itemize}
+    \item Hadoop Pig
+    \item Hadoop Hive
+    \item Cascading/Scalding
+    \item ... and many many more!
+    \end{itemize}
+
+  \end{itemize}
+} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{
+    \begin{beamerboxesrounded}[shadow=true]{}
+      \begin{center}
+        Seamless Scalability
+      \end{center}
+    \end{beamerboxesrounded}
+  }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  \begin{itemize}
+  \item \textbf{We can define scalability along two dimensions}
+    \begin{itemize}
+    \item In terms of data: given twice the amount of data, the same
+      algorithm should take no more than twice as long to run
+    \item In terms of resources: given a cluster twice the size, the
+      same algorithm should take no more than half as long to run
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Embarrassingly parallel problems}
+    \begin{itemize}
+    \item Simple definition: independent ({\color{red}shared nothing})
+      computations on fragments of the dataset
+    \item How to to decide if a problem is embarrassingly
+      parallel or not?
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{MapReduce is a first attempt, not the final answer}
+  \end{itemize}
+} 

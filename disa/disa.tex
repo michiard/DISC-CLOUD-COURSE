@@ -1,0 +1,170 @@
+\documentclass{beamer}
+
+\usepackage[lined,ruled]{algorithm2e}
+\usepackage{subfigure}
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{times}
+\usepackage[T1]{fontenc} 
+\usepackage{color}
+
+\usetheme[secheader]{Boadilla}
+\usefonttheme[onlylarge]{structurebold}
+\setbeamerfont*{frametitle}{size=\normalsize,series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{mini frames}[box]
+\setbeamertemplate{sections/subsections in toc}[square]
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamertemplate{bibliography item}[text]
+
+\setbeamercolor{lightorange}{fg=black,bg=orange!40}
+\setbeamercolor{lightblue}{fg=black,bg=blue!30}
+
+\newenvironment{colorblock}[2]
+{\setbeamercolor{item}{fg=#1,bg=#1}\begin{beamerboxesrounded}[upper=#1,lower=#2,shadow=true]}
+  {\end{beamerboxesrounded}}
+
+
+
+% Setup TikZ
+
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\tikzstyle{block}=[draw opacity=0.7,line width=1.4cm]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{observation}[theorem]{Observation} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Scalable Algorithm Design}
+\subtitle{The MapReduce Programming Model}
+\author{Pietro Michiardi}
+\institute{Eurecom}
+\date
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Sources and Acks}
+
+\begin{frame}
+  \begin{itemize}
+    \item Jimmy Lin and Chris Dyer, ``Data-Intensive Text Processing with MapReduce,'' Morgan \& Claypool Publishers, 2010. \url{http://lintool.github.io/MapReduceAlgorithms/}
+
+    \item[]
+
+    \item Tom White, ``Hadoop, The Definitive Guide,'' O'Reilly / Yahoo Press, 2012
+
+    \item[]
+
+    \item Anand Rajaraman, Jeffrey D. Ullman, Jure Leskovec, ``Mining of Massive Datasets'', Cambridge University Press, 2013
+  \end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction and Motivations}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Introduction and Motivations}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+\input{./introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Key Principles}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Key Principles}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+\input{./principles}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Programming Model}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{The Programming Model}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+\input{./programming_model}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Basic Design Patterns}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Basic Design Patterns}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+\input{./design_patterns.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Graph Algorithms [Optional]}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Graph Algorithms [Optional]}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+\input{./graph_algorithms}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{References}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{References}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{References}
+\bibliographystyle{plain} 
+\bibliography{references} 
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
