@@ -11,7 +11,7 @@
 
   \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.5]{./Figures/functional}
+    \includegraphics[scale=0.4]{./Figures/functional}
     \caption{Illustration of \emph{map} and \emph{fold}.}
     \label{fig:functional}
   \end{figure}
@@ -166,7 +166,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
   \item \textbf{The programmer defines a mapper and a reducer as
-      follows\footnote{We use the convention $[ \cdots ]$ to denote a list.}}:
+      follows}\footnote{We use the convention $[ \cdots ]$ to denote a list.}\footnote{Pedices indicate different data types.}:
     \begin{itemize}
     \item map: $(k_1,v_1) \to [(k_2,v_2)]$
     \item reduce: $(k_2,[v_2]) \to [(k_3,v_3)]$
@@ -219,17 +219,6 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{A Simplified view of MapReduce}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.25]{./Figures/simple_MR}
-    \caption{Mappers are applied to all input key-value pairs, to generate an arbitrary number of intermediate pairs. Reducers are applied to all intermediate values associated with the same intermediate key. Between the map and reduce phase lies a barrier that involves a large distributed sort and group by.}
-    \label{fig:simple_MR}
-  \end{figure}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{``Hello World'' in MapReduce}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{figure}[h]
@@ -240,6 +229,15 @@
   \end{figure}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{figure}[h]
+    \centering
+    \includegraphics[scale=0.23]{./Figures/simple_MR}
+    \label{fig:simple_MR}
+  \end{figure}
+}
 
 \frame {\frametitle{``Hello World'' in MapReduce}
   \begin{itemize}
