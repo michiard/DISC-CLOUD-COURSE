@@ -267,14 +267,14 @@
 
   \item \textbf{Input:}
     \begin{itemize}
-    \item Key-value pairs: (docid, doc) stored on the distributed filesystem
-    \item docid: unique identifier of a document
-    \item doc: is the text of the document itself
+    \item Key-value pairs: (offset, line) of a file stored on the distributed filesystem
+    \item a: unique identifier of a line offset
+    \item l: is the text of the line itself
     \end{itemize}
 
   \item \textbf{Mapper:}
     \begin{itemize}
-    \item Takes an input key-value pair, tokenize the document 
+    \item Takes an input key-value pair, tokenize the line 
     \item Emits intermediate key-value pairs: the word is the key and
       the integer is the value
     \end{itemize}
