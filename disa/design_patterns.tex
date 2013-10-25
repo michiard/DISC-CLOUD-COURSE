@@ -80,7 +80,7 @@
 
     \vspace{20pt}
 
-  \item \textbf{Basic design patterns\footnote{You will see them in action during the DAY2 laboratory session.}}
+  \item \textbf{Basic design patterns\footnote{You will see them in action during the laboratory sessions.}}
     \begin{itemize}
     \item Local Aggregation
     \item Pairs and Stripes
@@ -129,57 +129,12 @@
   \end{itemize}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Combiners}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \begin{itemize}
-  \item \textbf{Combiners are a general mechanism to reduce the amount
-      of intermediate data}
-    \begin{itemize}
-    \item They could be thought of as ``mini-reducers''
-    \end{itemize}
-
-    \vspace{20pt}
-
-  \item \textbf{Back to our running example: word count}
-    \begin{itemize}
-    \item Combiners aggregate term counts across documents processed
-      by each map task
-    \item If combiners take advantage of all opportunities for local
-      aggregation we have at most $m \times V$ intermediate key-value
-      pairs
-      \begin{itemize}
-      \item $m$: number of mappers
-      \item $V$: number of unique terms in the collection
-      \end{itemize}
-    \item Note: due to Zipfian nature of term distributions, not all
-      mappers will see all terms
-    \end{itemize}
-    
-  \end{itemize}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Combiners: an illustration}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   \begin{center}
-   \includegraphics[scale=0.4]{./Figures/combiners}
-    \end{center}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Word Counting in MapReduce}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   \begin{center}
-   \includegraphics[scale=0.5]{./Figures/word_count}
-    \end{center}
-}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{In-Mapper Combiners}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
-  \item \textbf{In-Mapper Combiners, a possible improvement}
+  \item \textbf{In-Mapper Combiners, a possible improvement over vanilla Combiners}
     \begin{itemize}
     \item Hadoop does not guarantee combiners to be executed
     \end{itemize}
@@ -326,152 +281,6 @@
   \end{itemize}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Algorithmic correctness with local aggregation}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \begin{itemize}
-  \item \textbf{The use of combiners must be thought carefully}
-    \begin{itemize}
-    \item In Hadoop, they are optional: the correctness of the
-      algorithm cannot depend on computation (or even execution) of
-      the combiners
-    \end{itemize}
-
-    \vspace{20pt}
-
-  \item \textbf{In MapReduce, the reducer input key-value type must match the
-      mapper output key-value type}
-    \begin{itemize}
-    \item Hence, for combiners, both input and output key-value types
-      must match the output key-value type of the mapper
-    \end{itemize}
-
-    \vspace{20pt}
-
-  \item \textbf{Commutative and Associative computations}
-    \begin{itemize}
-    \item This is a special case, which worked for word counting
-      \begin{itemize}
-      \item There the combiner code is actually the reducer code
-      \end{itemize}
-    \item In general, combiners and reducers are not interchangeable
-    \end{itemize}
-  \end{itemize}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Algorithmic Correctness: an Example}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \begin{itemize}
-  \item \textbf{Problem statement}
-    \begin{itemize}
-    \item We have a large dataset where input keys are strings and input
-      values are integers
-    \item We wish to compute the mean of all integers associated with
-      the same key
-      \begin{itemize}
-      \item In practice: the dataset can be a log from a website,
-        where the keys are user IDs and values are some measure of activity
-      \end{itemize}
-    \end{itemize}
-
-    \vspace{20pt}
-
-  \item \textbf{Next, a baseline approach}
-    \begin{itemize}
-    \item We use an \textbf{identity mapper}, which groups and sorts
-      appropriately input key-value pairs
-    \item Reducers keep track of running sum and the number of
-      integers encountered
-    \item The mean is emitted as the output of the reducer, with the
-      input string as the key
-    \end{itemize}
-
-    \vspace{20pt}
-
-  \item \textbf{Inefficiency problems in the shuffle phase}
-  \end{itemize}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Example: basic way to compute the mean of values}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   \begin{center}
-   \includegraphics[scale=0.4]{./Figures/average_v1}
-    \end{center}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Algorithmic Correctness}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \begin{itemize}
-  \item \textbf{Note: operations are not distributive}
-    \begin{itemize}
-    \item \texttt{Mean}(1,2,3,4,5) $\neq$
-      \texttt{Mean}(\texttt{Mean}(1,2), \texttt{Mean}(3,4,5))
-    \item Hence: a combiner cannot output partial means and hope that
-      the reducer will compute the correct final mean
-    \end{itemize}
-
-    \vspace{20pt}
-
-  \item \textbf{Next, a failed attempt at solving the problem}
-    \begin{itemize}
-    \item The combiner partially aggregates results by separating the
-      components to arrive at the mean
-    \item The sum and the count of elements are packaged into a pair
-    \item Using the same input string, the combiner emits the pair
-    \end{itemize}
-  \end{itemize}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Example: {\color{red}Wrong} use of combiners}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   \begin{center}
-   \includegraphics[scale=0.35]{./Figures/average_v2}
-    \end{center}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Algorithmic Correctness: an Example}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \begin{itemize}
-  \item \textbf{What's wrong with the previous approach?}
-    \begin{itemize}
-    \item {\color{red}Trivially}, the input/output keys are not
-      correct
-    \item Remember that combiners are optimizations, the algorithm
-      should work even when ``removing'' them
-    \end{itemize}
-
-    \vspace{20pt}
-
-  \item \textbf{Executing the code omitting the combiner phase}
-    \begin{itemize}
-    \item The output value type of the mapper is integer
-    \item The reducer expects to receive a list of integers
-    \item Instead, we make it expect a list of pairs
-    \end{itemize}
-
-    \vspace{20pt}
-    
-
-  \item \textbf{Next, a correct implementation of the combiner}
-    \begin{itemize}
-    \item Note: the reducer is similar to the combiner!
-    \item Exercise: verify the correctness
-    \end{itemize}
-  \end{itemize}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Example: {\color{red}Correct} use of combiners}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   \begin{center}
-   \includegraphics[scale=0.35]{./Figures/average_v3}
-    \end{center}
-}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Advanced technique}

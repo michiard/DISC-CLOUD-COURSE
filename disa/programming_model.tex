@@ -293,3 +293,208 @@
     \end{itemize}
   \end{itemize}
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Combiners}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+  \item \textbf{Combiners are a general mechanism to reduce the amount
+      of intermediate data}
+    \begin{itemize}
+    \item They could be thought of as ``mini-reducers''
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Back to our running example: word count}
+    \begin{itemize}
+    \item Combiners aggregate term counts across documents processed
+      by each map task
+    \item If combiners take advantage of all opportunities for local
+      aggregation we have at most $m \times V$ intermediate key-value
+      pairs
+      \begin{itemize}
+      \item $m$: number of mappers
+      \item $V$: number of unique terms in the collection
+      \end{itemize}
+    \item Note: due to Zipfian nature of term distributions, not all
+      mappers will see all terms
+    \end{itemize}
+    
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{A word of caution}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+  \item \textbf{The use of combiners must be thought carefully}
+    \begin{itemize}
+    \item In Hadoop, they are optional: the correctness of the
+      algorithm cannot depend on computation (or even execution) of
+      the combiners
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Combiners I/O types}
+    \begin{itemize}
+    \item Input: $(k_2, [v_2])$ [Same input as for Reducers]
+    \item Output: $[(k_2, v_2)]$ [Same output as for Mappers]
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Commutative and Associative computations}
+    \begin{itemize}
+    \item Reducer and Combiner code may be interchangeable (e.g. Word Count)
+    \item This is not true in the general case
+    \end{itemize}
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   \begin{center}
+   \includegraphics[scale=0.23]{./Figures/simple_MR_combiners}
+    \end{center}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Algorithmic Correctness: an Example}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+  \item \textbf{Problem statement}
+    \begin{itemize}
+    \item We have a large dataset where input keys are strings and input
+      values are integers
+    \item We wish to compute the mean of all integers associated with
+      the same key
+      \begin{itemize}
+      \item In practice: the dataset can be a log from a website,
+        where the keys are user IDs and values are some measure of activity
+      \end{itemize}
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Next, a baseline approach}
+    \begin{itemize}
+    \item We use an \textbf{identity mapper}, which groups and sorts
+      appropriately input key-value pairs
+    \item Reducers keep track of running sum and the number of
+      integers encountered
+    \item The mean is emitted as the output of the reducer, with the
+      input string as the key
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Inefficiency problems in the shuffle phase}
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Example: Computing the mean}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{algorithm}[H]
+\algrenewcommand\algorithmicfunction{\textbf{class}}
+\algrenewcommand\algorithmicprocedure{\textbf{method}}
+  \begin{algorithmic}[1]
+    \Function{Mapper}{}
+    \Procedure{Map}{string $t$, integer $r$}
+    \State $\textsc{Emit}(\textrm{string }t, \textrm{integer }r)$
+    \EndProcedure
+    \EndFunction
+  \end{algorithmic}
+
+  \begin{algorithmic}[1]
+    \Function{Reducer}{}
+    \Procedure{Reduce}{string $t$, integers $[ r_1, r_2, \ldots ]$}
+    \State $sum \gets 0$
+    \State $cnt \gets 0$
+    \ForAll{$ \textrm{integer }r \in \textrm{integers }[ r_1, r_2, \ldots ]$}
+    \State $sum \gets sum + r$
+    \State $cnt \gets cnt + 1$
+    \EndFor
+    \State $r_{avg} \gets sum/cnt$
+    \State $\textsc{Emit}(\textrm{string }t, \textrm{integer } r_{avg})$
+    \EndProcedure
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Algorithmic Correctness}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+  \item \textbf{Note: operations are not distributive}
+    \begin{itemize}
+    \item \texttt{Mean}(1,2,3,4,5) $\neq$
+      \texttt{Mean}(\texttt{Mean}(1,2), \texttt{Mean}(3,4,5))
+    \item Hence: a combiner cannot output partial means and hope that
+      the reducer will compute the correct final mean
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Rule of thumb:}
+    \begin{itemize}
+      \item Combiners are optimizations, the algorithm should work even when ``removing'' them
+    \end{itemize}   
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Example: Computing the mean with combiners}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{algorithm}[H]
+\algrenewcommand\algorithmicfunction{\textbf{class}}
+\algrenewcommand\algorithmicprocedure{\textbf{method}}
+\begin{tiny}
+  \begin{algorithmic}[1]
+    \Function{Mapper}{}
+    \Procedure{Map}{string $t$, integer $r$}
+    \State $\textsc{Emit}(\textrm{string }t, \textrm{pair }(r, 1))$
+    \EndProcedure
+    \EndFunction
+  \end{algorithmic}
+
+  \begin{algorithmic}[1]
+    \Function{Combiner}{}
+    \Procedure{Combine}{string $t$, pairs $[ (s_1, c_1), (s_2, c_2) \ldots ]$}
+    \State $sum \gets 0$
+    \State $cnt \gets 0$
+    \ForAll{$ \textrm{pair }(s, c) \in \textrm{pairs }[ (s_1, c_1), (s_2, c_2) \ldots ]$}
+    \State $sum \gets sum + s$
+    \State $cnt \gets cnt + c$
+    \EndFor
+    \State $\textsc{Emit}(\textrm{string }t, \textrm{pair }(sum, cnt))$
+    \EndProcedure
+    \EndFunction
+  \end{algorithmic}
+
+  \begin{algorithmic}[1]
+    \Function{Reducer}{}
+    \Procedure{Reduce}{string $t$, pairs $[ (s_1, c_1), (s_2, c_2) \ldots ]$}
+    \State $sum \gets 0$
+    \State $cnt \gets 0$
+    \ForAll{$ \textrm{pair }(s, c) \in \textrm{pairs }[ (s_1, c_1), (s_2, c_2) \ldots ]$}
+    \State $sum \gets sum + s$
+    \State $cnt \gets cnt + c$
+    \EndFor
+    \State $r_{avg} \gets sum/cnt$
+    \State $\textsc{Emit}(\textrm{string }t, \textrm{integer } r_{avg})$
+    \EndProcedure
+    \EndFunction
+  \end{algorithmic}
+\end{tiny}
+\end{algorithm}
+
+}
+
