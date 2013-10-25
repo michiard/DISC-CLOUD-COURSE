@@ -221,12 +221,35 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{``Hello World'' in MapReduce}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \begin{figure}[h]
-    \centering
-    \includegraphics[scale=0.5]{./Figures/word_count}
-    \caption{Pseudo-code for the word count algorithm.}
-    \label{fig:word_count}
-  \end{figure}
+
+\begin{algorithm}[H]
+\algrenewcommand\algorithmicfunction{\textbf{class}}
+\algrenewcommand\algorithmicprocedure{\textbf{method}}
+
+  \begin{algorithmic}[1]
+    \Function{Mapper}{}
+    \Procedure{Map}{offset $a$, line $l$}
+    \ForAll{term $t \in$ line $l$}
+      \State $\textsc{Emit}(\textrm{term }t, \textrm{count }1)$
+    \EndFor
+    \EndProcedure
+    \EndFunction
+  \end{algorithmic}
+  
+  \begin{algorithmic}[1]
+    \Function{Reducer}{}
+    \Procedure{Reduce}{term $t$, counts $[  c_1, c_2, \ldots ]$}
+    \State $sum \gets 0$
+    \ForAll{$ \textrm{count }c \in \textrm{counts }[  c_1, c_2, \ldots ]$}
+    \State $sum \gets sum + c$
+    \EndFor
+    \State $\textsc{Emit}(\textrm{term }t, \textrm{count }sum)$
+    \EndProcedure
+    \EndFunction
+  \end{algorithmic}
+
+\end{algorithm}
+
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
