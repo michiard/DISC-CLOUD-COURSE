@@ -136,7 +136,7 @@
   \begin{itemize}
   \item \textbf{In-Mapper Combiners, a possible improvement over vanilla Combiners}
     \begin{itemize}
-    \item Hadoop does not guarantee combiners to be executed
+    \item Hadoop does not\footnote{Actually, combiners are not called if the number of map output records is less than a small threshold, {\it i.e.}, 4} guarantee combiners to be executed
     \end{itemize}
 
     \vspace{20pt}
@@ -144,10 +144,8 @@
   \item \textbf{Use an associative array to cumulate intermediate
       results}
     \begin{itemize}
-    \item The array is used to tally up term counts within a single
-      document
-    \item The \texttt{Emit} method is called only after all
-      \texttt{InputRecords} have been processed
+    \item The array is used to tally up term counts within a single ``document''
+    \item The \texttt{Emit} method is called only after all \texttt{InputRecords} have been processed
     \end{itemize}
 
     \vspace{20pt}
@@ -163,16 +161,32 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{In-Memory Combiners}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   \begin{center}
-   \includegraphics[scale=0.4]{./Figures/in_mapper_v1}
-    \end{center}
+\begin{algorithm}[H]
+\algrenewcommand\algorithmicfunction{\textbf{class}}
+\algrenewcommand\algorithmicprocedure{\textbf{method}}
+
+  \begin{algorithmic}[1]
+    \Function{Mapper}{}
+    \Procedure{Map}{offset $a$, line $l$}
+    \State $H \gets$  new AssociativeArray
+    \ForAll{term $t \in$ line $l$}
+      \State $H\{t\} \gets H\{t\} + 1$
+    \EndFor
+    \ForAll{term $t \in$ $H$}
+      \State $\textsc{Emit}(\textrm{term }t, \textrm{count }H\{t\})$
+    \EndFor
+    \EndProcedure
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
 }
 
 \frame {\frametitle{In-Memory Combiners}
   \begin{itemize}
   \item \textbf{Taking the idea one step further}
     \begin{itemize}
-    \item Exploit implementation details in Hadoop\footnote{Forward reference! We'll see more tomorrow.}
+    \item Exploit implementation details in Hadoop
     \item A Java mapper object is created for each map task
     \item JVM reuse must be enabled
     \end{itemize}
@@ -182,7 +196,7 @@
   \item \textbf{Preserve state within and across calls to the \texttt{Map}
     method}
     \begin{itemize}
-    \item \texttt{Initialize} method, used to create a across-map persistent
+    \item \texttt{Initialize} method, used to create an across-map, persistent
       data structure
     \item \texttt{Close} method, used to emit intermediate key-value
       pairs only when all map task scheduled on one machine are done
@@ -193,9 +207,29 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{In-Memory Combiners}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   \begin{center}
-   \includegraphics[scale=0.4]{./Figures/in_mapper_v2}
-    \end{center}
+\begin{algorithm}[H]
+\algrenewcommand\algorithmicfunction{\textbf{class}}
+\algrenewcommand\algorithmicprocedure{\textbf{method}}
+
+  \begin{algorithmic}[1]
+    \Function{Mapper}{}
+      \Procedure{Initialize}{}
+        \State $H \gets$  new AssociativeArray
+      \EndProcedure
+      \Procedure{Map}{offset $a$, line $l$}
+        \ForAll{term $t \in$ line $l$}
+          \State $H\{t\} \gets H\{t\} + 1$
+        \EndFor
+      \EndProcedure
+      \Procedure{Close}{}
+        \ForAll{term $t \in$ $H$}
+          \State $\textsc{Emit}(\textrm{term }t, \textrm{count }H\{t\})$
+        \EndFor
+      \EndProcedure
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -220,8 +254,8 @@
         collection)
       \item Serialization, deserialization when memory bounded
       \end{itemize}
-    \item Mappers still need to emit all key-value pairs, combiners
-      only reduce network traffic
+    \item With combiners. mappers still need to emit all key-value pairs, combiners
+      ``only'' reduce network traffic
     \end{itemize}
   \end{itemize}
 }
@@ -233,28 +267,21 @@
   \item \textbf{Precautions}
     \begin{itemize}
     \item In-memory combining breaks the functional programming
-      paradigm due to state preservation
+      paradigm due to {\bf state preservation}
     \item Preserving state across multiple instances implies that
       algorithm behavior might depend on execution order
       \begin{itemize}
-      \item Ordering-dependent bugs are difficult to find
+      \item Works well with commutative / associative operations
+      \item Otherwise, order-dependent bugs are difficult to find
       \end{itemize}
     \end{itemize}
 
     \vspace{20pt}
 
-  \item \textbf{Scalability bottleneck}
+  \item \textbf{Memory capacity is limited}
     \begin{itemize}
-    \item The in-memory combining technique strictly depends on having
-      sufficient memory to store intermediate results
-      \begin{itemize}
-      \item And you don't want the OS to deal with swapping
-      \end{itemize}
-    \item Multiple threads compete for the same resources
+    \item In-memory combining strictly depends on having sufficient memory to store intermediate results
     \item A possible {\color{red}solution}: ``block'' and ``flush''
-      \begin{itemize}
-      \item Implemented with a simple counter
-      \end{itemize}
     \end{itemize}
   \end{itemize}
 }
@@ -275,30 +302,44 @@
   \item \textbf{Local aggregation also effective to deal with reduce
       stragglers}
     \begin{itemize}
-    \item Reduce the number of values associated with frequently
-      occuring keys
+    \item Reduce the number of values associated with frequently occurring keys
     \end{itemize}
   \end{itemize}
 }
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Advanced technique}
+\frame {\frametitle{Computing the average, with in-mapper combiners}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
-  \item \textbf{Using in-mapper combining}
-    \begin{itemize}
-    \item Inside the mapper, the partial sums and counts are
-      held in memory (across inputs)
+    \item Partial sums and counts are held in memory (across inputs)
     \item Intermediate values are emitted only after the entire input
       split is processed
-    \item Similarly to before, the output value is a pair
-    \end{itemize}
+    \item The output value is a pair
   \end{itemize}
 
-   \begin{center}
-   \includegraphics[scale=0.4]{./Figures/average_v4}
-    \end{center}
+\begin{algorithm}[H]
+\algrenewcommand\algorithmicfunction{\textbf{class}}
+\algrenewcommand\algorithmicprocedure{\textbf{method}}
+
+  \begin{algorithmic}[1]
+    \Function{Mapper}{}
+      \Procedure{Initialize}{}
+        \State $S \gets$  new AssociativeArray
+        \State $C \gets$  new AssociativeArray
+      \EndProcedure
+      \Procedure{Map}{term $t$, integer $r$}
+        \State $S\{t\} \gets S\{t\} + r$
+        \State $C\{t\} \gets C\{t\} + 1$
+      \EndProcedure
+      \Procedure{Close}{}
+        \ForAll{term $t \in$ $S$}
+          \State $\textsc{Emit}(\textrm{term }t, \textrm{pair }(S\{t\},C\{t\}))$
+        \EndFor
+      \EndProcedure
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
 
 } 
 
@@ -312,11 +353,9 @@
 \frame {\frametitle{Pairs and Stripes}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
-  \item \textbf{A common approach in MapReduce: build
-      {\color{red}complex} keys}
+  \item \textbf{A common approach in MapReduce: build {\color{red}complex} keys}
     \begin{itemize}
-    \item Data necessary for a computation are naturally brought
-      together by the framework
+    \item Use the framework to group data together
     \end{itemize}
 
     \vspace{20pt}
@@ -338,17 +377,12 @@
 \frame {\frametitle{Problem statement}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
-  \item \textbf{The problem: building word co-occurrence matrices for
-      large corpora}
+  \item \textbf{The problem: building word co-occurrence matrices for large corpora}
     \begin{itemize}
-    \item The co-occurrence matrix of a corpus is a square $n \times
-      n$ matrix
-    \item $n$ is the number of unique words (\textit{i.e.}, the
-      vocabulary size)
-    \item A cell $m_{ij}$ contains the number of times the word $w_i$
-      co-occurs with word $w_j$ \textit{within a specific context}
-    \item Context: a sentence, a paragraph a document or a window of
-      $m$ words
+    \item The co-occurrence matrix of a corpus is a square $n \times n$ matrix, $M$
+    \item $n$ is the number of unique words (\textit{i.e.}, the vocabulary size)
+    \item A cell $m_{ij}$ contains the number of times the word $w_i$ co-occurs with word $w_j$ \textit{within a specific context}
+    \item Context: a sentence, a paragraph a document or a window of $m$ words
     \item NOTE: the matrix may be symmetric in some cases
     \end{itemize}
 
@@ -356,10 +390,8 @@
 
   \item \textbf{Motivation}
     \begin{itemize}
-    \item This problem is a basic building block for more complex
-      operations
-    \item {\color{red}Estimating the distribution of discrete
-        joint events from a large number of observations}
+    \item This problem is a basic building block for more complex operations
+    \item {\color{red}Estimating the distribution of discrete joint events from a large number of observations}
     \item Similar problem in other domains:
       \begin{itemize}
       \item Customers who buy \textit{this} tend to also buy
@@ -375,20 +407,16 @@
   \begin{itemize}
   \item \textbf{Space requirements}
     \begin{itemize}
-    \item Clearly, the space requirement is $O(n^2)$, where $n$ is the
-      size of the vocabulary
-    \item For real-world (English) corpora $n$ can be hundreds of
-      thousands of words, or even billions of worlds in some specific cases
+    \item Clearly, the space requirement is $O(n^2)$, where $n$ is the size of the vocabulary
+    \item For real-world (English) corpora $n$ can be hundreds of thousands of words, or even billions of worlds in some specific cases
     \end{itemize}
 
     \vspace{20pt}
 
   \item \textbf{So what's the problem?}
     \begin{itemize}
-    \item If the matrix can fit in the memory of a single machine,
-      then just use whatever naive implementation
-    \item Instead, if the matrix is bigger than the available memory,
-      then {\color{red}paging} would kick in, and any naive
+    \item If the matrix can fit in the memory of a single machine, then just use whatever naive implementation
+    \item Instead, if the matrix is bigger than the available memory, then {\color{red}paging} would kick in, and any naive
       implementation would break
     \end{itemize}
 
@@ -396,8 +424,7 @@
 
   \item \textbf{Compression}
     \begin{itemize}
-    \item Such techniques can help in solving the problem on a single
-      machine
+    \item Such techniques can help in solving the problem on a single machine
     \item However, there are scalability problems
     \end{itemize}
   \end{itemize}
@@ -406,10 +433,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Word co-occurrence: the Pairs approach}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{center}
+    \includegraphics[scale=0.36]{./Figures/pairs}
+  \end{center}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Word co-occurrence: the Pairs approach}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
   \item \textbf{Input to the problem}
     \begin{itemize}
-    \item Key-value pairs in the form of a \texttt{docid} and a \texttt{doc}
+    \item Key-value pairs in the form of a \texttt{offset} and a \texttt{line}
     \end{itemize}
 
     \vspace{20pt}
@@ -449,8 +484,40 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Word co-occurrence: the Pairs approach}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{algorithm}[H]
+\algrenewcommand\algorithmicfunction{\textbf{class}}
+\algrenewcommand\algorithmicprocedure{\textbf{method}}
+
+  \begin{algorithmic}[1]
+    \Function{Mapper}{}
+      \Procedure{Map}{offset $a$, line $l$}
+        \ForAll{term $w \in$ line $l$}
+          \ForAll{term $u \in \textsc{Neighbors}(w)$}
+            \State $\textsc{Emit } (\textrm{pair }(w,u), \textrm{count }1)$
+          \EndFor
+        \EndFor
+      \EndProcedure
+    \EndFunction
+
+    \Function{Reducer}{}
+      \Procedure{Reduce}{pair $p$, counts $[c_1,c_2, \cdots ]$}
+        \State $s \gets 0$
+        \ForAll{count $c \in \textrm{counts }[c_1,c_2, \cdots ]$}
+          \State $s \gets s + c$
+        \EndFor
+        \State $\textsc{Emit } (\textrm{pair }p, \textrm{count }s)$
+      \EndProcedure
+    \EndFunction
+
+  \end{algorithmic}
+\end{algorithm}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Word co-occurrence: the Stripes approach}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{center}
-    \includegraphics[scale=0.4]{./Figures/pairs}
+    \includegraphics[scale=0.36]{./Figures/stripes}
   \end{center}
 }
 
@@ -460,7 +527,7 @@
   \begin{itemize}
   \item \textbf{Input to the problem}
     \begin{itemize}
-    \item Key-value pairs in the form of a \texttt{docid} and a \texttt{doc}
+    \item Key-value pairs in the form of a \texttt{offset} and a \texttt{line}
     \end{itemize}
 
     \vspace{20pt}
@@ -494,9 +561,36 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Word co-occurrence: the Stripes approach}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \begin{center}
-    \includegraphics[scale=0.4]{./Figures/stripes}
-  \end{center}
+\begin{algorithm}[H]
+\algrenewcommand\algorithmicfunction{\textbf{class}}
+\algrenewcommand\algorithmicprocedure{\textbf{method}}
+
+  \begin{algorithmic}[1]
+    \Function{Mapper}{}
+      \Procedure{Map}{offset $a$, line $l$}
+        \ForAll{term $w \in$ line $l$}
+        \State $H \gets$ new AssociativeArray
+          \ForAll{term $u \in \textsc{Neighbors}(w)$}
+            \State $H\{u\} \gets H\{u\}+1$
+          \EndFor
+          \State $\textsc{Emit } (\textrm{term }w, \textrm{Stripe }H)$
+        \EndFor
+      \EndProcedure
+    \EndFunction
+
+    \Function{Reducer}{}
+      \Procedure{Reduce}{term $w$, Stripes $[H_1,H_2,H_3 \cdots ]$}
+        \State $H_f \gets$ new AssociativeArray
+        \ForAll{Stripe $H \in \textrm{Stripes }[H_1,H_2,H_3 \cdots ]$}
+          \State $\textsc{Sum}(H_f,H)$
+        \EndFor
+        \State $\textsc{Emit } (\textrm{term }w, \textrm{Stripe }H_f)$
+      \EndProcedure
+    \EndFunction
+
+  \end{algorithmic}
+\end{algorithm}
+
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -523,10 +617,8 @@
       \begin{itemize}
       \item The framework has less sorting to do
       \end{itemize}
-    \item The values are more complex and have
-      serialization/deserialization overhead
-    \item Greatly benefits from combiners, as the key space is the
-      vocabulary
+    \item The values are more complex and have serialization / deserialization overhead
+    \item Greatly benefits from combiners, as the key space is the vocabulary
     \item Suffers from memory paging problems, if not properly engineered
     \end{itemize}
   \end{itemize}
@@ -583,7 +675,7 @@
       the conditioning variable ($w_i$) are available in the
       associative array
     \item Hence, the sum of all those counts gives the marginal
-    \item Then we divide the the joint counts by the marginal and
+    \item Then we divide the joint counts by the marginal and
       we're done
     \end{itemize}
 
@@ -614,7 +706,7 @@
     \begin{itemize}
     \item In this way, the keys are first sorted by the left word, and
       then by the right word (in the pair)
-    \item Hence, we can detect if  all pairs associated with the word
+    \item Hence, we can detect if all pairs associated with the word
       we are conditioning on ($w_i$) have been seen
     \item At this point, we can use the in-memory buffer, compute the
       relative frequencies and emit
@@ -626,7 +718,7 @@
     \begin{itemize}
     \item The default partitioner is based on the hash value of the
       intermediate key, modulo the number of reducers
-    \item For a complex key, the raw byte representation is used to
+    \item For a complex key, the {\bf raw byte representation} is used to
       compute the hash value
       \begin{itemize}
       \item Hence, there is no guarantee that the pair (dog, aardvark)
@@ -640,7 +732,7 @@
 
   \item \textbf{Limitations of this approach}
     \begin{itemize}
-    \item Essentially, we reproduce the stripes method on the reducer
+    \item Essentially, we reproduce the stripes method in the reducer
       and we need to use a custom partitioner
     \item This algorithm would work, but present the same
       memory-bottleneck problem as the stripes method
