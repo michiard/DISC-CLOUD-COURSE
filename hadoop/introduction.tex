@@ -1,0 +1,68 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{From Theory to Practice}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+  \item \textbf{The story so far}
+    \begin{itemize}
+    \item Principles behind the MapReduce Framework
+    \item Programming model
+    \item Algorithm design and patterns
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Hadoop implementation of MapReduce}
+    \begin{itemize}
+    \item HDFS in details
+    \item Hadoop MapReduce
+      \begin{itemize}
+      \item Implementation details
+      \item Types and Formats
+      \end{itemize}
+    \item Hadoop I/O
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Hadoop Deployments}
+  \begin{itemize}
+    \item The BigFoot platform (if time allows)
+  \end{itemize}
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Terminology}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+  \item \textbf{MapReduce:}
+    \begin{itemize}
+    \item \texttt{Job}: an execution of a Mapper and Reducer across a
+      data set
+    \item \texttt{Task}: an execution of a Mapper or a Reducer on a slice of
+      data
+    \item \texttt{Task Attempt}: instance of an attempt to execute a
+      task
+    \item \textbf{Example:}
+      \begin{itemize}
+      \item Running ``Word Count'' across 20 files is one job
+      \item 20 files to be mapped = 20 map tasks + some number of
+        reduce tasks
+      \item At least 20 attempts will be performed... more if a
+        machine crashes
+      \end{itemize}
+    \end{itemize}
+
+
+
+    \vspace{20pt}
+
+  \item \textbf{Task Attempts}
+    \begin{itemize}
+    \item Task attempted at least once, possibly more
+    \item Multiple crashes on input imply discarding it
+    \item Multiple attempts may occur in parallel (a.k.a. speculative execution)
+    \item Task ID from TaskInProgress is not a unique identifier
+    \end{itemize}
+  \end{itemize}
+}
