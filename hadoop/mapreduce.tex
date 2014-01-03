@@ -28,7 +28,7 @@
 \frame {\frametitle{Anatomy of a MapReduce Job Run}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    \begin{center}
-      \framebox{\includegraphics[scale=0.3]{./Figures/mapreduce_schema}}      
+      \framebox{\includegraphics[scale=0.36]{./Figures/mapreduce}}      
     \end{center}
 }
 
@@ -97,6 +97,13 @@
 \subsection{Scheduling}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \textbf{Scheduling}
+  \end{center}
+  \end{colorblock}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Task Assignment}
@@ -177,39 +184,29 @@
 \frame {\frametitle{Scheduling in detail}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
-  \item \textbf{FIFO Scheduler (default behavior)}
+  \item \textbf{FIFO Scheduler (default in vanilla Hadoop)}
     \begin{itemize}
-    \item Each job uses the whole cluster\footnote{To be precise, all required slots are assigned to highest priority job. Excess capacity can be given to other jobs.}
-    \item Not suitable for shared, production-level cluster
+    \item First-come-first-served
       \begin{itemize}
       \item Long jobs monopolize the cluster
-      \item Short jobs can hold back and have no guarantees on
-        execution time
       \end{itemize}
     \end{itemize}
 
     \vspace{20pt}
 
-  \item \textbf{Fair Scheduler}
+  \item \textbf{Fair Scheduler (default in Cloudera)}
     \begin{itemize}
-    \item Every user gets a fair share of the cluster capacity over
-      time
+    \item Every user gets a fair share of the cluster capacity over time
     \item Jobs are placed into pools, one for each user
       \begin{itemize}
-      \item Users that submit more jobs have no more resources than
-        oterhs
+      \item Users that submit more jobs have no more resources than oterhs
       \item Can guarantee minimum capacity per pool
       \end{itemize}
-    \item Supports {\color{red}preemption}
-      % \begin{itemize}
-      % \item Tasks in pools running over capacity can be killed
-      % \item Slots dedicated to tasks running under capacity
-      % \end{itemize}
     \end{itemize}
 
     \vspace{20pt}
 
-  \item \textbf{Capacity Scheduler}
+  \item \textbf{Capacity Scheduler (heavily used in Yahoo)}
     \begin{itemize}
     \item Hierarchical queues (mimic an organization)
     \item FIFO scheduling in each queue
@@ -223,13 +220,19 @@
 \subsection{Failures}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \textbf{Failures}
+  \end{center}
+  \end{colorblock}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Handling Failures}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{beamerboxesrounded}[shadow=true]{}
-    In the real world, code is buggy, processes crash and machine
-    fails
+    In the real world, code is buggy, processes crash and machines fail
   \end{beamerboxesrounded}
 
   \begin{itemize}
@@ -250,6 +253,7 @@
       \item \texttt{TaskTracker} kills the child JVM\footnote{With
           streaming, you need to take care of the orphaned process.}
       \end{itemize}
+      \end{itemize}
     \item \texttt{JobTracker} is notified of a failed task
       \begin{itemize}
       \item Avoids rescheduling the task on the same
@@ -260,7 +264,6 @@
         the job fails
       \end{itemize}
    \end{itemize}
-  \end{itemize}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -301,6 +304,13 @@
 \subsection{Internals}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \textbf{Internals}
+  \end{center}
+  \end{colorblock}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Shuffle and Sort}
@@ -330,10 +340,10 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Shuffle and Sort: the Map Side}
+\frame {\frametitle{Shuffle and Sort: Map Side}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    \begin{center}
-      \framebox{\includegraphics[scale=0.4]{./Figures/shuffle_map}}      
+      \includegraphics[scale=0.4]{./Figures/map_task}
     \end{center}
 }
 
@@ -341,8 +351,7 @@
 \frame {\frametitle{Shuffle and Sort: the Map Side}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
-  \item \textbf{The output of a map task is not simply written to
-      disk}
+  \item \textbf{The output of a map task is not simply written to disk}
     \begin{itemize}
     \item In memory buffering
     \item Pre-sorting
@@ -353,10 +362,8 @@
   \item \textbf{Circular memory buffer}
     \begin{itemize}
     \item 100 MB by default
-    \item Threshold based mechanism to {\color{red}spill} buffer
-      content to disk
-    \item Map output written to the buffer {\color{red}while} spilling
-      to disk
+    \item Threshold based mechanism to {\color{red}spill} buffer content to disk
+    \item Map output written to the buffer {\color{red}while} spilling to disk
     \item If buffer fills up while spilling, the map task is \textbf{blocked}
     \end{itemize}
  
@@ -365,11 +372,9 @@
   \item \textbf{Disk spills}
     \begin{itemize}
     \item Written in round-robin to a local dir
-    \item Output data is partitioned corresponding to the reducers they
-      will be sent to
+    \item Output data is partitioned corresponding to the reducers they will be sent to
     \item Within each partition, data is sorted ({\color{red}in-memory})
-    \item Optionally, if there is a combiner, it is executed just
-      after the sort phase ({\color{red}WHY?})
+    \item Optionally, if there is a combiner, it is executed just after the sort phase ({\color{red}WHY?})
     \end{itemize}
   \end{itemize}
 }
@@ -380,29 +385,33 @@
   \begin{itemize}
   \item \textbf{More on spills and memory buffer}
     \begin{itemize}
-    \item Each time the buffer is full, a {\color{red}new} spill is
-      created
+    \item Each time the buffer is full, a {\color{red}new} spill is created
     \item Once the map task finishes, there are many spills
-    \item Such spills are merged into a single partitioned and sorted
-      output file
+    \item Such spills are merged into a single partitioned and sorted output file
     \end{itemize}
 
     \vspace{40pt}
 
-  \item \textbf{The output file partitions are made available to
-      reducers over HTTP}
+  \item \textbf{The output file partitions are made available to reducers over HTTP}
     \begin{itemize}
-    \item There are 40 (default) threads dedicated to serve the file
-      partitions to reducers
+    \item There are 40 (default) threads dedicated to serve the file partitions to reducers
     \end{itemize}
   \end{itemize}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Shuffle and Sort: the Map Side}
+\frame {\frametitle{Details on local spill files}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    \begin{center}
-      \framebox{\includegraphics[scale=0.3]{./Figures/spill_partition}}      
+      \includegraphics[scale=0.4]{./Figures/spill_partition}
+    \end{center}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Shuffle and Sort: Reduce Side}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   \begin{center}
+      \includegraphics[scale=0.4]{./Figures/reduce_task}
     \end{center}
 }
 
@@ -475,6 +484,13 @@
 \subsection{Types and Formats}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \textbf{Types and Formats}
+  \end{center}
+  \end{colorblock}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{MapReduce Types}
