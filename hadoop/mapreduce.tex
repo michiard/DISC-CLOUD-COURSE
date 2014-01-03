@@ -546,7 +546,7 @@
 \frame {\frametitle{Getting Data to the Mapper}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    \begin{center}
-      \framebox{\includegraphics[scale=0.4]{./Figures/data_to_map}}      
+      \includegraphics[scale=0.4]{./Figures/data2map}
     \end{center}
 }
 
@@ -581,22 +581,12 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{The relationship between \texttt{InputSplit} and
-    HDFS blocks}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   \begin{center}
-      \framebox{\includegraphics[scale=0.4]{./Figures/split_block}}      
-    \end{center}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{\texttt{FileInputFormat} and Friends}
+\frame {\frametitle{\texttt{InputFormat}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
   \item \textbf{\texttt{TextInputFormat}}
     \begin{itemize}
-    \item Treats each \texttt{newline}-terminated line of a file as a
-      value
+    \item Treats each \texttt{newline}-terminated line of a file as a value
     \end{itemize}
 
     \vspace{20pt}
@@ -624,52 +614,7 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Filtering File Inputs}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \begin{itemize}
-  \item \textbf{\texttt{FileInputFormat} reads all files out of a specified
-    directory and send them to the mapper}
-
-\vspace{40pt}
-
-
-\item \textbf{Delegates filtering this file list to a method
-    subclasses may override}
-  \begin{itemize}
-  \item Example: create your own ``\texttt{xyzFileInputFormat}'' to read \texttt{*.xyz}
-    from a directory list
-  \end{itemize}
-  \end{itemize}
-
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Record Readers}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \begin{itemize}
-  \item \textbf{Each \texttt{InputFormat} provides its own
-      \texttt{RecordReader} implementation}
-
-    \vspace{20pt}
- 
-  \item \textbf{\texttt{LineRecordReader}}
-    \begin{itemize}
-    \item Reads a line from a text file
-    \end{itemize}
-
-    \vspace{20pt}
- 
-  \item \textbf{\texttt{KeyValueRecordReader}}
-    \begin{itemize}
-    \item Used by \texttt{KeyValueTextInputFormat}
-    \end{itemize}
-
-  \end{itemize}
-}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Input Split Size}
+\frame {\frametitle{\texttt{InputSplit}}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
   \item \textbf{\texttt{FileInputFormat} divides large files into
@@ -680,8 +625,7 @@
 
     \vspace{20pt}
 
-  \item \textbf{Record readers receive file, offset, and length of
-      chunk}
+  \item \textbf{Record readers receive file, offset, and length of chunk}
     \begin{itemize}
     \item Example
     \end{itemize}
@@ -707,6 +651,37 @@
   \item \textbf{Custom \texttt{InputFormat} implementations may
       override split size}
  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{The relationship between an \texttt{InputSplit} and an HDFS block}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   \begin{center}
+      \includegraphics[scale=0.4]{./Figures/split_block}
+    \end{center}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Record Readers}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+  \item \textbf{Each \texttt{InputFormat} provides its own \texttt{RecordReader} implementation}
+
+    \vspace{20pt}
+ 
+  \item \textbf{\texttt{LineRecordReader}}
+    \begin{itemize}
+    \item Reads a line from a text file
+    \end{itemize}
+
+    \vspace{20pt}
+ 
+  \item \textbf{\texttt{KeyValueRecordReader}}
+    \begin{itemize}
+    \item Used by \texttt{KeyValueTextInputFormat}
+    \end{itemize}
+
+  \end{itemize}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -792,14 +767,6 @@
     \item ``Early'' keys are reduced and output before ``late'' keys
     \end{itemize}
   \end{itemize}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Writing the Output}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-   \begin{center}
-      \framebox{\includegraphics[scale=0.4]{./Figures/reduce_to_data}}      
-    \end{center}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
