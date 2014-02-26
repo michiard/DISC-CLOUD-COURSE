@@ -1,4 +1,0 @@
-\beamer@endinputifotherversion {3.26pt}
-\select@language {english}
-\beamer@sectionintoc {1}{Sources and Acks}{2}{0}{1}
-\beamer@sectionintoc {2}{Title}{3}{0}{2}
