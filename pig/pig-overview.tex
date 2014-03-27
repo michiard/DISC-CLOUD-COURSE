@@ -1296,7 +1296,60 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
       \end{itemize}
 
   \end{itemize}
+}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Data Processing Operators}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{beamerboxesrounded}{}
+  \begin{center}
+          Per-tuple processing: example
+  \end{center}    
+  \end{beamerboxesrounded}
+
+\begin{itemize}
+  \item[] \texttt{X = FOREACH A GENERATE f0, f1+f2;}
+  \item[] \texttt{Y = GROUP A BY f1;}
+  \item[] \texttt{Z = FOREACH X GENERATE group, X.(\$1, \$2);} 
+\end{itemize}
+
+  \begin{columns}
+    \begin{column}{.3\linewidth}
+    \begin{itemize}
+      \item[] \texttt{A=}
+      \item[] \texttt{<1, 2, 3>}
+      \item[] \texttt{<4, 2, 1>}
+      \item[] \texttt{<8, 3, 4>}
+      \item[] \texttt{<4, 3, 3>}
+      \item[] \texttt{<7, 2, 5>}
+      \item[] \texttt{<8, 4, 3>}
+    \end{itemize}
+    \end{column}
+
+    \begin{column}{.2\linewidth}
+    \begin{itemize}
+      \item[] \texttt{X=}
+      \item[] \texttt{<1, 5>}
+      \item[] \texttt{<4, 3>}
+      \item[] \texttt{<8, 7>}
+      \item[] \texttt{<4, 6>}
+      \item[] \texttt{<7, 7>}
+      \item[] \texttt{<8, 7>}
+    \end{itemize}
+    \end{column}
+
+    \begin{column}{.5\linewidth}
+    \begin{footnotesize}
+    \begin{itemize}
+      \item[] \texttt{Z=}
+      \item[] \texttt{<1, \{<2, 3>\}>}
+      \item[] \texttt{<1, \{<2, 3>\}>}
+      \item[] \texttt{<4, \{<2, 1>, <3, 3>\}> <7, \{<2, 5>\}>}
+      \item[] \texttt{<8, \{<3, 4>, <4, 3>\}>}
+    \end{itemize}
+    \end{footnotesize}
+    \end{column}
+  \end{columns}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
