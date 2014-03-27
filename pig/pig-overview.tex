@@ -278,6 +278,56 @@
 \end{footnotesize}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Example 2}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+  \item User data in one file, website data in another
+  \item Find the top 5 most visited sites
+  \item Group by users aged in the range (18,25)
+\end{itemize}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{./Figures/example2_plan}
+\end{figure}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Example 2: in MapReduce}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{./Figures/example2_mr}
+\end{figure}
+
+\begin{itemize}
+  \item Hundreds lines of code; hours to write
+\end{itemize}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Example 2: in Pig}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{footnotesize}
+
+\noindent \texttt{Users = load 'users' as (name, age);} \\
+\texttt{Fltrd = filter Users by age >= 18 and age <= 25;} \\
+\texttt{Pages = load 'pages' as (user, url);} \\
+\texttt{Jnd = join Fltrd by name, Pages by user; Grpd = group Jnd by url;} \\
+\texttt{Smmd = foreach Grpd generate group, COUNT(Jnd) as clicks;} \\
+\texttt{Srtd = order Smmd by clicks desc; Top5 = limit Srtd 5;} \\
+\texttt{store Top5 into 'top5sites';}
+\end{footnotesize}
+
+\begin{itemize}
+  \item Few lines of code; few minutes to write
+\end{itemize}
+
+}
+
 \frame {\frametitle{Pig Execution environment}
   \begin{itemize}
   \item \textbf{How do we go from Pig Latin to MapReduce?}
