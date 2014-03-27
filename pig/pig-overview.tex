@@ -1207,8 +1207,30 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
 \frame {\frametitle{Data Processing Operators}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{beamerboxesrounded}{}
+  \begin{center}
+          Loading and storing data: Example
+  \end{center}    
+  \end{beamerboxesrounded}
+
+\begin{itemize}
+  \item[] \texttt{A = LOAD 'myfile.txt' USING PigStorage(',') AS (f1,f2,f3);}
+  \item[] 
+  \item[] \texttt{<1, 2, 3>}
+  \item[] \texttt{<4, 2, 1>}
+  \item[] \texttt{<8, 3, 4>}
+  \item[] \texttt{<4, 3, 3>}
+  \item[] \texttt{<7, 2, 5>}
+  \item[] \texttt{<8, 4, 3>}
+\end{itemize}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Data Processing Operators}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{beamerboxesrounded}{}
 	\begin{center}
-          Per-tuple processing: Filtering data
+          Per-tuple processing
 	\end{center}    
   \end{beamerboxesrounded}
 
@@ -1238,7 +1260,7 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{beamerboxesrounded}{}
 	\begin{center}
-          Per-tuple processing: Filtering data
+          Per-tuple processing
 	\end{center}    
   \end{beamerboxesrounded}
 
@@ -1264,7 +1286,7 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
     \item \textbf{Semantics of the \texttt{GENERATE} clause}
       \begin{itemize}
       \item Followed by a list of expressions
-      \item Also \textit{flattering} is allowed
+      \item Also \textit{flattening} is allowed
         \begin{itemize}
         \item This is done to eliminate nesting in data
         \item[$\to$] Allows to make output data independent for
@@ -1276,7 +1298,6 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
   \end{itemize}
 
 }
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Data Processing Operators}
@@ -1305,6 +1326,43 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
     \item UDF 
     \end{itemize}
   \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Data Processing Operators}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{beamerboxesrounded}{}
+  \begin{center}
+          Filtering: example
+  \end{center}    
+  \end{beamerboxesrounded}
+
+\begin{itemize}
+  \item[] \texttt{Y = FILTER A BY f1 == '8';} 
+\end{itemize}
+
+  \begin{columns}
+    \begin{column}{.5\linewidth}
+    \begin{itemize}
+      \item[] \texttt{A=}
+      \item[] \texttt{<1, 2, 3>}
+      \item[] \texttt{<4, 2, 1>}
+      \item[] \texttt{<8, 3, 4>}
+      \item[] \texttt{<4, 3, 3>}
+      \item[] \texttt{<7, 2, 5>}
+      \item[] \texttt{<8, 4, 3>}
+    \end{itemize}
+    \end{column}
+
+    \begin{column}{.5\linewidth}
+    \begin{itemize}
+      \item[] \texttt{Y=}
+      \item[] \texttt{<8, 3, 4>}
+      \item[] \texttt{<8, 4, 3>}
+    \end{itemize}
+
+    \end{column}
+  \end{columns}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1356,22 +1414,94 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
     \item We will explore several nuances of ``grouping''
     \end{itemize}
 
-    \vspace{20pt}
+    % \vspace{20pt}
 
-  \item \textbf{The first grouping operation we study is given by the
-      COGROUP command}
-  \item[] Example: Assume we have loaded two relations from a Search Engine log file
-  \item[] \texttt{results: (queryString, url, position)}
-  \item[] \texttt{revenue: (queryString, adSlot, amount)}
-    \begin{itemize}
-    \item \texttt{results} contains, for different query strings, the
-      urls shown as search results, and the positions at which they
-      where shown
-    \item \texttt{revenue} contains, for different query strings, and
-      different advertisement slots, the average amount of revenue
-    \end{itemize}
+  % \item \textbf{A grouping operation we study in details is the COGROUP command}
+  % \item[] Example: Assume we have loaded two relations from a Search Engine log file
+  % \item[] \texttt{results: (queryString, url, position)}
+  % \item[] \texttt{revenue: (queryString, adSlot, amount)}
+  %   \begin{itemize}
+  %   \item \texttt{results} contains, for different query strings, the
+  %     urls shown as search results, and the positions at which they
+  %     where shown
+  %   \item \texttt{revenue} contains, for different query strings, and
+  %     different advertisement slots, the average amount of revenue
+  %   \end{itemize}
 
   \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Data Processing Operators}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{beamerboxesrounded}{}
+  \begin{center}
+          The \texttt{GROUP} operator
+  \end{center}    
+  \end{beamerboxesrounded}
+
+  \begin{itemize}
+  \item \textbf{Sometimes, we want to operate on a single dataset}
+    \begin{itemize}
+    \item This is when you use the \texttt{GROUP} operator
+    \end{itemize}
+
+    \vspace{20pt}
+
+  \item \textbf{Let's continue from Example 3:}
+    \begin{itemize}
+    \item Assume we want to find the total revenue for each query
+      string. This writes as:
+    \item[] \texttt{grouped\_revenue = GROUP revenue BY queryString;}
+    \item[] \texttt{query\_revenue = FOREACH grouped\_revenue GENERATE}
+    \item[] \texttt{queryString, SUM(revenue.amount) AS totalRevenue;}
+
+      \vspace{10pt}
+
+  \item Note that \texttt{revenue.amount} refers to a projection of
+    the nested bag in the tuples of \texttt{grouped\_revenue}
+
+    \end{itemize}
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Data Processing Operators}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{beamerboxesrounded}{}
+  \begin{center}
+          \texttt{GROUP ... BY ...}: Example
+  \end{center}    
+  \end{beamerboxesrounded}
+
+\begin{itemize}
+  \item[] \texttt{X = GROUP A BY f1;} 
+\end{itemize}
+
+  \begin{columns}
+    \begin{column}{.3\linewidth}
+    \begin{itemize}
+      \item[] \texttt{A=}
+      \item[] \texttt{<1, 2, 3>}
+      \item[] \texttt{<4, 2, 1>}
+      \item[] \texttt{<8, 3, 4>}
+      \item[] \texttt{<4, 3, 3>}
+      \item[] \texttt{<7, 2, 5>}
+      \item[] \texttt{<8, 4, 3>}
+    \end{itemize}
+    \end{column}
+
+    \begin{column}{.7\linewidth}
+    \begin{footnotesize}
+    \begin{itemize}
+      \item[] \texttt{X=}
+      \item[] \texttt{<1, {<1, 2, 3>}>}
+      \item[] \texttt{<4, {<4, 2, 1>, <4, 3, 3>}> <7, {<7, 2, 5>}>}
+      \item[] \texttt{<8, {<8, 3, 4>, <8, 4, 3>}>}
+    \end{itemize}
+    \end{footnotesize}
+    \end{column}
+  \end{columns}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1422,8 +1552,66 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
 
     \vspace{20pt}
 
-  \item \textbf{Next: why \texttt{COGROUP} when you can use \texttt{JOINS}?}
+  \item \textbf{Next: a clarifying example}
   \end{itemize}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Data Processing Operators}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % \begin{beamerboxesrounded}{}
+  % \begin{center}
+  %         \texttt{COGROUP}: A Simple Example
+  % \end{center}    
+  % \end{beamerboxesrounded}
+
+\begin{footnotesize}
+\begin{itemize}
+  \item[] \texttt{C = COGROUP A BY f1, B BY \$0;} 
+\end{itemize}
+\end{footnotesize}
+
+  \begin{columns}
+    \begin{column}{.5\linewidth}
+    \begin{footnotesize}
+    \begin{itemize}
+      \item[] \texttt{A=}
+      \item[] \texttt{<1, 2, 3>}
+      \item[] \texttt{<4, 2, 1>}
+      \item[] \texttt{<8, 3, 4>}
+      \item[] \texttt{<4, 3, 3>}
+      \item[] \texttt{<7, 2, 5>}
+      \item[] \texttt{<8, 4, 3>}
+    \end{itemize}
+    \end{footnotesize}
+    \end{column}
+
+    \begin{column}{.5\linewidth}
+    \begin{footnotesize}
+    \begin{itemize}
+      \item[] \texttt{B=}
+      \item[] \texttt{<2, 4>}
+      \item[] \texttt{<8, 9>}
+      \item[] \texttt{<1, 3>}
+      \item[] \texttt{<2, 7>}
+      \item[] \texttt{<2, 9>}
+      \item[] \texttt{<4, 6>}
+      \item[] \texttt{<4, 9>}
+    \end{itemize}
+    \end{footnotesize}
+    \end{column}
+  \end{columns}
+
+\begin{footnotesize}
+\begin{itemize}
+  \item[] \texttt{C=}
+  \item[] \texttt{<1, \{<1, 2, 3>\}, \{<1, 3>\}>} 
+  \item[] \texttt{<2, \{ \}, \{<2, 4>, <2, 7>, <2, 9>\}>} 
+  \item[] \texttt{<4, \{<4, 2, 1>, <4, 3, 3>\}, \{<4, 6>,<4, 9>\}> <7, \{<7, 2, 5>\}, \{ \}>} 
+  \item[] \texttt{<8, \{<8, 3, 4>, <8, 4, 3>\}, \{<8, 9>\}>} 
+\end{itemize}
+\end{footnotesize}
 
 }
 
@@ -1533,40 +1721,6 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
     \begin{itemize}
     \item Implementation details are tricky
     \item Groups can be very large (and are redundant)
-    \end{itemize}
-  \end{itemize}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Data Processing Operators}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \begin{beamerboxesrounded}{}
-	\begin{center}
-          A special case of \texttt{COGROUP}: the \texttt{GROUP} operator
-	\end{center}    
-  \end{beamerboxesrounded}
-
-  \begin{itemize}
-  \item \textbf{Sometimes, we want to operate on a single dataset}
-    \begin{itemize}
-    \item This is when you use the \texttt{GROUP} operator
-    \end{itemize}
-
-    \vspace{20pt}
-
-  \item \textbf{Let's continue from Example 3:}
-    \begin{itemize}
-    \item Assume we want to find the total revenue for each query
-      string. This writes as:
-    \item[] \texttt{grouped\_revenue = GROUP revenue BY queryString;}
-    \item[] \texttt{query\_revenue = FOREACH grouped\_revenue GENERATE}
-    \item[] \texttt{queryString, SUM(revenue.amount) AS totalRevenue;}
-
-      \vspace{10pt}
-
-  \item Note that \texttt{revenue.amount} refers to a projection of
-    the nested bag in the tuples of \texttt{grouped\_revenue}
-
     \end{itemize}
   \end{itemize}
 }
