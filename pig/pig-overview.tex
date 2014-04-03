@@ -858,7 +858,7 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
                 (`iPod')
               \end{tabular} \right\}$
             } \\
-            \texttt{(`age' $\to$ 20)}
+            \texttt{`age' $\to$ 20}
           \end{tabular}
         \right ]$
       \end{tabular}
@@ -1309,8 +1309,8 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
 
 \begin{itemize}
   \item[] \texttt{X = FOREACH A GENERATE f0, f1+f2;}
-  \item[] \texttt{Y = GROUP A BY f1;}
-  \item[] \texttt{Z = FOREACH X GENERATE group, X.(\$1, \$2);} 
+  \item[] \texttt{Y = GROUP A BY f0;}
+  \item[] \texttt{Z = FOREACH Y GENERATE group, Y.(\$1, \$2);} 
 \end{itemize}
 
   \begin{columns}
@@ -1343,8 +1343,8 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
     \begin{itemize}
       \item[] \texttt{Z=}
       \item[] \texttt{<1, \{<2, 3>\}>}
-      \item[] \texttt{<1, \{<2, 3>\}>}
-      \item[] \texttt{<4, \{<2, 1>, <3, 3>\}> <7, \{<2, 5>\}>}
+      \item[] \texttt{<4, \{<2, 1>, <3, 3>\}>}
+      \item[] \texttt{<7, \{<2, 5>\}>}
       \item[] \texttt{<8, \{<3, 4>, <4, 3>\}>}
     \end{itemize}
     \end{footnotesize}
@@ -1576,7 +1576,7 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
 
   \begin{figure}[h]
     \centering
-    \includegraphics[scale=0.8]{./figures/cogroup}
+    \includegraphics[scale=0.8]{./Figures/cogroup}
   \end{figure}
 }
 
