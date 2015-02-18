@@ -29,3 +29,38 @@ errors.count() // This is an action
 
 \end{frame}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{The RDD graph: dataset vs. partition views}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% missing: what is an rdd? difference between RDD and partition?
+
+\begin{columns}[c]
+	\column{.5\textwidth}
+		
+			\begin{figure}[h]
+			  \centering
+			  \includegraphics[scale=0.25]{./Figures/spark_rdd}
+			  \label{fig:spark_components}
+			\end{figure}
+	
+	\column{.5\textwidth}
+		
+			\begin{figure}[h]
+			  \centering
+			  \includegraphics[scale=0.25]{./Figures/spark_partition}
+			  \label{fig:spark_components}
+			\end{figure}
+
+\end{columns}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Data Locality}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+	\item First run: data not in cache, so use HadoopRDD's locality prefs (from HDFS)
+	\item Second run: FilteredRDD is in cache, so use its locations
+	\item If something falls out of cache, go back to HDFS
+\end{itemize}
+}
