@@ -1,0 +1,148 @@
+\documentclass{beamer}
+
+\usepackage[lined,ruled]{algorithm2e}
+\usepackage{subfigure}
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{times}
+\usepackage[T1]{fontenc} 
+\usepackage{color}
+
+\usetheme[secheader]{Boadilla}
+\usefonttheme[onlylarge]{structurebold}
+\setbeamerfont*{frametitle}{size=\normalsize,series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{mini frames}[box]
+\setbeamertemplate{sections/subsections in toc}[square]
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamertemplate{bibliography item}[text]
+
+\setbeamercolor{lightorange}{fg=black,bg=orange!40}
+\setbeamercolor{lightblue}{fg=black,bg=blue!30}
+
+\newenvironment{colorblock}[2]
+{\setbeamercolor{item}{fg=#1,bg=#1}\begin{beamerboxesrounded}[upper=#1,lower=#2,shadow=true]}
+  {\end{beamerboxesrounded}}
+
+
+
+% Setup TikZ
+
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\tikzstyle{block}=[draw opacity=0.7,line width=1.4cm]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{observation}[theorem]{Observation} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Apache Spark Internals}
+% \subtitle{Introduction}
+\author{Pietro Michiardi}
+\institute{Eurecom}
+\date
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction and Motivations}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Introduction and Motivations}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+% \input{./introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Anatomy of a Spark Application}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Anatomy of a Spark Application}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+% \input{./spark_job.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Resource Allocation}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Resource Allocation: the DAG and Standalone Schedulers}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+% \input{./schedulers.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data Shuffling}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Data Shuffling}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+% \input{./shuffle.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Caching}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Caching}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+% \input{./caching.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Spark Tuning}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Spark Tuning with a Running Example}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+% \input{./tuning.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
