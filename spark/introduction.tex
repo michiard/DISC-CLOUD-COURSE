@@ -102,13 +102,25 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{SPARK: Descriptive Computing Model}
+\begin{frame}[fragile]
+\frametitle{SPARK: Descriptive Computing Model}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}[h]
-  \centering
-  \includegraphics[scale=0.36]{./Figures/wc_spark}
-  \label{fig:wc_spark}
-\end{figure}
+% \begin{figure}[h]
+%   \centering
+%   \includegraphics[scale=0.36]{./Figures/wc_spark}
+%   \label{fig:wc_spark}
+% \end{figure}
+
+\begin{lstlisting}
+val file = sc.textFile("hdfs://...")
+
+val counts = file.flatMap(line => line.split(" "))
+    .map(word => (word,1))
+    .reduceByKey(_ + _)
+
+counts.saveAsTextFile("hdfs://...")
+\end{lstlisting}
+
 
 \begin{itemize}
   \item Organize computation into multiple stages in a processing pipeline
@@ -118,7 +130,7 @@
   \end{itemize}
     
   \end{itemize}  
-}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Faster Processing Speed}
