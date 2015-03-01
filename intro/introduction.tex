@@ -5,19 +5,24 @@
     \item \textbf{The MapReduce Programming Model}
     \begin{itemize}
       \item Principles of functional programming
-      \item Scalable algorithm design
     \end{itemize}
 
-\vspace{20pt}
+\vspace{10pt}
   
-    \item \textbf{In-depth description of Hadoop MapReduce}
+    \item \textbf{In-depth description of Hadoop MapReduce v.1}
     \begin{itemize}
       \item Architecture internals
-      \item Software components
       \item Cluster deployments
     \end{itemize}
 
-\vspace{20pt}
+\vspace{10pt}
+
+    \item \textbf{In-depth description of Apache Spark}
+    \begin{itemize}
+      \item Architecture internals
+    \end{itemize}
+
+\vspace{10pt}
 
     \item \textbf{Relational Algebra and High-Level Languages}
     \begin{itemize}
@@ -25,6 +30,147 @@
       \item Hadoop Pig and PigLatin
     \end{itemize}
 
+\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{What is this Course About}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+
+    \item \textbf{Cluster schedulers}
+    \begin{itemize}
+      \item Apache YARN, a.k.a. Hadoop v.2
+      \item Apache Mesos
+      \item Google Omega
+    \end{itemize}
+
+\vspace{10pt}
+
+    \item \textbf{Distributed Database Systems}
+    \begin{itemize}
+      \item Amazon Dynamo
+      \item Apache Cassandra
+      \item Apache HBase
+    \end{itemize}
+
+\vspace{10pt}
+
+    \item \textbf{Coordination}
+    \begin{itemize}
+      \item Apache Zookeeper
+    \end{itemize}
+
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Who is this course for?}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+
+    \item \textbf{System engineers}
+
+\vspace{10pt}
+
+    \item \textbf{Data scientists}
+
+\vspace{10pt}
+
+    \item \textbf{Requirements}
+    \begin{itemize}
+      \item Familiarity with Java
+      \item Familiarity with operating systems concepts, and Linux
+      \item Familiartiy with git
+      \item Ideally, familiarity with Python and Scala
+      \item Ideally, familiarity with distributed algorithms
+    \end{itemize}
+
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{How to make the most of this course?}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+
+    \item \textbf{Contribute!}
+    \begin{itemize}
+      \item The whole course is open source
+      \item Pull-request based
+      \item Contribute to both lecture notes and laboratories
+    \end{itemize}
+
+\vspace{10pt}
+
+    \item \textbf{Attend classes and the labs}
+    \begin{itemize}
+      \item Many discussions in live classes, that are not on the slides
+      \item Laboratories can be hard for people with little CS background
+    \end{itemize}
+
+\vspace{10pt}
+
+    \item \textbf{Resources}
+    \begin{itemize}
+      \item Lecture notes: \url{http://michiard.github.io/DISC-CLOUD-COURSE/}
+      \item Laboratories: \url{https://github.com/michiard/CLOUDS-LAB}
+    \end{itemize}
+
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Grading}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+
+    \item \textbf{Final exam}
+    \begin{itemize}
+      \item 50\% of the grade
+      \item Generally divided in two parts
+      \begin{itemize}
+        \item A series of questions
+        \item One or more problems to solve
+      \end{itemize}
+      \item No coding is required
+    \end{itemize}
+
+\vspace{40pt}
+
+    \item \textbf{Laboratory sessions}
+    \begin{itemize}
+      \item Questions to be answered during the labs
+      \item Each correct question brings some credits
+      \item Heuristic to map credits to grade
+    \end{itemize}
+
+\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{What is Big Data?}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  \begin{itemize}
+  \item \textbf{Vast repositories of data}
+    \begin{itemize}
+      \item The Web
+      \item Physics
+      \item Astronomy
+      \item Finance
+    \end{itemize}
+
+  \vspace{20pt}
+
+  \item \textbf{Volume, Velocity, Variety}
+
+  \vspace{20pt}
+
+  \item \textbf{It's not the algorithm, it's the data!}
+    \begin{itemize}
+      \item More data leads to better accuracy
+      \item With more data, accuracy of different algorithms converges
+    \end{itemize}
   \end{itemize}
 }
 
@@ -47,31 +193,3 @@
     \end{itemize}
  \end{itemize}
 }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{What is Big Data?}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \begin{itemize}
-  \item \textbf{Vast repositories of data}
-    \begin{itemize}
-      \item The Web
-      \item Physics
-      \item Astronomy
-      \item Finance
-    \end{itemize}
-
-  \vspace{20pt}
-
-  \item \textbf{Volume, Velocity, Variety}
-
-  \vspace{20pt}
-
-  \item \textbf{It's not the algorithm, it's the data!} \cite{banko01}
-    \begin{itemize}
-      \item More data leads to better accuracy
-      \item With more data, accuracy of different algorithms converges
-    \end{itemize}
-  \end{itemize}
-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
