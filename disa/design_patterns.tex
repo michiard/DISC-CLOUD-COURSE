@@ -137,6 +137,7 @@
   \item \textbf{In-Mapper Combiners, a possible improvement over vanilla Combiners}
     \begin{itemize}
     \item Hadoop does not\footnote{Actually, combiners are not called if the number of map output records is less than a small threshold, {\it i.e.}, 4} guarantee combiners to be executed
+    \item Combiners can be costly in terms of CPU and I/O
     \end{itemize}
 
     \vspace{20pt}
