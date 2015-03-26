@@ -185,35 +185,99 @@
 \frame {\frametitle{Hadoop RDD}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{itemize}
-	\item Slide 15 MZ
-\end{itemize}
+	\item {\color{mauve} partitions} = one per HDFS block
 
+	\vspace{10pt}
+
+	\item {\color{mauve} dependencies} = none
+
+	\vspace{10pt}
+
+	\item {\color{mauve} compute(partition)} = read corresponding block
+
+	\vspace{10pt}
+
+	\item {\color{mauve} preferredLocations(part)} = HDFS block location
+
+	\vspace{10pt}
+
+	\item {\color{mauve} partitioner} = none
+
+\end{itemize}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Filtered RDD}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{itemize}
-	\item Slide 16 MZ
-\end{itemize}
+	\item {\color{mauve} partitions} = same as parent RDD
 
+	\vspace{10pt}
+
+	\item {\color{mauve} dependencies} = \emph{one-to-one} on parent
+
+	\vspace{10pt}
+
+	\item {\color{mauve} compute(partition)} = compute parent and filter it
+
+	\vspace{10pt}
+
+	\item {\color{mauve} preferredLocations(part)} = none (\emph{ask parent})
+
+	\vspace{10pt}
+
+	\item {\color{mauve} partitioner} = none
+
+\end{itemize}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Joined RDD}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{itemize}
-	\item Slide 17 MZ
+	\item {\color{mauve} partitions} = one per reduce task
+
+	\vspace{10pt}
+
+	\item {\color{mauve} dependencies} = \emph{shuffle} on \emph{each} parent
+
+	\vspace{10pt}
+
+	\item {\color{mauve} compute(partition)} = read and join shuffled data
+
+	\vspace{10pt}
+
+	\item {\color{mauve} preferredLocations(part)} = none 
+
+	\vspace{10pt}
+
+	\item {\color{mauve} partitioner} = HashPartitioner(numTask)\footnote{Spark knows this data is hashed.}
+
 \end{itemize}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Dependency Types}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{itemize}
-	\item Slide 18 MZ
-\end{itemize}
+\begin{columns}[t, onlytextwidth]
+	\begin{column}[T]{.4\textwidth}
+		\begin{center}
+			{ \tiny \bf Narrow dependencies}
+		\end{center}
+		\begin{figure}[h]
+			\includegraphics[scale=0.3]{./Figures/narrow_deps}
+		\end{figure}
+	\end{column}
 
+	\begin{column}[T]{.4\textwidth}
+		\begin{center}
+			{ \tiny \bf Wide dependencies}
+		\end{center}
+		\begin{figure}[h]
+			\includegraphics[scale=0.3]{./Figures/wide_deps}
+		\end{figure}
+	\end{column}
+\end{columns}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
