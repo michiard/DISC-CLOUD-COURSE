@@ -2,15 +2,6 @@
 \begin{frame}[fragile] 
 \frametitle{Spark Word Count: the driver}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{itemize}
-	\item Driver and \texttt{SparkContext}
-	\begin{itemize}
-		\item A SparkContext initializes the application driver, the latter then registers the application to the cluster manager, and gets a list of executors
-		\item Then, the driver takes full control of the Spark job
-	\end{itemize}
-\end{itemize}
-
 \begin{lstlisting}
 	import org.apache.spark.SparkContext
 
@@ -18,6 +9,14 @@
 
 	val sc = new SparkContext("spark://...", "MyJob", "spark home", "additional jars") 
 \end{lstlisting}
+
+\begin{itemize}
+	\item {\bf Driver and \texttt{SparkContext}}
+	\begin{itemize}
+		\item A SparkContext initializes the application driver, the latter then registers the application to the cluster manager, and gets a list of executors
+		\item Then, the driver takes full control of the Spark job
+	\end{itemize}
+\end{itemize}
 
 \end{frame}
 
