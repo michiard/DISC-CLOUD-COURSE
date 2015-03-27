@@ -136,7 +136,7 @@ counts.saveAsTextFile("hdfs://...")
 \frame {\frametitle{Faster Processing Speed}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{itemize}
-  \item Let's focus on iterative algorithms
+  \item {\bf Let's focus on iterative algorithms}
   \begin{itemize}
     \item Spark is faster thanks to the simplified data flow
     \item We avoid materializing data on HDFS after each iteration
@@ -144,14 +144,22 @@ counts.saveAsTextFile("hdfs://...")
 
 \vspace{20pt}
 
-  \item Example: k-means algorithm
+  \item {\bf Example: k-means algorithm, 1 iteration}
   \begin{itemize}
-    \item Step 1: Place randomly initial group centroids into the space
-    \item Step 2: Assign each object to the group that has the closest centroid.
-    \item Step 3: Recalculate the positions of the centroids.
-    \item Step 4: If the positions of the centroids didn't change go to the next step, else go to Step 2.
-    \item Step 5: End.
+    \item \texttt{HDFS Read}
+    \item \textbf{\texttt{Map}}(\emph{Assign sample to closest centroid})
+    \item \textbf{\texttt{GroupBy}}(Centroid\_ID)
+    \item \texttt{NETWORK Shuffle}
+    \item \textbf{\texttt{Reduce}}(\emph{Compute new centroids})
+    \item \texttt{HDFS Write}
   \end{itemize}
+  % \begin{itemize}
+  %   \item Step 1: Place randomly initial group centroids into the space
+  %   \item Step 2: Assign each object to the group that has the closest centroid.
+  %   \item Step 3: Recalculate the positions of the centroids.
+  %   \item Step 4: If the positions of the centroids didn't change go to the next step, else go to Step 2.
+  %   \item Step 5: End.
+  % \end{itemize}
 \end{itemize}
 }
 

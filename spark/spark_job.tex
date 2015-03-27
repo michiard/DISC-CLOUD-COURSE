@@ -9,6 +9,85 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+\frametitle{A Very Simple Job Example}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{lstlisting}
+val sc = new SparkContext("spark://...", "MyJob", home, jars) 
+
+val file = sc.textFile("hdfs://...") // This is an RDD
+
+val errors = file.filter(_.contains("ERROR")) // This is an RDD
+
+errors.cache()
+
+errors.count() // This is an action
+\end{lstlisting}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Spark Components: System-level View}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\begin{figure}[h]
+	  \centering
+	  \includegraphics[scale=0.3]{./Figures/spark_system}
+	  \label{fig:spark_components}
+	\end{figure}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{The RDD graph: dataset vs. partition views}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% missing: what is an rdd? difference between RDD and partition?
+
+\begin{columns}[c]
+	\column{.5\textwidth}
+		
+			\begin{figure}[h]
+			  \centering
+			  \includegraphics[scale=0.25]{./Figures/spark_rdd}
+			  \label{fig:spark_components}
+			\end{figure}
+	
+	\column{.5\textwidth}
+		
+			\begin{figure}[h]
+			  \centering
+			  \includegraphics[scale=0.25]{./Figures/spark_partition}
+			  \label{fig:spark_components}
+			\end{figure}
+
+\end{columns}
+}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Data Locality}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+	\item {\bf Data locality principle}
+	\begin{itemize}
+		\item Same as for Hadoop MapReduce
+		\item Avoid network I/O, workers should manage local data
+	\end{itemize}
+
+	\vspace{20pt}
+
+	\item {\bf Data locality and caching}
+	\begin{itemize}
+		\item First run: data not in cache, so use HadoopRDD's locality prefs (from HDFS)
+		\item Second run: FilteredRDD is in cache, so use its locations
+		\item If something falls out of cache, go back to HDFS
+	\end{itemize}
+\end{itemize}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Lifetime of a Job in Spark}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -392,58 +471,3 @@
 \end{figure}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]
-\frametitle{A Very Simple Job Example}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-\begin{lstlisting}
-val sc = new SparkContext("spark://...", "MyJob", home, jars) 
-
-val file = sc.textFile("hdfs://...") // This is an RDD
-
-val errors = file.filter(_.contains("ERROR")) // This is an RDD
-
-errors.cache()
-
-errors.count() // This is an action
-\end{lstlisting}
-
-\end{frame}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{The RDD graph: dataset vs. partition views}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% missing: what is an rdd? difference between RDD and partition?
-
-\begin{columns}[c]
-	\column{.5\textwidth}
-		
-			\begin{figure}[h]
-			  \centering
-			  \includegraphics[scale=0.25]{./Figures/spark_rdd}
-			  \label{fig:spark_components}
-			\end{figure}
-	
-	\column{.5\textwidth}
-		
-			\begin{figure}[h]
-			  \centering
-			  \includegraphics[scale=0.25]{./Figures/spark_partition}
-			  \label{fig:spark_components}
-			\end{figure}
-
-\end{columns}
-}
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \frame {\frametitle{Data Locality}
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \begin{itemize}
-% 	\item First run: data not in cache, so use HadoopRDD's locality prefs (from HDFS)
-% 	\item Second run: FilteredRDD is in cache, so use its locations
-% 	\item If something falls out of cache, go back to HDFS
-% \end{itemize}
-% }
