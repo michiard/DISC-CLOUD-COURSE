@@ -1,0 +1,44 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] 
+\frametitle{Spark Word Count}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{itemize}
+	\item Driver and \texttt{SparkContext}
+	\begin{itemize}
+		\item A SparkContext initializes the application driver, the latter then registers the application to the cluster manager, and gets a list of executors
+		\item Then, the driver takes full control of the Spark job
+	\end{itemize}
+\end{itemize}
+
+\begin{lstlisting}
+	import org.apache.spark.SparkContext
+
+	import org.apache.spark.SparkContext._
+
+	val sc = new SparkContext("spark://...", "MyJob", "spark home", "additional jars") 
+\end{lstlisting}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile] 
+\frametitle{Spark Word Count}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{lstlisting}
+	val lines = sc.textFile("input")
+	val words = lines.flatMap(_.split(" ")) 
+	val ones = words.map(_ -> 1)
+	val counts = ones.reduceByKey(_ + _) 
+	val result = counts.collectAsMap()
+\end{lstlisting}
+
+\begin{itemize}
+	\item {\bf RDD lineage DAG is built on driver side with}
+	\begin{itemize}
+		\item Data source RDD(s)
+		\item Transformation RDD(s), which are created by transformations
+	\end{itemize}
+\end{itemize}
+
+\end{frame}
