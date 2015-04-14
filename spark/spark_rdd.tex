@@ -178,6 +178,85 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Operations on RDDs: Transformations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+	\item {\bf Transformations}
+	\begin{itemize}
+		\item Set of operations on a RDD that define how they should be transformed
+		\item As in relational algebra, the application of a transformation to an RDD yields a new RDD (because RDD are \emph{immutable})
+		\item Transformations are lazily evaluated, which allow for optimizations to take place before execution
+	\end{itemize}
+
+	\vspace{10pt}
+
+	\item {\bf Examples} (not exhaustive)
+	\begin{itemize}
+		\item \texttt{map(func)}, \texttt{flatMap(func)}, \texttt{filter(func)}
+		\item \texttt{grouByKey()}
+		\item \texttt{reduceByKey(func)}, \texttt{mapValues(func)}, \texttt{distinct()}, \texttt{sortByKey(func)}
+		\item \texttt{join(other)}, \texttt{union(other)}
+		\item \texttt{sample()}
+	\end{itemize}
+
+\end{itemize}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Operations on RDDs: Actions}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+	\item {\bf Actions}
+	\begin{itemize}
+		\item Apply transformation chains on RDDs, eventually performing some additional operations (e.g., counting)
+		\item Some actions only store data to an external data source (e.g. HDFS), others fetch data from the RDD (and its transformation chain) upon which the action is applied, and convey it to the driver
+	\end{itemize}
+
+	\vspace{20pt}
+
+	\item {\bf Examples} (not exhaustive)
+	\begin{itemize}
+		\item \texttt{reduce(func)}
+		\item \texttt{collect()}, \texttt{first()}, \texttt{take()}, \texttt{foreach(func)}
+		\item \texttt{count()}, \texttt{countByKey()}
+		\item \texttt{saveAsTextFile()}
+	\end{itemize}
+
+\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Operations on RDDs: Final Notes}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+
+	\item {\bf Look at return types!}
+	\begin{itemize}
+		\item Return type: RDD $\to$ transformation
+		\item Return type: built-in scala/java types such as \texttt{int}, \texttt{long}, \texttt{List<Object>}, \texttt{Array<Object>} $\to$ action
+	\end{itemize}
+
+	\vspace{10pt}
+
+	\item {\bf Caching is a transformation}
+	\begin{itemize}
+		\item Hints to keep RDD in memory after its first evaluation
+	\end{itemize}
+
+	\vspace{10pt}
+
+	\item {\bf Transformations depend on RDD ``flavor''}
+	\begin{itemize}
+		\item \texttt{PairRDD}
+		\item \texttt{SchemaRDD}
+	\end{itemize}
+
+\end{itemize}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{RDD Code Snippet}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	\begin{figure}[h]
@@ -200,10 +279,6 @@
 			\item Input RDD(s)
 		\end{itemize}
 	\end{itemize}
-
-	\begin{colorblock}{blue}{lightblue}{}
-	{\bf M. Zaharia}, M. Chowdhury, T. Das, A. Dave, J. Ma, M. McCauley, M.J. Franklin, S. Shenker, I. Stoica. \emph{Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing}, {\bf NSDI}, 2012		
-	\end{colorblock}			
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
