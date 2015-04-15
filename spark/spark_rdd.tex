@@ -154,7 +154,7 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Dependency Types}
+\frame {\frametitle{Dependency Types (1)}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{columns}[t, onlytextwidth]
 	\begin{column}[T]{.4\textwidth}
@@ -176,6 +176,46 @@
 	\end{column}
 \end{columns}
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Dependency Types (2)}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+	\item {\bf Narrow dependencies}
+	\begin{itemize}
+		\item Each partition of the parent RDD is used by at most one partition of the child RDD
+		\item Task can be executed locally and we don't have to shuffle. (Eg: \texttt{map}, \texttt{flatMap}, \texttt{filter}, \texttt{sample})
+	\end{itemize}
+
+	\vspace{20pt}
+
+	\item {\bf Wide Dependencies}
+	\begin{itemize}
+		\item Multiple child partitions may depend on one partition of the parent RDD 
+		\item This means we have to shuffle data \textbf{unless the parents are hash-partitioned} (Eg: \texttt{sortByKey}, \texttt{reduceByKey}, \texttt{groupByKey}, \texttt{cogroupByKey}, \texttt{join}, \texttt{cartesian})
+	\end{itemize}
+\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Dependency Types: Optimizations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+	\item {\bf Benefits of Lazy evaluation}
+	\begin{itemize}
+		\item The DAG Scheduler optimizes \emph{Stages} and \emph{Tasks} before submitting them to the Task Scheduler
+		\item \textbf{Piplining} narrow dependencies within a Stage
+		\item \textbf{Join plan selection} based on partitioning
+		\item \textbf{Cache reuse}
+	\end{itemize}
+\end{itemize}
+
+\begin{figure}[h]
+	\includegraphics[scale=0.5]{./Figures/deps_optimization}
+\end{figure}
+
+}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Operations on RDDs: Transformations}
@@ -363,3 +403,62 @@
 		\includegraphics[scale=0.45]{./Figures/HadoopRDD_snippet}
 \end{figure}
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Large \textbf{\texttt{Understanding RDD Operations}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Common Transformations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{columns}[t, onlytextwidth]
+	\begin{column}[T]{.3\textwidth}
+		\begin{center}
+			\texttt{map(f: T => U)}	
+		\end{center}
+	\end{column}
+
+	\begin{column}[T]{.5\textwidth}
+		
+			Returns a \texttt{MappedRDD[U]} by applying $f$ to each element
+		
+	\end{column}
+\end{columns}
+
+\begin{figure}[h]
+	\includegraphics[scale=0.6]{./Figures/transformation_map}
+\end{figure}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Common Transformations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{columns}[t, onlytextwidth]
+	\begin{column}[T]{.4\textwidth}
+		\begin{center}
+			\texttt{flatMap(f: T => TraversableOnce[U])}	
+		\end{center}
+	\end{column}
+
+	\begin{column}[T]{.4\textwidth}
+		
+			Returns a \texttt{FlatMappedRDD[U]} by first applying $f$ to each element, then flattening the results
+		
+	\end{column}
+\end{columns}
+
+\begin{figure}[h]
+	\includegraphics[scale=0.6]{./Figures/transformation_flatmap}
+\end{figure}
+
+}
+
+
