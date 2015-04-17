@@ -14,7 +14,7 @@
 
 	\item {\bf Transformations requiring a shuffle phase}
 	\begin{itemize}
-		\item \texttt{groupByKey()}, \texttt{reduceByKey()}, \texttt{sortByKey()}, \texttt{distinct()}, ...
+		\item \texttt{groupByKey()}, \texttt{reduceByKey()}, \texttt{sortByKey()}, \texttt{distinct()}
 	\end{itemize}
 
 	\vspace{20pt}
@@ -52,12 +52,32 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{The Spark Shuffle Mechanism: Implementation Details}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.33]{./Figures/shuffle_diagram}
+  \label{fig:spark_shuffle_diagram}
+\end{figure}
+
+\begin{itemize}
+	\item {\bf Pluggable component}
+	\begin{itemize}
+		\item \emph{Shuffle Manager}: components registered to \texttt{SparkEnv}, configured through \texttt{SparkConf}
+		\item \emph{Shuffle Writer}: tracks ``intermediate data'' for the \texttt{MapOutputTracker}
+		\item \emph{Shuffle Reader}: pull-based mechanism used by the \texttt{ShuffleRDD}
+		\item \emph{Shuffle Block Manager}: mapping between logical partitioning and the physical layout of data
+	\end{itemize}
+\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{The Hash Shuffle Mechanism}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[h]
   \centering
   \includegraphics[scale=0.35]{./Figures/spark_shuffle_hash}
-  \label{fig:spark_shuffle}
+  \label{fig:spark_shuffle_hash}
 \end{figure}
 
 \begin{itemize}
@@ -81,7 +101,7 @@
 \begin{figure}[h]
   \centering
   \includegraphics[scale=0.35]{./Figures/spark_shuffle_consolidate}
-  \label{fig:spark_shuffle}
+  \label{fig:spark_shuffle_consolidate}
 \end{figure}
 
 \begin{itemize}
@@ -101,7 +121,7 @@
 \begin{figure}[h]
   \centering
   \includegraphics[scale=0.35]{./Figures/spark_shuffle_sort}
-  \label{fig:spark_shuffle}
+  \label{fig:spark_shuffle_sort}
 \end{figure}
 
 \begin{itemize}
@@ -118,4 +138,39 @@
 	\end{itemize}
 
 \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Data Transfer: Implementation Details}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+	\item {\bf BlockTransfer Service}
+	\begin{itemize}
+		\item General interface for \texttt{ShuffleFetcher}
+		\item Uses \texttt{BlockDataManager} to get local data
+	\end{itemize}
+
+	\vspace{10pt}
+
+	\item {\bf Shuffle Client}
+	\begin{itemize}
+		\item Manages and wraps the ``client-side'', setting up the \texttt{TransportContext} and \texttt{TransportClient}
+	\end{itemize}
+	
+	\vspace{10pt}
+
+	\item {\bf Transport Context}: manages the transport layer
+	\item {\bf Transport Server}: streaming server
+	\item {\bf Transport Client}: fetches consecutive chunks
+\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Data Transfer: an Illustration}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.35]{./Figures/shuffle_data_transfer}
+  \label{fig:spark_shuffle_sort}
+\end{figure}
 }
