@@ -8,6 +8,8 @@
 		\item Combined, they allow constructing Internet-scale applications
 	\end{itemize}
 
+	\vspace{40pt}
+
 	\item {\bf Infrastructure services requirements:}
 	\begin{itemize}
 		\item Security, scalability, availability, performance, cost-efficiency
@@ -26,6 +28,8 @@
 		\item AWS is in AP, sacrificing consistency
 	\end{itemize}
 
+	\vspace{40pt}
+
 	\item {\bf AWS follows the BASE philosophy}
 	\begin{itemize}
 		\item BASE vs. ACID
@@ -41,6 +45,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{itemize}
 	\item {\bf Even the shortest outage has significant financial consequences and impact customer trust}
+
+	\vspace{40pt}
 
 	\item {\bf Clearly, consistency violations may as well have a big impact}
 	\begin{itemize}
@@ -60,6 +66,8 @@
 		\item Used to power internal Amazon services such as: shopping cart, customer session management, product catalog, recommendations, order fulfillment, sales rank, fraud detection, ...
 	\end{itemize}
 
+	\vspace{40pt}
+
 	\item {\bf What is Dynamo?}
 	\begin{itemize}
 		\item Highly available key-value storage system
@@ -78,12 +86,16 @@
 		\item Sometimes referred to read/write operations
 	\end{itemize}
 
+	\vspace{20pt}
+
 	\item {\bf Specifics of Dynamo API}
 	\begin{itemize}
 		\item Uses an additional argument to pass a ``context''
 		\item Context holds critical metadata
 		\item Typically stores {\color{red}small objects} (< 1 MB)
 	\end{itemize}
+
+	\vspace{20pt}
 
 	\item {\bf Specifics of services using Dynamo}
 	\begin{itemize}
@@ -106,6 +118,8 @@
 		\item {\color{red}Eventually} consistent
 	\end{itemize}
 
+	\vspace{40pt}
+
 	\item {\bf How such features are obtained}
 	\begin{itemize}
 		\item General distributed systems toolbox
@@ -122,6 +136,8 @@
 	\begin{itemize}
 		\item For data partitioning, replication and load balancing
 	\end{itemize}
+
+	\vspace{40pt}
 
 	\item {\bf Sloppy Quorums}
 	\begin{itemize}
@@ -140,10 +156,14 @@
 		\item For tracking causal dependencies among different versions of the same key (data)
 	\end{itemize}
 
+	\vspace{20pt}
+
 	\item {\bf Gossip-based group membership}
 	\begin{itemize}
 		\item For maintaining information about alive nodes
 	\end{itemize}
+
+	\vspace{20pt}
 
 	\item {\bf Anti-entropy protocol based on Merkle trees}
 	\begin{itemize}
@@ -161,12 +181,16 @@
 		\item E.g., think shopping cart service
 	\end{itemize}
 
+	\vspace{20pt}
+
 	\item {\bf How to handle data changes?}
 	\begin{itemize}
 		\item Replication, required for fault/disaster tolerance
 		\item Allow multiple versions of data
 		\item Reconcile and resolve conflicts {\color{red}during reads}
 	\end{itemize}
+
+	\vspace{20pt}
 
 	\item {\bf How to reconcile data?}
 	\begin{itemize}
@@ -224,12 +248,16 @@
 		\item Technique used for DHTs, e.g., Chord
 	\end{itemize}
 
+	\vspace{20pt}
+
 	\item {\bf Consistent Hashing}
 	\begin{itemize}
 		\item Hashes of keys give key $m$-bit identifiers
 		\item Hashes of nodes give $m$-bit identifiers
 		\item Identifiers are ordered in an identifier circle
 	\end{itemize}
+
+	\vspace{20pt}
 
 	\item {\bf Key assignment to storage nodes}
 	\begin{itemize}
@@ -261,6 +289,8 @@
 		\item Allows incremental scalability
 	\end{itemize}
 
+	\vspace{40pt}
+
 	\item {\bf Storage node arrival/departures}
 	\begin{itemize}
 		\item \texttt{$n$ Joins}: all keys previously assigned to node $n$'s successor are now assigned to $n$
@@ -278,6 +308,8 @@
 		\item Each node is responsible for at most $(1+ \epsilon)K/N$ keys
 		\item When a new node joins, only $O(K/n)$ keys must be moved (optimal)
 	\end{itemize}
+
+	\vspace{40pt}
 
 	\item {\bf Virtual Nodes}
 	\begin{itemize}
@@ -299,6 +331,8 @@
 		\item $N$ is a configurable parameter per Dynamo instance
 	\end{itemize}
 
+	\vspace{40pt}
+
 	\item {\bf Example:}
 	\begin{itemize}
 		\item Assume $N=3$
@@ -307,11 +341,6 @@
 		\item[$\to$] $B, C, D$ are a {\bf preference list} for $k$
 	\end{itemize}
 \end{itemize}
-
-\begin{figure}[h]
-	\includegraphics[scale=0.3]{./figures/dynamo_replication_example}
-\end{figure}
-
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -324,6 +353,8 @@
 		\item May result in inconsistencies under partitions
 		\item[$\to$] Read does not return the last value
 	\end{itemize}
+
+	\vspace{40pt}
 
 	\item {\bf Operations should not be lost!}
 	\begin{itemize}
@@ -345,6 +376,8 @@
 		\item Applications {\color{red}must be designed} with data versionin in mind
 	\end{itemize}
 
+	\vspace{40pt}
+
 	\item {\bf Key technique for versioning}
 	\begin{itemize}
 		\item Vector clocks
@@ -365,6 +398,8 @@
 		\item When node $i$ handles a write for key $k$ it increments $VC(k)[i]$
 	\end{itemize}
 
+	\vspace{40pt}
+
 	\item {\bf In practice:}
 	\begin{itemize}
 		\item $VC(k)$ will not have many entries $\to$ only node from the preference list should have entries
@@ -377,7 +412,7 @@
 \frame {\frametitle{Vector Clocks (in Dynamo) (2)}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[h]
-	\includegraphics[scale=0.5]{./figures/dynamo_vc_example}
+	\includegraphics[scale=0.45]{./figures/dynamo_vc_example}
 \end{figure}
 
 }
@@ -392,6 +427,8 @@
 		\item Application may directly contact the coordinator in a preference list
 	\end{itemize}
 
+	\vspace{20pt}
+
 	\item {\bf Request routing}
 	\begin{itemize}
 		\item Node serves request only if in preference list
@@ -399,6 +436,8 @@
 		\item 0-hop DHT routing: all nodes know all other nodes
 		\item[$\to$] Not the most scalable, but excellent for low-latency
 	\end{itemize}
+
+	\vspace{20pt}
 
 	\item {\bf Extended preference list}
 	\begin{itemize}
@@ -418,12 +457,16 @@
 		\item Quorum system: $R+W > N$, where $N$ is the number of replicas
 	\end{itemize}
 
+	\vspace{20pt}
+
 	\item {\bf Handling put (by coordinator)}
 	\begin{itemize}
 		\item Generate new VC, write new version locally
 		\item Send value, VC, to $N$ nodes from preference list
 		\item Wait for $W-1$ acknowledgments
 	\end{itemize}
+
+	\vspace{20pt}
 
 	\item {\bf Handling get (by coordinator)}
 	\begin{itemize}
@@ -445,11 +488,15 @@
 		\item Slowest replica dictates query latency
 	\end{itemize}
 
+	\vspace{20pt}
+
 	\item {\bf $W=1$}
 	\begin{itemize}
 		\item Always available for writes
 		\item Yields $R=N$ $\to$ reads pay the penalty
 	\end{itemize}
+
+	\vspace{20pt}
 
 	\item {\bf Typical values in Dynamo}
 	\begin{itemize}
@@ -468,11 +515,15 @@
 		\item Hence the term ``sloppy'' quorums
 	\end{itemize}
 
+	\vspace{20pt}
+
 	\item {\bf Sloppy vs. strict quorums}
 	\begin{itemize}
 		\item Allow availability under a much wider range of partitions
 		\item Sacrifice consistency
 	\end{itemize}
+
+	\vspace{20pt}
 
 	\item {\bf Data-center wide failures}
 	\begin{itemize}
@@ -504,6 +555,8 @@
 		\item A tree in which every non-leaf node is labelled with the hash of the labels of its children nodes
 	\end{itemize}
 
+	\vspace{40pt}
+
 	\item {\bf Storage nodes}
 	\begin{itemize}
 		\item Keep a Merkle tree for each of its key ranges (virtual nodes)
@@ -519,6 +572,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{itemize}
 	\item {\bf Membership management initiated by administrator}
+
+	\vspace{40pt}
 
 	\item {\bf Gossip protocol to propagate membership changes}
 	\begin{itemize}
@@ -540,6 +595,8 @@
 		\item[$\to$] No dedicated component
 	\end{itemize}
 
+	\vspace{40pt}
+
 	\item {\bf Example:}
 	\begin{itemize}
 		\item With steady load on node A
@@ -558,11 +615,15 @@
 		\item In the CAP space, it is in AP
 	\end{itemize}
 
+	\vspace{20pt}
+
 	\item {\bf Focuses on low-latency}
 	\begin{itemize}
 		\item Writes are super fast
 		\item Reconciliation in reads
 	\end{itemize}
+
+	\vspace{20pt}
 
 	\item {\bf Built atop of fundamental techniques in distributed systems}
 	\begin{itemize}
