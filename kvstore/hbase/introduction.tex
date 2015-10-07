@@ -19,7 +19,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Why yet another storage architecture?}
   \begin{itemize}
-  \item \textbf{Relational Databse Management Systems (RDBMS)}:
+  \item \textbf{Relational Database Management Systems (RDBMS)}:
     \begin{itemize}
     \item Around since 1970s
     \item Countless examples in which they actually do make sense
@@ -314,14 +314,13 @@
 
   \item \textbf{Consistency models and the CAP Theorem}
     \begin{itemize}
-    \item Strict: all changes to data are atomic
-    \item Sequential: changes to data are seen in the same order as
-      they were applied
-      \item Causal: causally related changes are seen in the same
-        order
-      \item Eventual: updates propagates through the system and
-        replicas when in steady state
-      \item Weak: no guarantee
+    \item Strong: real-time global ordering of operations
+    \item Sequential: global ordering of operations that respects 
+		client session ordering
+	\item Causal: causally related changes are seen in the same
+	   	order
+    \item Eventual: eventual, steady state replicas convergence
+    \item Weak: no guarantee
     \end{itemize}
 
   \end{itemize}
@@ -349,7 +348,7 @@
 
   \item \textbf{Consistency model}
     \begin{itemize}
-    \item Strict or eventual?
+    \item Strong or eventual?
     \item This translates in how fast the system handles
       \texttt{READS} and \texttt{WRITES} \cite{Brewer01}
     \end{itemize}
@@ -386,7 +385,7 @@
   \begin{itemize}
   \item \textbf{Failure Handling}
     \begin{itemize}
-    \item How each data store handle server failures?
+    \item How does each data store handle server failures?
     \item Is it able to continue operating in case of failures?
       \begin{itemize}
       \item This is related to Consistency models and the CAP theorem
@@ -796,7 +795,7 @@
       of columns
     \item There is no further guarantee or transactional feature
       spanning multiple rows
-    \item[$\to$] HBase is strictly consistent
+    \item[$\to$] HBase is strongly consistent
     \end{itemize}
 
   \end{itemize}
@@ -901,7 +900,7 @@
     \item Values can be interpreted as counters and \textbf{updated
         atomically}
     \item Can be read and modified in one operation
-    \item[$\to$] Implement global, strictly consistent, sequential counters
+    \item[$\to$] Implement global, strongly consistent, sequential counters
     \end{itemize}
 
     \vspace{20pt}

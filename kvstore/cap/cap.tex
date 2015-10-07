@@ -10,7 +10,7 @@
 	\begin{itemize}
 		\item C: Consistency
 		\begin{itemize}
-			\item One-copy semantics, linearizability, atomicity, total-order
+			\item One-copy semantics, linearizability, atomicity, total order
 			\item Every operation must appear to take effect in a single indivisible point in time between its invocation and response
 		\end{itemize}
 		\item A: Availability
@@ -18,7 +18,7 @@
 			\item Every client's request is served (receives a response) unless a
 client fails (despite a strict subset of server nodes failing) 
 		\end{itemize}
-		\item P: Partition-tolerance
+		\item P: Partition tolerance
 		\begin{itemize}
 			\item A system functions properly even if the network is allowed to lose arbitrarily many messages sent from one node to another
 		\end{itemize}
@@ -142,15 +142,15 @@ client fails (despite a strict subset of server nodes failing)
 \begin{itemize}
 	\item {\bf CP:}
 	\begin{itemize}
-		\item BigTable (Google), HBase, MongoDB, Redis, Memcachedb, ...
-		\item (sometimes classified in CA) Paxos, Zookeeper, RDBMSs, ...
+		\item BigTable (Google), HBase, ...
+		\item Coordination systems: ZooKeeper, etcd, ...
 	\end{itemize}
 
 	\vspace{40pt}
 
 	\item {\bf AP:}
 	\begin{itemize}
-		\item Amazon Dynamo, CouchDB, Cassandra, SimpleDB, Riak, Voldmort (LinkedIn), ...
+		\item Amazon Dynamo, CouchDB, Cassandra, SimpleDB, Riak, Voldemort (LinkedIn), ...
 	\end{itemize}
 \end{itemize}
 }
