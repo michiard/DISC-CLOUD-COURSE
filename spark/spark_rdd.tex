@@ -201,12 +201,14 @@
 \frame {\frametitle{Dependency Types: Optimizations}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{itemize}
-	\item {\bf Benefits of Lazy evaluation}
+	\item {\bf Benefits of Lazy evaluation:} The DAG Scheduler optimizes \emph{Stages} and \emph{Tasks} before submitting them to the Task Scheduler
 	\begin{itemize}
-		\item The DAG Scheduler optimizes \emph{Stages} and \emph{Tasks} before submitting them to the Task Scheduler
-		\item \textbf{Piplining} narrow dependencies within a Stage
-		\item \textbf{Join plan selection} based on partitioning
-		\item \textbf{Cache reuse}
+		\item Examples:
+		\begin{itemize}
+			\item \textbf{Piplining} narrow dependencies within a Stage
+			\item \textbf{Join plan selection} based on partitioning
+			\item \textbf{Cache reuse}
+		\end{itemize}
 	\end{itemize}
 \end{itemize}
 
@@ -224,7 +226,7 @@
 	\item {\bf Transformations}
 	\begin{itemize}
 		\item Set of operations on a RDD that define how they should be transformed
-		\item As in relational algebra, the application of a transformation to an RDD yields a new RDD (because RDD are \emph{immutable})
+		\item As in relational algebra, the application of a transformation to an RDD yields a new RDD (because RDDs are \emph{immutable})
 		\item Transformations are lazily evaluated, which allow for optimizations to take place before execution
 	\end{itemize}
 
