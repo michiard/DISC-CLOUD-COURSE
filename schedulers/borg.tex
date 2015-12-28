@@ -171,8 +171,79 @@
 
 \begin{frame}
 \frametitle{Priority, Quota and Admission Control}
+\begin{itemize}
+	\item {\bf Mechanisms to deal with resource demand and offer}
+	\begin{itemize}
+		\item What to do when more work shows up than can be accommodated?
+		\item Note: this is not {\it scheduling}, it is more admission control
+	\end{itemize}
+	\item {\bf Job priority}
+	\begin{itemize}
+		\item Non-overlapping {\it priority bands} for different uses
+		\item This essentially means users must ``manually'' cluster their applications according to such bands
+		\item[$\to$] Tasks from high-priority jobs can preempt low-priority tasks
+		\item Cascade preemption is avoided by disabling it for same-band jobs
+	\end{itemize}
+	\item {\bf Job/User quotas}
+	\begin{itemize}
+		\item Used to decide which job to admit for scheduling
+		\item Expressed as a vector of resource quantities
+	\end{itemize}
+	\item {\bf Pricing}
+	\begin{itemize}
+		\item Underlying mechanism to regulate user behavior
+		\item Aligns user incentives to better resource utilization
+		\item Discourages over-buying by over-selling quotas at lower priority
+	\end{itemize}
+\end{itemize}
 \end{frame}
 
 \begin{frame}
-\frametitle{Naming and Monitoring}
+\frametitle{Naming Services}
+\begin{itemize}
+	\item {\bf Borg Name Service}
+	\begin{itemize}
+		\item A mechanism to assign a name to tasks
+		\item Task name = Cell name, job name and task number
+	\end{itemize}
+	\item {\bf Uses the Chubby coordination service}
+	\begin{itemize}
+		\item Writes task names into it
+		\item Writes also health information and status
+		\item Used by Borg RPC mechanism to establish communication endpoints
+	\end{itemize}
+	\item {\bf DNS service inherits from BNS}
+	\begin{itemize}
+		\item Example: the 50th task in job ``jfoo'' owned by user ``ubar'' in a Borg Cell called ``cc''
+		\item \texttt{50.jfoo.ubar.cc.borg.google.com}
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Monitoring Services}
+\begin{itemize}
+	\item {\bf Every task in Borg has a built-in HTTP server}
+	\begin{itemize}
+		\item Provides health information
+		\item Provides performance metrics
+	\end{itemize}
+	\item {\bf Borg SIGMA}
+	\begin{itemize}
+		\item Monitoring UI Service
+		\item State of jobs, of cells
+		\item Drill-down to task level
+		\item {\bf Why pending?}
+		\begin{itemize}
+			\item ``Debugging'' service
+			\item Helps users with finding job specifications that can be easily scheduled
+		\end{itemize}
+	\end{itemize}
+	\item {\bf Billing services}
+	\begin{itemize}
+		\item Use monitoring information to compute usage-based charging
+		\item Help users debug their jobs
+		\item Used for capacity planning
+	\end{itemize}
+\end{itemize}
 \end{frame}
