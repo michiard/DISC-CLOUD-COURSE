@@ -48,6 +48,7 @@
 	\begin{itemize}
 		\item Long-running services: jobs that should ``never'' go down, and handle short-lived, latency-sensitive requests
 		\item Batch jobs: delay-tolerant jobs that can take from few seconds to few days to complete
+		\item Storage services: these are long-running services like above, that are used to store data
 	\end{itemize}
 	\item {\bf Workload composition in a cell is dynamic}
 	\begin{itemize}
@@ -147,6 +148,25 @@
 
 \begin{frame}
 \frametitle{Resource Allocations}
+\begin{itemize}
+	\item {\bf The Borg ``Alloc''}
+	\begin{itemize}
+		\item Reserved set of resources on a machine
+		\item Can be used to execute one or more tasks, that equally share resources
+		\item {\bf Resources remain assigned whether or not they are used}
+	\end{itemize}
+	\item {\bf Typical use of Borg Allocs}
+	\begin{itemize}
+		\item Set resources aside for future tasks
+		\item Retain resources between stopping and starting tasks
+		\item Consolidate (gather) tasks from different jobs on the same machine
+	\end{itemize}
+	\item {\bf Alloc Sets}
+	\begin{itemize}
+		\item Group of allocs on different machines
+		\item Once an alloc set has been created, one or more jobs can be submitted
+	\end{itemize}
+\end{itemize}
 \end{frame}
 
 \begin{frame}
