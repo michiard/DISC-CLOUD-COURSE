@@ -363,11 +363,167 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
  \begin{colorblock}{blue}{lightblue}{ }
-    \Large \textbf{System behavior}
+    \Large \textbf{System behavior: a very rough Mesos ``model''}
   \end{colorblock}
 \end{frame}
 
+\begin{frame}
+\frametitle{Overview: Mesos in a nutshell}
+\begin{itemize}
+	\item {\bf Ideal workloads for Mesos}
+	\begin{itemize}
+		\item Elastic frameworks, supporting scaling up and down seamlessly
+		\item Task durations are homogeneous (and short)
+		\item No strict preference over cluster nodes
+	\end{itemize}
+	\item {\bf Frameworks with cluster node preferences}
+	\begin{itemize}
+		\item Assume frameworks prefer different (and possibly disjoint) nodes
+		\item Mesos can emulate a centralized scheduler
+		\item Cluster and Framework wide fair resource sharing
+	\end{itemize}
+	\item {\bf Heterogeneous task durations}
+	\begin{itemize}
+		\item Mesos can handly coexisting short and long lived tasks
+		\item Performance degradation is acceptable
+	\end{itemize}
+\end{itemize}
+\end{frame}
 
 \begin{frame}
-\frametitle{Definitions and Metrics}
+\frametitle{Definitions}
+\begin{itemize}
+	\item {\bf Workload characterization}
+	\begin{itemize}
+		\item {\it Elasticity:} elastic workloads can use resources as soon as they are acquired, and releases them as soon as tasks finish; in contrast, rigid frameworks (e.g. MPI) can only start a job when {\bf all} resources have been acquired, and do not work well with scaling
+		\item {\it Task runtime distribution:} both homogeneous and not
+	\end{itemize}
+	\item {\bf Resource characterization}
+	\begin{itemize}
+		\item {\it Mandatory:} resource that a framework {\bf must} acquire to work. Assumption: mandatory resources $<$ guaranteed share
+		\item {\it Preferred:} resources that a framework {\bf should} acquire to achieve better performance, but are not necessary for the job to work
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Performance Metrics}
+\begin{itemize}
+	\item {\bf Performance metrics}
+	\begin{itemize}
+		\item {\it Framework ramp-up time:} time it takes a new framework to achieve its fair share
+		\item {\it Job completion time:} time it takes a job to complete. Assume one job per framework
+		\item {\it System utilization:} total cluster resource utilization, with focus on CPU and memory
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Homogeneous Tasks}
+\begin{itemize}
+	\item Cluster with $n$ slots and a framework $f$ entitled with $k$ slots
+	\item Task runtime distribution: uniform and exponential
+	\item Mean task duration $T$
+	\item Job duration: $\beta k T$
+	\item[$\to$] If $f$ has $k$ slots, then job duration is $\beta T$
+\end{itemize}
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.4]{./figures/mesos_model}
+  \label{fig:mesos_arch_example}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Placement preferences}
+Consider two cases:
+\begin{itemize}
+	\item {\bf There exist a configuration satisfying all frameworks constraints}
+	\begin{itemize}
+		\item The system will eventually converge to the state in which the optimal allocation is achieved, and this in at most one $T$ interval
+	\end{itemize}
+	\item {\bf No such allocation exists, e.g. demand is larger than supply}
+	\begin{itemize}
+		\item {\bf Lottery Scheduling} to achieve a {\bf weighted fair allocation}
+		\item Mesos offers a slot to framework $i$ with probability 
+		$$ \frac{s_i}{\sum_{i=1}^{m}s_i} $$
+		\item where $s_i$ is framework's $i$ {\bf intended} allocation, and $m$ is the total number of frameworks registered to Mesos
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Heterogeneous Tasks}
+\begin{itemize}
+	\item {\bf Assumptions}
+	\begin{itemize}
+		\item Workloads with tasks that are either long or short
+		\item Mean duration of long task is longer than short ones
+	\end{itemize}
+	\item {\bf Worst case scenario}
+	\begin{itemize}
+		\item All nodes required by a ``short job'' are filled with long tasks, which means it has to wait for a long time
+	\end{itemize}
+	\item {\bf How likely is the worst case?}
+	\begin{itemize}
+		\item Assume $\phi < 1$, where $\phi$ fraction of long tasks
+		\item Assume a cluster with $S$ available slots per node
+		\item[$\to$] Probability for a node to be filled with long tasks is $\phi^S$
+		\item $S=8$ and $\phi = 0.5$ gives a 0.4\% chance 
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Limitations of Distributed Scheduling}
+\begin{itemize}
+	\item {\bf Fragmentation}
+	\begin{itemize}
+		\item Provokes under utilization of system resources
+		\item Distributed collection of frameworks might not achieve the same ``packing'' quality of a centralized scheduler
+		\item[$\to$] This is mitigated by having clusters of ``big'' nodes (many CPUs, many cores) running ``small'' tasks
+	\end{itemize}
+	\item {\bf Starvation}
+	\begin{itemize}
+		\item Large jobs may wait indefinitely for slots to become free
+		\item Small tasks from small jobs might monopolize the cluster
+		\item[$\to$] This is mitigated by a {\it minimum offer size} mechanism
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Mesos Performance}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+    \Large \textbf{Experimental Mesos Performance Evaluation}
+  \end{colorblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Resource Allocation}
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.55]{./figures/mesos_perf_fm}
+  \label{fig:mesos_perf_ru}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Resource Utilization}
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.6]{./figures/mesos_perf_ru}
+  \label{fig:mesos_perf_ru}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Data Locality}
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.6]{./figures/mesos_perf_dl}
+  \label{fig:mesos_perf_dl}
+\end{figure}
 \end{frame}
