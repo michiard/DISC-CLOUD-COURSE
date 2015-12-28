@@ -1,0 +1,158 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+    \Large \textbf{Introduction}
+  \end{colorblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Introduction and Objectives}
+\begin{itemize}
+	\item {\bf Hide the details of resource management}
+	\begin{itemize}
+		\item Let users instead focus on application developlemt
+	\end{itemize}
+	\item {\bf Operate applications with high reliability and availability}
+	\begin{itemize}
+		\item Tolerate failures within a datacenter and across datacenters
+	\end{itemize}
+	\item {\bf Run heterogeneous workloads and scale across thousands of machines}
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{User perspective}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+    \Large \textbf{The User Perspective}
+  \end{colorblock}
+\end{frame}
+
+\begin{frame}
+\frametitle{Terminology}
+\begin{itemize}
+	\item Users develop applications called {\it jobs}
+	\item Jobs consists in one or more {\it tasks}
+	\item All tasks run the same binary
+	\item Each job runs in a set of machines that are managed as a unit, called a {\it Borg Cell}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Workloads}
+\begin{itemize}
+	\item {\bf Two main categories supported}
+	\begin{itemize}
+		\item Long-running services: jobs that should ``never'' go down, and handle short-lived, latency-sensitive requests
+		\item Batch jobs: delay-tolerant jobs that can take from few seconds to few days to complete
+	\end{itemize}
+	\item {\bf Workload composition in a cell is dynamic}
+	\begin{itemize}
+		\item It varies depending on the tenants using the cell
+		\item It varies with time: diurnal usage pattern for end-user-facing jobs, irregular pattern for batch jobs
+	\end{itemize}
+	\item {\bf Examples}
+	\begin{itemize}
+		\item High-priority, \texttt{production} jobs $\to$ long-running services
+		\item Low-priority, \texttt{non-production} jobs $\to$ batch jobs
+		\item In a typical Borg Cell
+		\begin{itemize}
+			\item Prod Jobs: 70\% of CPU allocation, representing 60\% of CPU usage
+			\item Non-prod Jobs: 55\% of CPU allocation, representing 85\% of CPU usage
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Clusters and Cells}
+\begin{itemize}
+	\item {\bf Borg Cluster:} a set of machines connected by a high-performance datacenter-scale network fabric
+	\begin{itemize}
+		\item The machines in a Borg Cell all belong to a {\it single} cluster
+		\item A cluster lives inside a datacenter building
+		\item A collection of building makes up a {\it Site}
+	\end{itemize}
+	\item {\bf Borg Machines:} physical servers dedicated to execute Borg applications
+	\begin{itemize}
+		\item They are generally highly heterogeneous in terms of resources
+		\item They may expose a public IP address
+		\item They may expose advanced features, like SSD or GPGPU
+	\end{itemize}
+	\item {\bf Examples}
+	\begin{itemize}
+		\item A typical cluster usually hsts one large cell and a few small-scale test cells
+		\item The {\it median cell size} is about 10 k machines
+		\item Borg uses those machines to schedule application tasks, install their binaries and dependencies, monitor their health and restarting them if they fail
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Jobs and Tasks}
+\begin{itemize}
+	\item {\bf Job Definition}
+	\begin{itemize}
+		\item Name, owner and number of tasks
+		\item {\it Constraints} to force tasks run on machines with particular {\it attributes}
+		\item Constraints can be {\bf hard} or {\bf soft} ({\it i.e.}, preferences)
+		\item Each task maps to a set of UNIX processes running in a container on a Borg machine in a Borg Cell
+	\end{itemize}
+	\item {\bf Task Definition}
+	\begin{itemize}
+		\item Task index within their parent job
+		\item Resource requirements
+		\item Generally, all tasks have the {\it same} definition
+		\item Tasks can run on {\bf any resource dimension}: there are no fixed-size slots or buckets
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Jobs and Tasks}
+
+\begin{itemize}
+	\item {\bf The Borg Configuration Language}
+	\begin{itemize}
+		\item Declarative language to specify jobs and tasks
+		\item Lambda functions to allow calculations
+		\item Some application descriptions can be over 1 k lines of code
+	\end{itemize}
+	\item {\bf User interacting with live jobs}
+	\begin{itemize}
+		\item This is achieved mainly using RPC
+		\item Users can update the specification of tasks, while their parent job is running
+		\item Updates are non-atomic, executed in a rolling-fashion
+	\end{itemize}
+	\item {\bf Task updates ``side-effects''}
+	\begin{itemize}
+		\item Always require restarts: e.g., pushing a new binary
+		\item Might require migration: e.g., change in specification
+		\item Never require restarts nor migrations: e.g., change in priority
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Jobs State Diagram}
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.5]{./figures/borg_state_diagram}
+  \label{fig:borg_state_diagram}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{Resource Allocations}
+\end{frame}
+
+\begin{frame}
+\frametitle{Priority, Quota and Admission Control}
+\end{frame}
+
+\begin{frame}
+\frametitle{Naming and Monitoring}
+\end{frame}
