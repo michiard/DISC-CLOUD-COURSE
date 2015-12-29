@@ -81,7 +81,7 @@
 
 	\item {\bf Two-level:} single resource manager that grants resources to independent ``framework schedulers''
 	\begin{itemize}
-		\item Flexibility in accommodating multiple applications
+		\item Flexibility in accommodating multiple application frameworks
 		\item Resource management and locking are conservative, which can hurt cluster utilization and performance
 	\end{itemize}
 \end{itemize}
@@ -135,14 +135,63 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}\frametitle{A Taxonomy}
+\begin{frame}\frametitle{Short Taxonomy of Scheduling Design Issues}
+\begin{itemize}
+	\item {\bf Scheduling Work Partitioning:} how to distribute work across frameworks
+	\begin{itemize}
+		\item Workload-oblivious load-balancing
+		\item Workload partitioning and specialized schdulers
+		\item Hybrid
+	\end{itemize}
 
+\vspace{20pt}
+
+	\item {\bf Resource choice:} which cluster resources are available to concurrent frameworks
+	\begin{itemize}
+		\item All resources available
+		\item A subset of cluster resources is granted (or offered)
+		\item NOTE: preemption primitives help scheduling flexibility at the cost of potentially wasting work
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Short Taxonomy of Scheduling Design Issues}
+\begin{itemize}
+	\item {\bf Interference:} what to do when multiple frameworks attempt at using the same resources
+	\begin{itemize}
+		\item Pessimistic concurrency control: make sure to avoid conflicts, by partitionning resources across frameworks
+		\item Optimistic concurrency control: hope for the best, otherwise detect and undo conflicting claims
+	\end{itemize}
+
+\vspace{20pt}
+
+	\item {\bf Allocation Granularity: } task ``scheduling'' policies
+	\begin{itemize}
+		\item Atomic, all-or-nothing gang scheduling: e.g. MPI
+		\item Incremental placement, hoarding: e.g. MapReduce
+	\end{itemize}
+
+\vspace{20pt}
+
+	\item {\bf Cluster-wide behavior: } some requirements need global view
+	\begin{itemize}
+		\item Fairness across frameworks
+		\item Global notion of priority
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Summary of design knobs}
+\begin{figure}[h]
+  \includegraphics[scale=0.28]{./figures/intro_design}
+  \label{fig:intro_design}
+\end{figure}
+\begin{itemize}
+	\item {\bf Comparison of cluster scheduling approaches}
+\end{itemize}
 \end{frame}
 
 
-\begin{frame}\frametitle{A Taxonomy}
-
-\end{frame}
 
 \begin{frame}\frametitle{Architecture Details}
 
