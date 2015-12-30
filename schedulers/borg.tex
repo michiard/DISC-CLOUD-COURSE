@@ -14,10 +14,16 @@
 	\begin{itemize}
 		\item Let users instead focus on application developlemt
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Operate applications with high reliability and availability}
 	\begin{itemize}
 		\item Tolerate failures within a datacenter and across datacenters
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Run heterogeneous workloads and scale across thousands of machines}
 \end{itemize}
 \end{frame}
@@ -34,10 +40,19 @@
 \begin{frame}
 \frametitle{Terminology}
 \begin{itemize}
-	\item Users develop applications called {\it jobs}
-	\item Jobs consists in one or more {\it tasks}
-	\item All tasks run the same binary
-	\item Each job runs in a set of machines that are managed as a unit, called a {\it Borg Cell}
+	\item {\bf Users develop applications called {\it jobs}}
+	
+\vspace{20pt}
+
+	\item {\bf Jobs consists in one or more {\it tasks}}
+
+\vspace{20pt}
+
+	\item {\bf All tasks run the same binary}
+
+\vspace{20pt}
+
+	\item {\bf Each job runs in a set of machines managed as a unit, called a {\it Borg Cell}}
 \end{itemize}
 \end{frame}
 
@@ -102,6 +117,9 @@
 		\item Constraints can be {\bf hard} or {\bf soft} ({\it i.e.}, preferences)
 		\item Each task maps to a set of UNIX processes running in a container on a Borg machine in a Borg Cell
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Task Definition}
 	\begin{itemize}
 		\item Task index within their parent job
@@ -122,12 +140,18 @@
 		\item Lambda functions to allow calculations
 		\item Some application descriptions can be over 1 k lines of code
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf User interacting with live jobs}
 	\begin{itemize}
 		\item This is achieved mainly using RPC
 		\item Users can update the specification of tasks, while their parent job is running
 		\item Updates are non-atomic, executed in a rolling-fashion
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Task updates ``side-effects''}
 	\begin{itemize}
 		\item Always require restarts: e.g., pushing a new binary
@@ -155,12 +179,18 @@
 		\item Can be used to execute one or more tasks, that equally share resources
 		\item {\bf Resources remain assigned whether or not they are used}
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Typical use of Borg Allocs}
 	\begin{itemize}
 		\item Set resources aside for future tasks
 		\item Retain resources between stopping and starting tasks
 		\item Consolidate (gather) tasks from different jobs on the same machine
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Alloc Sets}
 	\begin{itemize}
 		\item Group of allocs on different machines
@@ -206,12 +236,18 @@
 		\item A mechanism to assign a name to tasks
 		\item Task name = Cell name, job name and task number
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Uses the Chubby coordination service}
 	\begin{itemize}
 		\item Writes task names into it
 		\item Writes also health information and status
 		\item Used by Borg RPC mechanism to establish communication endpoints
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf DNS service inherits from BNS}
 	\begin{itemize}
 		\item Example: the 50th task in job ``jfoo'' owned by user ``ubar'' in a Borg Cell called ``cc''
@@ -286,11 +322,17 @@
 		\item One per Borg Cell
 		\item Orchestrates cell resources
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Components}
 	\begin{itemize}
 		\item The Borgmaster process
 		\item The scheduler process
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf The Borgmaster process}
 	\begin{itemize}
 		\item Handles client RPCs that either mutate state or lookup for state
@@ -310,6 +352,9 @@
 		\item Single master elected using Paxos when starting a cell, or upon failure of the current master
 		\item Master serves as Paxos leader and cell state mutator
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Borgmaster replicas}
 	\begin{itemize}
 		\item Maintain an {\bf in-memory} fresh copy of the cell state
@@ -327,6 +372,9 @@
 		\item Time-based and event-based mechanism
 		\item State include everything related to a cell
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Checkpoint utilization}
 	\begin{itemize}
 		\item Restore the state to a functional one, e.g. before a failure or a bug
@@ -387,13 +435,19 @@
 \frametitle{Scheduling Algorithm}
 \begin{itemize}
 	\item {\bf The scheduling algorithm has two main processes}
+
+\vspace{20pt}
+
 	\begin{itemize}
-		\item Feasibility checking: find a set of machines that
+		\item {\bf Feasibility checking}: find a set of machines that
 		\begin{itemize}
 		 	\item Meet tasks' constraints
 		 	\item Have enough available resources, including those that are currently assigned to low-priority tasks that can be evicted
 		 \end{itemize}
-		\item Scoring: among the set returned by the previous process, rank such machines to
+
+\vspace{20pt}
+
+		\item {\bf Scoring}: among the set returned by the previous process, rank such machines to
 		\begin{itemize}
 			\item Minimize the number and priority of preempted tasks
 			\item Prefer machines with a local copy of tasks binaries and dependencies
@@ -414,12 +468,18 @@
 		\item[$\to$] Leaves headroom for load spikes
 		\item[$\to$] But leads to fragmentation
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Best-fit scoring: ``waterfilling'' algorithm}
 	\begin{itemize}
 		\item Tries to fill machines as tightly as possible
 		\item[$\to$] Leaves empty machines that can be used to place large tasks
 		\item[$\to$] But difficult to deal with load spikes as the headroom left in each machine depends highly on load estimation
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Hybrid}
 	\begin{itemize}
 		\item Tries to reduce the amount of stranded resources
@@ -437,6 +497,9 @@
 		\item Highly variable
 		\item Median is about 25 s
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Techniques to reduce latency}
 	\begin{itemize}
 		\item The main culprit for high latency is binary and package installations
@@ -458,6 +521,9 @@
 		\item Maintains and rolls over debug logs
 		\item Report the state of the machine to the Borgmaster
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Interaction with the Borgmaster}
 	\begin{itemize}
 		\item Pull-based mechanism: heartbeat-like messages every few seconds
@@ -476,6 +542,9 @@
 		\item Many Borgmaster replicas receive state updates
 		\item Many Borglets communicate concurrently
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf The link shard mechanism}
 	\begin{itemize}
 		\item Each borgmaster replica communicates with a subset of the cell Borglets
@@ -495,6 +564,9 @@
 		\item Arrival rates of 10,000 tasks per minute
 		\item 10+ cores, 50+ GB of RAM
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Decentralized design}
 	\begin{itemize}
 		\item Scheduler process separate from Borgmaster process
@@ -502,6 +574,9 @@
 		\item Scheduling is somehow decentralized
 		\item State change communicated from replicas to elected Borgmaster, that finalizes the state update
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Additional techniques to achieve scalability}
 	\begin{itemize}
 		\item Score caching

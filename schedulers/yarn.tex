@@ -42,6 +42,9 @@
         \item Performs Job scheduling
         \item Performs Task scheduling
       \end{itemize}
+
+\vspace{20pt}
+
       \item {\bf TaskTracker}
       \begin{itemize}
         \item Per machine agent
@@ -60,15 +63,24 @@
     \item Everything needs to be cast to MapReduce
     \item Iterative applications are slow
   \end{itemize}
+
+\vspace{10pt}
+
   \item {\bf Scalability issues}
   \begin{itemize}
     \item Max cluster size roughy 4,000 nodes
     \item Max concurrent tasks, roughly 40,000 tasks
   \end{itemize}
+
+\vspace{10pt}
+
   \item {\bf Availability}
   \begin{itemize}
     \item System failures destroy running and queued jobs
   \end{itemize}
+
+\vspace{10pt}
+
   \item {\bf Resource utilization}
   \begin{itemize}
     \item Hard, static partitioning of resources in Map or Reduce slots
@@ -118,12 +130,18 @@
     \item Define protocols/libraries and provide a framework for custom application development
     \item Share same Hadoop Cluster across applications
   \end{itemize}
+
+\vspace{10pt}
+
   \item {\bf Improved cluster utilization}
   \begin{itemize}
     \item Generic resource container model replaces fixed Map/Reduce slots
     \item Container allocations based on locality and memory
     \item Sharing cluster among multiple application
   \end{itemize}
+
+\vspace{10pt}
+
   \item {\bf Improved scalability}
   \begin{itemize}
     \item Remove complex app logic from resource management
@@ -143,6 +161,9 @@
     \item Multiple versions of an app can co-exist leading to experimentation
     \item Easier upgrade of framework and applications
   \end{itemize}
+
+\vspace{20pt}
+
   \item {\bf A data operating system: shared services}
   \begin{itemize}
     \item Common services included in a pluggable framework
@@ -248,12 +269,18 @@
   \begin{itemize}
     \item In addition to existing ones, advanced scheduling is supported
   \end{itemize}
+
+\vspace{20pt}
+
   \item {\bf Current supported schedulers}
   \begin{itemize}
     \item The Capacity scheduler
     \item The Fair scheduler
     \item Dominant Resource Fairness
   \end{itemize}
+
+\vspace{20pt}
+
   \item {\bf What's different w.r.t. Hadoop 1.0?}
   \begin{itemize}
     \item Support any YARN application, not just MapReduce
@@ -302,15 +329,24 @@
   \begin{itemize}
     \item Tracks hearbeats from NMs
   \end{itemize}
+
+\vspace{20pt}
+
   \item {\bf Container Management}
   \begin{itemize}
     \item Handles AM requests for new containers
     \item De-allocates containers when they expire or application finishes
   \end{itemize}
+
+\vspace{20pt}
+
   \item {\bf AM Management}
   \begin{itemize}
     \item Creates a container for every new AM, and tracks its health
   \end{itemize}
+
+\vspace{20pt}
+
   \item {\bf Security Management}
   \begin{itemize}
     \item Kerberos integration
@@ -335,6 +371,9 @@
     \item Registers, monitors and communicates node resources
     \item Sends heartbeats and container status
   \end{itemize}
+
+\vspace{20pt}
+
   \item {\bf Manages processes in containers}
   \begin{itemize}
     \item Launches AMs on request from the RM
@@ -342,6 +381,9 @@
     \item Monitors resource usage
     \item Kills processes and containers
   \end{itemize}
+
+\vspace{20pt}
+
   \item {\bf Provides logging services}
   \begin{itemize}
     \item Log aggregation and roll over to HDFS
@@ -386,6 +428,9 @@
     \item AM re-attempts containers that complete with exceptions or fail
     \item Applications with too many failed containers are considered failed
   \end{itemize}
+
+\vspace{30pt}
+
   \item {\bf AM failure}
   \begin{itemize}
     \item If application or AM fail, the RM will re-attempt the whole application
@@ -407,6 +452,9 @@
     \item Containers on the failed node are re-scheduled
     \item AM on the failed node are re-submitted completely
   \end{itemize}
+  
+\vspace{30pt}
+
   \item {\bf RM failure}
   \begin{itemize}
     \item No application can be run if RM is down

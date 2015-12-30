@@ -191,8 +191,92 @@
 \end{itemize}
 \end{frame}
 
-
-
 \begin{frame}\frametitle{Architecture Details}
+\begin{itemize}
+	\item {\bf High-level summary of scheduling objectives}
+	\begin{itemize}
+		\item Minimize the job queueing time, or more generally, the system response time (queueing + service times)
+		\item Subject to
+		\begin{itemize}
+			\item Priorities among jobs
+			\item Per-job constraints
+			\item Failure tolerance
+			\item Scalability
+		\end{itemize}
+	\end{itemize}
 
+\vspace{20pt}
+
+	\item {\bf Scheduling architectures}
+	\begin{itemize}
+		\item Monolithic schedulers
+		\item Statically partitioned schedulers
+		\item Two-level schedulers
+		\item Shared-state schedulers (cf. Omega paper)
+	\end{itemize}
+\end{itemize}
 \end{frame}
+
+\begin{frame}\frametitle{Monolithic Schedulers}
+\begin{itemize}
+	\item {\bf Single centralized instance}
+	\begin{itemize}
+		\item Typical of HPC setting
+		\item Implements all policies in a single code base
+		\item Applies the same scheduling algorithm to all incoming jobs
+	\end{itemize}
+
+\vspace{20pt}
+
+	\item {\bf Alternative designs}
+	\begin{itemize}
+		\item Support multiple code paths for different jobs
+		\item Each path implements a different scheduling logic
+		\item[$\to$] Difficult to implement and maintain
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Statically Partitioned Schedulers}
+\begin{itemize}
+	\item {\bf Standard ``Cloud-computing'' approach}
+	\begin{itemize}
+		\item Underlying assumption: each framework has complete control over a set of resources
+		\item Depend on statically partitioned, dedicated resources
+		\item Examples: Hadoop 1.0, Quincy scheduler
+	\end{itemize}
+
+\vspace{20pt}
+
+	\item {\bf Problems with static partitioning}
+	\begin{itemize}
+		\item Fragmentation of resources
+		\item Sub-optimal cluster utilization
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Two-level Schedulers}
+\begin{itemize}
+	\item {\bf Obviates the problems of static partitioning}
+	\begin{itemize}
+		\item Dynamic allocation of resources to concurrent frameworks
+		\item Use a ``logically centralized'' coordinator to decide how many resources to grant
+	\end{itemize}
+	\item {\bf A first example: Mesos}
+	\begin{itemize}
+		\item Centralized resource allocator, with dynamic cluster partitioning
+		\item {\bf Available} resources are {\it offered} to competing frameworks
+		\item Avoids interference by exclusive offers
+		\item Frameworks lock resources by accepting offers $\to$ {\bf pessimistic concurrency control}
+		\item No global cluster state available to frameworks
+	\end{itemize}
+	\item {\bf Another tricky example: YARN}
+	\begin{itemize}
+		\item Centralized resource allocator (RM), with per-job framework master (AM)
+		\item AM only provides job management services, not proper scheduling
+		\item[$\to$] YARN is closer to a monolithic architecture
+	\end{itemize}
+\end{itemize}
+\end{frame}
+

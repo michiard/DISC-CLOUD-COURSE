@@ -10,12 +10,12 @@
 \begin{frame}
 \frametitle{Introduction and Motivations}
 \begin{itemize}
-	\item {\bf Clusters of commodity servers are a major computing platform}
+	\item {\bf Clusters of commodity servers major computing platform}
 	\begin{itemize}
 		\item Modern Internet Services
 		\item Data-intensive applications
 	\end{itemize}
-	\item {\bf New computing {\it Frameworks} developed to ``program the cluster''}
+	\item {\bf New {\it frameworks} developed to ``program the cluster''}
 	\begin{itemize}
 		\item Hadoop MapReduce, Apache Spark, Microsoft Dryad
 		\item Pregel, Storm, ...
@@ -42,11 +42,17 @@
 		\item {\it Static} partitioning
 		\item Traditional virtualization
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Problems of current approaches}
 	\begin{itemize}
 		\item Mismatch between allocation granularities
 		\item No mechanism to allocate resources to short-lived tasks
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item[$\to$] {\bf Underlying hypothesis for Mesos}
 	\begin{itemize}
 		\item Cluster frameworks operate with short tasks
@@ -58,15 +64,19 @@
 
 \begin{frame}
 \frametitle{Mesos Design Objectives}
-\begin{itemize}
-	\item {\it Mesos: a thin resource sharing layer enabling fine-grained sharing across diverse frameworks}
+{\it Mesos: a thin resource sharing layer enabling fine-grained sharing across diverse frameworks}
 
+\vspace{20pt}
+
+\begin{itemize}
 	\item {\bf Challenges}
 	\begin{itemize}
 		\item Each supported framework has different scheduling needs
 		\item Scalability is crucial: Mesos must scale to clusters of 10,000+ nodes, running hundreds of jobs with millions of tasks
 		\item Fault-tolerance and high availability
 	\end{itemize}
+
+\vspace{20pt}
 
 	\item {\bf Would a centralized approach work?}
 	\begin{itemize}
@@ -85,6 +95,8 @@
 		\item Scalability and resilience
 		\item Moving framework-specific scheduling to a centralized scheduler requires expensive refactoring
 	\end{itemize}
+
+\vspace{20pt}
 
 	\item {\bf A decentralized approach}
 	\begin{itemize}
@@ -140,11 +152,15 @@
 		\item High-level libraries for common functionalities
 	\end{itemize}
 
+\vspace{20pt}
+
 	\item {\bf Minimal interface to support resource sharing}
 	\begin{itemize}
 		\item Mesos manages cluster resources
 		\item Frameworks control task scheduling and execution
 	\end{itemize}
+
+\vspace{20pt}
 
 	\item {\bf Benefits of two-level approach}
 	\begin{itemize}
@@ -171,6 +187,8 @@
 	\item Collects resource utilization from slaves
 	\item Resource offer: list of free resources on multiple slaves
 \end{itemize}
+
+\vspace{20pt}
 
 \begin{block}{First-level Scheduling}
 \begin{itemize}
@@ -203,7 +221,7 @@
 \begin{block}{Second-level Scheduling}
 \begin{itemize}
 	\item One framework scheduler per application
-	\item Framework decides how to execute an application (a job) and its tasks
+	\item Framework decides how to execute a job and its tasks
 	\item {\bf NOTE:} The actual task execution is requested by the master
 \end{itemize}
 \end{block}
@@ -250,11 +268,17 @@
 		\item Max-min Fairness
 		\item Strict priority
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Fundamental assumption}
 	\begin{itemize}
 		\item Tasks are short
 		\item[$\to$] Mesos only reallocates resources when tasks finish
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Example}
 	\begin{itemize}
 		\item Assume a Framework's share is 10\% of the cluster
@@ -271,12 +295,18 @@
 		\item Some jobs (e.g. streaming) may have long tasks
 		\item In this case, Mesos can {\bf Kill} running tasks
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Preemption primitives}
 	\begin{itemize}
 		\item Require knowledge about potential resource usage by frameworks
 		\item Killing might be wasteful, although not critical (e.g. MapReduce)
 		\item Some applications (e.g. MPI) might be harmed
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Guaranteed allocation}
 	\begin{itemize}
 		\item Minimum set of resources granted to a framework
@@ -294,11 +324,17 @@
 		\item Achieved through low-level OS primitives
 		\item Pluggable isolation modules to support a variety of OS
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Currently supported mechanisms}
 	\begin{itemize}
 		\item Limit CPU, memory, network and I/O bandwidth of a process tree
 		\item Linux Containers and Solaris Cages
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Advantages and limitations}
 	\begin{itemize}
 		\item Better isolation than current approach, process-based
@@ -316,11 +352,17 @@
 		\item Filter type 1: restrict which slave machines to use
 		\item Filter type 2: check resource availability on slaves
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Incentives to speed-up the resource offer mechanism}
 	\begin{itemize}
 		\item Mesos counts offers to a framework toward its allocation
 		\item Frameworks have to answer and/or filter as quickly as possible
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Rescinding offers}
 	\begin{itemize}
 		\item Mesos can decide to invalidate an offer to a framework
@@ -338,12 +380,18 @@
 		\item List of registered frameworks
 		\item List of running tasks
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Multiple masters in a hot-standby mode}
 	\begin{itemize}
 		\item Leader election through Zookeeper
 		\item Upon failure detection new master is elected
 		\item Slaves and executors help populating the new master's state
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Helping frameworks to tolerate failure}
 	\begin{itemize}
 		\item Master sends ``health reports'' to framework schedulers
@@ -370,12 +418,18 @@
 		\item Task durations are homogeneous (and short)
 		\item No strict preference over cluster nodes
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Frameworks with cluster node preferences}
 	\begin{itemize}
 		\item Assume frameworks prefer different (and possibly disjoint) nodes
 		\item Mesos can emulate a centralized scheduler
 		\item Cluster and Framework wide fair resource sharing
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Heterogeneous task durations}
 	\begin{itemize}
 		\item Mesos can handly coexisting short and long lived tasks
@@ -392,6 +446,9 @@
 		\item {\it Elasticity:} elastic workloads can use resources as soon as they are acquired, and releases them as soon as tasks finish; in contrast, rigid frameworks (e.g. MPI) can only start a job when {\bf all} resources have been acquired, and do not work well with scaling
 		\item {\it Task runtime distribution:} both homogeneous and not
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Resource characterization}
 	\begin{itemize}
 		\item {\it Mandatory:} resource that a framework {\bf must} acquire to work. Assumption: mandatory resources $<$ guaranteed share
@@ -454,10 +511,16 @@ Consider two cases:
 		\item Workloads with tasks that are either long or short
 		\item Mean duration of long task is longer than short ones
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Worst case scenario}
 	\begin{itemize}
 		\item All nodes required by a ``short job'' are filled with long tasks, which means it has to wait for a long time
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf How likely is the worst case?}
 	\begin{itemize}
 		\item Assume $\phi < 1$, where $\phi$ fraction of long tasks
@@ -477,6 +540,9 @@ Consider two cases:
 		\item Distributed collection of frameworks might not achieve the same ``packing'' quality of a centralized scheduler
 		\item[$\to$] This is mitigated by having clusters of ``big'' nodes (many CPUs, many cores) running ``small'' tasks
 	\end{itemize}
+
+\vspace{20pt}
+
 	\item {\bf Starvation}
 	\begin{itemize}
 		\item Large jobs may wait indefinitely for slots to become free
