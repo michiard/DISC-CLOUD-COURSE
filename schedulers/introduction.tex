@@ -186,9 +186,9 @@
   \includegraphics[scale=0.28]{./figures/intro_design}
   \label{fig:intro_design}
 \end{figure}
-\begin{itemize}
-	\item {\bf Comparison of cluster scheduling approaches}
-\end{itemize}
+
+	{\centering \bf Comparison of cluster scheduling approaches}
+
 \end{frame}
 
 \begin{frame}\frametitle{Architecture Details}
@@ -267,7 +267,7 @@
 	\begin{itemize}
 		\item Centralized resource allocator, with dynamic cluster partitioning
 		\item {\bf Available} resources are {\it offered} to competing frameworks
-		\item Avoids interference by exclusive offers
+		\item {\color{red} {\bf Avoids interference by exclusive offers}}
 		\item Frameworks lock resources by accepting offers $\to$ {\bf pessimistic concurrency control}
 		\item No global cluster state available to frameworks
 	\end{itemize}

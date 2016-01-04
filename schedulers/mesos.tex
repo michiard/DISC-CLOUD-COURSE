@@ -72,7 +72,7 @@
 	\item {\bf Challenges}
 	\begin{itemize}
 		\item Each supported framework has different scheduling needs
-		\item Scalability is crucial: Mesos must scale to clusters of 10,000+ nodes, running hundreds of jobs with millions of tasks
+		\item Scalability is crucial (10,000+ nodes)
 		\item Fault-tolerance and high availability
 	\end{itemize}
 
@@ -210,7 +210,7 @@
 	\begin{itemize}
 		\item Registers to the master
 		\item Selects {\bf which offer to accept}
-		\item Prepares a description of the tasks to launch on accepted resources
+		\item Describes the tasks to launch on accepted resources
 	\end{itemize}	
 	\item Framework {\bf executor}
 	\begin{itemize}
@@ -255,7 +255,7 @@
 \begin{block}{Arbitrary and complex resource constraints}
 \begin{itemize}
 	\item Delegate logic and control to individual frameworks
-	\item Mesos also implements {\bf filters} to optimize the resource offer mechanism
+	\item Mesos also implements {\bf filters} to optimize resource offers
 \end{itemize}
 \end{block}
 \end{frame}
@@ -443,7 +443,7 @@
 \begin{itemize}
 	\item {\bf Workload characterization}
 	\begin{itemize}
-		\item {\it Elasticity:} elastic workloads can use resources as soon as they are acquired, and releases them as soon as tasks finish; in contrast, rigid frameworks (e.g. MPI) can only start a job when {\bf all} resources have been acquired, and do not work well with scaling
+		\item {\it Elasticity:} elastic workloads can use resources as soon as they are acquired, and release them as soon as tasks finish; in contrast, rigid frameworks (e.g. MPI) can only start a job when {\bf all} resources have been acquired, and do not work well with scaling
 		\item {\it Task runtime distribution:} both homogeneous and not
 	\end{itemize}
 
