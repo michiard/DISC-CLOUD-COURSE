@@ -1549,7 +1549,8 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
     \begin{itemize}
       \item[] \texttt{X=}
       \item[] \texttt{<1, {<1, 2, 3>}>}
-      \item[] \texttt{<4, {<4, 2, 1>, <4, 3, 3>}> <7, {<7, 2, 5>}>}
+      \item[] \texttt{<4, {<4, 2, 1>, <4, 3, 3>}>}
+      \item[] \texttt{<7, {<7, 2, 5>}>}
       \item[] \texttt{<8, {<8, 3, 4>, <8, 4, 3>}>}
     \end{itemize}
     \end{footnotesize}
@@ -1625,9 +1626,10 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
 \end{itemize}
 \end{footnotesize}
 
+
   \begin{columns}
     \begin{column}{.5\linewidth}
-    \begin{footnotesize}
+    \begin{tiny}
     \begin{itemize}
       \item[] \texttt{A=}
       \item[] \texttt{<1, 2, 3>}
@@ -1637,11 +1639,11 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
       \item[] \texttt{<7, 2, 5>}
       \item[] \texttt{<8, 4, 3>}
     \end{itemize}
-    \end{footnotesize}
+    \end{tiny}
     \end{column}
 
     \begin{column}{.5\linewidth}
-    \begin{footnotesize}
+    \begin{tiny}
     \begin{itemize}
       \item[] \texttt{B=}
       \item[] \texttt{<2, 4>}
@@ -1652,19 +1654,20 @@ culprit\_urls = FILTER spam\_urls BY pagerank > 0.8;}
       \item[] \texttt{<4, 6>}
       \item[] \texttt{<4, 9>}
     \end{itemize}
-    \end{footnotesize}
+    \end{tiny}
     \end{column}
   \end{columns}
 
-\begin{footnotesize}
+\begin{tiny}
 \begin{itemize}
   \item[] \texttt{C=}
   \item[] \texttt{<1, \{<1, 2, 3>\}, \{<1, 3>\}>} 
   \item[] \texttt{<2, \{ \}, \{<2, 4>, <2, 7>, <2, 9>\}>} 
-  \item[] \texttt{<4, \{<4, 2, 1>, <4, 3, 3>\}, \{<4, 6>,<4, 9>\}> <7, \{<7, 2, 5>\}, \{ \}>} 
+  \item[] \texttt{<4, \{<4, 2, 1>, <4, 3, 3>\}, \{<4, 6>,<4, 9>\}>}
+  \item[] \texttt{<7, \{<7, 2, 5>\}, \{ \}>}
   \item[] \texttt{<8, \{<8, 3, 4>, <8, 4, 3>\}, \{<8, 9>\}>} 
 \end{itemize}
-\end{footnotesize}
+\end{tiny}
 
 }
 

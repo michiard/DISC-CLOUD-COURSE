@@ -105,6 +105,32 @@
   \titlepage
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Acknowledgments \& Sources}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{itemize}
+  \item {\bf Sources}
+  \begin{itemize}
+    \item Research papers: 
+    \begin{itemize}
+      \item \url{https://spark.apache.org/research.html}
+    \end{itemize}
+    \item Presentations: 
+    \begin{itemize}
+      \item M. Zaharia, ``Introduction to Spark Internals'', \url{https://www.youtube.com/watch?v=49Hr5xZyTEA}
+      \item A. Davidson, ``A Deeper Understanding of Spark Internals'', \url{https://www.youtube.com/watch?v=dmL0N3qfSc8}
+    \end{itemize}
+    \item Blogs:
+    \begin{itemize}
+      \item Quang-Nhat Hoang-Xuan, Eurecom, \url{http://hxquangnhat.com/}
+      \item Khoa Nguyen Trong, Eurecom, \url{https://trongkhoanguyenblog.wordpress.com/}
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction and Motivations}
@@ -135,6 +161,72 @@
 \input{./spark_job.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Spark Deployments}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Spark Deployments}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+\input{./spark_deployments.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Resilient Distributed Datasets}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Resilient Distributed Datasets}}
+  \end{center}
+  \end{colorblock}
+
+  \vspace{20pt}
+
+  \begin{colorblock}{blue}{lightblue}{}
+  {\bf M. Zaharia}, M. Chowdhury, T. Das, A. Dave, J. Ma, M. McCauley, M.J. Franklin, S. Shenker, I. Stoica.\\
+  \emph{Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing},\\
+  {\bf USENIX Symposium on Networked Systems Design and Implementation}, 2012    
+  \end{colorblock}      
+
+
+\end{frame}
+
+\input{./spark_rdd.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Spark Word Count}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Detailed Example: Word Count}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+\input{./spark_wc.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Caching and Storage}
+
+\begin{frame}
+ \begin{colorblock}{blue}{lightblue}{ }
+  \begin{center}
+    \Huge \textbf{\texttt{Caching and Storage}}
+  \end{center}
+  \end{colorblock}
+\end{frame}
+
+\input{./spark_caching.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Resource Allocation}
@@ -142,12 +234,12 @@
 \begin{frame}
  \begin{colorblock}{blue}{lightblue}{ }
   \begin{center}
-    \Huge \textbf{\texttt{Resource Allocation: the DAG and Standalone Schedulers}}
+    \Huge \textbf{\texttt{Resource Allocation: Spark Schedulers}}
   \end{center}
   \end{colorblock}
 \end{frame}
 
-% \input{./schedulers.tex}
+\input{./spark_schedulers.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -162,34 +254,20 @@
   \end{colorblock}
 \end{frame}
 
-% \input{./shuffle.tex}
+\input{./spark_shuffle.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Caching}
+% \section{Spark Tuning}
 
-\begin{frame}
- \begin{colorblock}{blue}{lightblue}{ }
-  \begin{center}
-    \Huge \textbf{\texttt{Caching}}
-  \end{center}
-  \end{colorblock}
-\end{frame}
-
-% \input{./caching.tex}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Spark Tuning}
-
-\begin{frame}
- \begin{colorblock}{blue}{lightblue}{ }
-  \begin{center}
-    \Huge \textbf{\texttt{Spark Tuning with a Running Example}}
-  \end{center}
-  \end{colorblock}
-\end{frame}
+% \begin{frame}
+%  \begin{colorblock}{blue}{lightblue}{ }
+%   \begin{center}
+%     \Huge \textbf{\texttt{Spark Tuning with a Running Example}}
+%   \end{center}
+%   \end{colorblock}
+% \end{frame}
 
 % \input{./tuning.tex}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

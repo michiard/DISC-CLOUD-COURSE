@@ -1,0 +1,101 @@
+\documentclass{beamer}
+
+\usepackage[lined,ruled]{algorithm2e}
+\usepackage{subfigure}
+\usepackage[english]{babel}
+\usepackage[latin1]{inputenc}
+\usepackage{times}
+\usepackage[T1]{fontenc} 
+\usepackage{color}
+
+\usetheme[secheader]{Boadilla}
+\usefonttheme[onlylarge]{structurebold}
+\setbeamerfont*{frametitle}{size=\normalsize,series=\bfseries}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{mini frames}[box]
+\setbeamertemplate{sections/subsections in toc}[square]
+\setbeamertemplate{blocks}[rounded][shadow=true]
+\setbeamertemplate{bibliography item}[text]
+\logo{\includegraphics[width=0.1\textwidth]{./logo.eps}}
+
+\setbeamercolor{lightorange}{fg=black,bg=orange!40}
+\setbeamercolor{lightblue}{fg=black,bg=blue!30}
+
+\newenvironment{colorblock}[2]
+{\setbeamercolor{item}{fg=#1,bg=#1}\begin{beamerboxesrounded}[upper=#1,lower=#2,shadow=true]}
+  {\end{beamerboxesrounded}}
+
+
+
+% Setup TikZ
+
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\tikzstyle{block}=[draw opacity=0.7,line width=1.4cm]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{observation}[theorem]{Observation} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{HBase}
+\subtitle{Theory and Practice of a Distributed Data Store}
+\author{ Pietro Michiardi}
+\institute{Eurecom}
+\date
+
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+\input{./introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Architecture}
+\input{./architecture}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Key Design}
+\input{./key-design}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{MapReduce Integration}
+\input{./mapreduce}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{References}
+\begin{frame}[allowframebreaks]{References}
+\bibliographystyle{plain} 
+\bibliography{references} 
+\end{frame}
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PART SEPARATOR
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \begin{frame}
+%  \begin{colorblock}{blue}{lightblue}{ }
+%   \begin{center}
+%     \Huge \textbf{\texttt{Part One}}
+%   \end{center}
+%   \end{colorblock}
+% \end{frame}
