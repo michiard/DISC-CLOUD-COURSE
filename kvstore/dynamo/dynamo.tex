@@ -436,8 +436,11 @@
 
 	\item {\bf Request routing}
 	\begin{itemize}
-		\item Node serves request only if in preference list
-		\item Otherwise, routes the request to the first node in preference list
+		\item If request comes from load balancer
+		\begin{itemize}
+			\item Node serves request only if in preference list
+			\item Otherwise, routes the request to the first node in preference list
+		\end{itemize}
 		\item 0-hop DHT routing: all nodes know all other nodes
 		\item[$\to$] Not the most scalable, but excellent for low-latency
 	\end{itemize}
