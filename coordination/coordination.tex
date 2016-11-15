@@ -58,6 +58,8 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
 \begin{frame}
  \begin{colorblock}{blue}{lightblue}{ }
   \begin{center}
@@ -65,43 +67,97 @@
   \end{center}
   \end{colorblock}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Introduction}
-%\input{./introduction}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Outline}
+	\begin{itemize}
+		\item \textbf{The consensus problem}
+		\begin{itemize}
+			\item A few examples of distributed consensus
+			\item Eventually consistent Vs Strongly consistent, CAP theorem
+			\item Fault tolerance: possible faults in distributed systems
+		\end{itemize}
+		
+		\vspace{10pt}
+		
+		\item \textbf{Consensus protocols}
+		\begin{itemize}
+			\item Raft from A to Z
+			\item Paxos overview
+			\item Other protocols
+		\end{itemize}
+		
+		\vspace{10pt}
+		
+		\item \textbf{Implementations - Zookeeper}
+		\begin{itemize}
+			\item History
+			\item Architecture
+			\item Data model
+			\item Higher-level primitives
+		\end{itemize}
+			
+	\end{itemize}
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{The consensus problem}
 \begin{frame}
  \begin{colorblock}{blue}{lightblue}{ }
   \begin{center}
-    \Huge \textbf{\texttt{The problems in distributed systems}}
+    \Huge \textbf{\texttt{The consensus problem}}
   \end{center}
   \end{colorblock}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The problems in distributed systems}
-%\input{./cap/cap}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}
- \begin{colorblock}{blue}{lightblue}{ }
-  \begin{center}
-    \Huge \textbf{\texttt{Consensus theory}}
-  \end{center}
-  \end{colorblock}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Consensus theory}
-%\input{./dynamo/dynamo}
-% paxos, raft
-% strongly consistent vs eventual consistency
+\subsection{Examples of the consensus problem}
+\frame {\frametitle{Wedding consensus}
+	\begin{itemize}
+		\item The priest follows a well known protocol to reach a consensus:
+		\begin{enumerate}
+			\item Priest: Alice, will you marry Bob ?
+			\item Alice: yes
+			\item Priest: Bob, will you marry Alice ?
+			\item Bob: yes
+			\item Priest: You are now husband and wife
+		\end{enumerate}
 
+		\vspace{10pt}
+
+		\item In distributed systems this becomes:
+		\begin{enumerate}
+			\item Coordinator: Alice, can you commit key X with value 5 ?
+			\item Alice: yes, I can
+			\item Coordinator: Bob, can you commit key X with value 5 ?
+			\item Bob: yes, I can
+			\item Coordinator: Ok, both of you record that X has now a value of 5
+		\end{enumerate}
+
+		\vspace{10pt}
+
+		\item What if Bob flees from the church?
+	\end{itemize}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{The two generals}
+	\begin{center}
+		\includegraphics[width=\textwidth]{images/2generals}
+	\end{center}
+	\begin{itemize}
+	\item Two generals want to attack a city
+	\item They can only use unreliable messengers to communicate
+	\item They need to attack at the same time to succeed
+	\end{itemize}
+
+	An infinite number of messages is needed for each general to be sure the other agrees on the time of the attack.
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Consensus protocols}
+
 \begin{frame}
  \begin{colorblock}{blue}{lightblue}{ }
   \begin{center}
@@ -109,14 +165,15 @@
   \end{center}
   \end{colorblock}
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Consensus protocols}
-%\input{./dynamo/dynamo}
-% paxos, raft
 
+
+\subsection{Paxos}
+\subsection{Raft}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Zookeper}
+
 \begin{frame}
  \begin{colorblock}{blue}{lightblue}{ }
   \begin{center}
@@ -125,35 +182,24 @@
   \end{colorblock}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{History}
+\frame {\frametitle{History}
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Zookeper}
-\subsection{Introduction}
-%\input{./hbase/introduction}
 \subsection{Architecture}
-%\input{./hbase/architecture}
-\subsection{The ZAB}
-%\input{./hbase/key-design}
-% \subsection{MapReduce Integration}
-% \input{./hbase/mapreduce}
+\frame {\frametitle{Architecture}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Higher-level primitives}
+\frame {\frametitle{Higher-level primitives}
+}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{References}
 \begin{frame}[allowframebreaks]{References}
 \bibliographystyle{plain} 
-%\bibliography{./hbase/references} 
 \end{frame}
 
 \end{document}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% PART SEPARATOR
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \begin{frame}
-%  \begin{colorblock}{blue}{lightblue}{ }
-%   \begin{center}
-%     \Huge \textbf{\texttt{Part One}}
-%   \end{center}
-%   \end{colorblock}
-% \end{frame}
