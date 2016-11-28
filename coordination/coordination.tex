@@ -71,14 +71,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Outline}
 	\begin{itemize}
+		\item \textbf{What is a distributed system?}
+		
+		\vspace{7pt}
+		
 		\item \textbf{The consensus problem}
 		\begin{itemize}
 			\item A few examples of distributed consensus
-			\item Eventually consistent Vs Strongly consistent, CAP theorem
+			\item CAP theorem
+			\item Eventually consistent Vs Strongly consistent
 			\item Fault tolerance: possible faults in distributed systems
 		\end{itemize}
 		
-		\vspace{10pt}
+		\vspace{7pt}
 		
 		\item \textbf{Consensus protocols}
 		\begin{itemize}
@@ -87,7 +92,7 @@
 			\item Other protocols
 		\end{itemize}
 		
-		\vspace{10pt}
+		\vspace{7pt}
 		
 		\item \textbf{Implementations - Zookeeper}
 		\begin{itemize}
@@ -99,6 +104,48 @@
 			
 	\end{itemize}
 }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{What is a distributed system?}
+\frame {\frametitle{What is a distributed system?}
+	\begin{center}
+		\includegraphics[width=0.6\textwidth]{images/traffic-jam}
+	\end{center}
+	\begin{itemize}
+		\item A set of processes seeking to achieve some common goal by communicating with each other
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{What is a distributed system?}
+	\begin{itemize}
+		\item Like software matryoskas
+		\begin{itemize}
+			\item Multi-threaded process
+			\item Multi-process on a single server
+			\item \textbf{Multiple processes in a set of servers in the same datacenter}
+			\item \textbf{Multiple processes in a set of geographically distributed servers}
+		\end{itemize}
+	
+		\vspace{10pt}
+	
+		\item Why?
+		\begin{itemize}
+			\item Inherent distribution (sensors, peer-to-peer, publish-subscribe, ...)
+			\item Engineering choice (fault tolerance, replication, performance, ...)
+		\end{itemize}
+	
+		\vspace{10pt}
+		
+		\item These processes need to coordinate to reach a common goal:
+		\begin{itemize}
+			\item data aggregation
+			\item synchronization
+			\item transactions
+			\item ...
+		\end{itemize}
+	\end{itemize}
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -153,6 +200,123 @@
 
 	An infinite number of messages is needed for each general to be sure the other agrees on the time of the attack.
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Consensus examples}
+	Processes need to reach a common goal:
+	\begin{itemize}
+		\item aggregate functions: sensors calculating average temperature
+		\item synchronization: agree on a value, elect a leader
+		\item reliable broadcast: a message sent to a group is received by all or none
+		\item atomic commit: ensure that processes reach a common decision whether to commit or abort a transaction
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Properties of a distributed system}
+	\begin{itemize}
+		\item Linearizability (Consistency): a given set of operations is \emph{linearizable} if it appears to the rest of the system to occur instantaneously
+		\begin{itemize}
+			\item Writes are linearizable operations if every read receives the most recent write or an error
+		\end{itemize}
+		\item Availability: a system is \emph{available} if every request to a non-failing node always receives a response, eventually
+		\begin{itemize}
+			\item Reading stale data is ok, though
+		\end{itemize}
+		\item Partition tolerance
+		\begin{itemize}
+			\item The system continues to function properly even if the network loses or delays an arbitrary number of messages
+		\end{itemize}
+	\end{itemize}
+
+	The CAP theorem links these three properties.
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{CAP theorem - 1}
+	The theorem says: between C A P, you can choose only two
+	\begin{center}
+		\includegraphics[width=0.5\textwidth]{images/cap}
+	\end{center}
+	(... but you need the P ...)
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{CAP theorem - 2 - Why not all three?}
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{images/cap2}
+	\end{center}
+
+	If there is a network partition either C or A will break
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{CAP theorem - 3 - P}
+	\begin{itemize}
+		\item Network partitions occur outside anyone's control in real life
+		\item Cannot sacrifice the Partition-Tolerance property
+		\item In the event of a network partition either A or C is maintained: it is the choice of the designer
+		\item Practical distributed systems are CP or AP
+		\item Some can be configured to shift between CP and AP (tunable consistency)
+	\end{itemize}
+	
+	\vspace{10pt}
+	
+	Note: a network partition can also be a very slow link
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{CAP theorem - 4 - Summary}
+	\begin{itemize}
+		\item First stated by Eric Brewer (Berkeley) at the PODC 2000 keynote
+		\item Formally proved by Gilbert and Lynch, 2002\cite{Gilbert02}
+	\end{itemize}
+	
+	\vspace{5pt}
+%	
+%	\begin{enumerate}
+%		\item Theorem 1: it is impossible in the \emph{asynchronous} network model to implement a read/write variable that guarantees availability (A) and consistency (C) in all executions (including those in which messages are lost)
+%		\item Theorem 2: the same applies to the \emph{partially synchronous} network model
+%	\end{enumerate}
+
+%	\vspace{5pt}
+	
+%	\begin{itemize}
+%		\item asynchronous: no clocks, message delays unbounded
+%		\item partially synchronous: bounds on the time it takes to deliver and process messages, but clocks are not synchronized and messages can be lost
+%	\end{itemize}
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frame {\frametitle{CAP theorem - 6 - Summary}
+	\begin{itemize}
+		\item The CAP theorem formally states the trade-offs among different distributed systems properties
+		\item In practice network Partitions occur, the designer can choose one of Consistency or Availability
+		\item The choice heavily depends on what your application/business logic is
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{CAP theorem - 5 - Summary}
+
+	CP-oriented systems:
+	\begin{itemize}
+		\item BigTable, Hbase, MongoDB, Redis, MemCacheDB, Scalaris, Paxos, Zookeeper$^1$
+	\end{itemize}
+	
+	\vspace{5pt}
+	
+	AP-oriented systems:
+	\begin{itemize}
+		\item Amazon Dynamo, CouchDB, Cassandra\footnote{CA or CP tunable}, SimpleDB, Riak, Voldemort
+	\end{itemize}
+
+	In-depth articles on the misuse of the CAP theorem in describing real systems:
+	\begin{itemize}
+	\item \url{https://codahale.com/you-cant-sacrifice-partition-tolerance/}
+	\item \url{https://martin.kleppmann.com/2015/05/11/please-stop-calling-databases-cp-or-ap.html}
+	\end{itemize}
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -200,6 +364,7 @@
 \section{References}
 \begin{frame}[allowframebreaks]{References}
 \bibliographystyle{plain} 
+\bibliography{references} 
 \end{frame}
 
 \end{document}
