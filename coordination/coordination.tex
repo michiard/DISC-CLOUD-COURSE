@@ -317,6 +317,58 @@
 	\item \url{https://martin.kleppmann.com/2015/05/11/please-stop-calling-databases-cp-or-ap.html}
 	\end{itemize}
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Consistency models}
+
+	\begin{itemize}
+		\item Eventual consistency: after a write, every read from the distributed system will \emph{eventually} return the written value, if no new updates are made to it
+	
+		\vspace{5pt}
+	
+		\item Strong consistency: after a write, all reads from the distributed system will return either the old or the new value
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Fault tolerance in distributed systems}
+	Faults examples:
+	\begin{itemize}
+		\item Simple: network partitions, hardware or software crashes, outdated/malicious nodes (bizantine faults)
+		\item Complex: feedback loops that overcompensate in good faith (examples in next slides)
+	\end{itemize}
+
+	Faults will always happen, design tolerance mechanisms:
+	\begin{itemize}
+		\item Replication: master-slave ($\rightarrow$ failover) or load balancing
+		\item Isolation: malfunctioning components do not affect the system as a whole
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Amazon DynamoDB crash (2015/09/20)}
+	DynamoDB: distributed NoSQL database from Amazon web services (AWS)
+	\begin{enumerate}
+		\item Network disruption caused timeouts of some storage servers
+		\item The affected servers tried to re-establish their membership
+		\item A change of usage pattern caused membership data to be unexpectedly large
+		\item Membership servers started to overload
+		\item More storage servers timed-out on health checks to membership servers
+		\item Cascading failure, stabilized at 55\% error rate for customers
+	\end{enumerate}
+	Post-mortem: \url{https://aws.amazon.com/message/5467D2/}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{More real-world failures}
+	\begin{itemize}
+		\item Google: \url{https://status.cloud.google.com/summary}
+		\item Facebook: \url{https://www.facebook.com/notes/facebook-engineering/more-details-on-todays-outage/431441338919}
+		\item Apple: \url{http://appleinsider.com/articles/16/06/02/apples-app-stores-apple-tv-itunes-other-services-hit-with-downtime}
+		\item Microsoft (Azure): \url{https://azure.microsoft.com/en-us/status/history/}
+	\end{itemize}
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
