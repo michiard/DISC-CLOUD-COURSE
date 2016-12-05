@@ -94,7 +94,7 @@
 		
 		\vspace{7pt}
 		
-		\item \textbf{Implementations - Zookeeper}
+		\item \textbf{Implementations - ZooKeeper}
 		\begin{itemize}
 			\item History
 			\item Architecture
@@ -118,7 +118,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{What is a distributed system?}
 	\begin{itemize}
-		\item Like software matryoskas
+		\item Like a software matrioshka
 		\begin{itemize}
 			\item Multi-threaded process
 			\item Multi-process on a single server
@@ -215,7 +215,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Properties of a distributed system}
 	\begin{itemize}
-		\item Linearizability (Consistency): a given set of operations is \emph{linearizable} if it appears to the rest of the system to occur instantaneously
+		\item Linearizability\footnote{The CAP theorem calls Consistency what is actually Linearizability}: a given set of operations is \emph{linearizable} if it appears to the rest of the system to occur instantaneously
 		\begin{itemize}
 			\item Writes are linearizable operations if every read receives the most recent write or an error
 		\end{itemize}
@@ -301,7 +301,7 @@
 
 	CP-oriented systems:
 	\begin{itemize}
-		\item BigTable, Hbase, MongoDB, Redis, MemCacheDB, Scalaris, Paxos, Zookeeper$^1$
+		\item BigTable, Hbase, MongoDB, Redis, MemCacheDB, Scalaris, Paxos, ZooKeeper$^1$
 	\end{itemize}
 	
 	\vspace{5pt}
@@ -393,7 +393,7 @@
 \begin{frame}
  \begin{colorblock}{blue}{lightblue}{ }
   \begin{center}
-    \Huge \textbf{\texttt{Zookeeper}}
+    \Huge \textbf{\texttt{ZooKeeper}}
   \end{center}
   \end{colorblock}
 \end{frame}

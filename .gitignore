@@ -1,9 +1,12 @@
-.aux
-.bbl
-.blg
-.log
-.nav
-.out
-.snm
-.toc
+*.aux
+*.bbl
+*.blg
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.synctex.gz
+*.txss
 
+coordination/old slides/
