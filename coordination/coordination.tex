@@ -87,9 +87,9 @@
 		
 		\item \textbf{Consensus protocols}
 		\begin{itemize}
-			\item Raft from A to Z
+			\item Two phase commit
 			\item Paxos overview
-			\item Other protocols
+			\item Raft from A to Z
 		\end{itemize}
 		
 		\vspace{7pt}
@@ -209,6 +209,7 @@
 		\item synchronization: agree on a value, elect a leader
 		\item reliable broadcast: a message sent to a group is received by all or none
 		\item atomic commit: ensure that processes reach a common decision whether to commit or abort a transaction
+		\item leader election: ensure there is only one process in charge at a given time
 	\end{itemize}
 }
 
@@ -273,22 +274,7 @@
 	\end{itemize}
 	
 	\vspace{5pt}
-%	
-%	\begin{enumerate}
-%		\item Theorem 1: it is impossible in the \emph{asynchronous} network model to implement a read/write variable that guarantees availability (A) and consistency (C) in all executions (including those in which messages are lost)
-%		\item Theorem 2: the same applies to the \emph{partially synchronous} network model
-%	\end{enumerate}
 
-%	\vspace{5pt}
-	
-%	\begin{itemize}
-%		\item asynchronous: no clocks, message delays unbounded
-%		\item partially synchronous: bounds on the time it takes to deliver and process messages, but clocks are not synchronized and messages can be lost
-%	\end{itemize}
-%}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\frame {\frametitle{CAP theorem - 6 - Summary}
 	\begin{itemize}
 		\item The CAP theorem formally states the trade-offs among different distributed systems properties
 		\item In practice network Partitions occur, the designer can choose one of Consistency or Availability
@@ -382,12 +368,102 @@
   \end{colorblock}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Overview}
+\frame {\frametitle{Consensus protocols overview}
+	Simplest (but unsafe):
+	\begin{itemize}
+		\item Two-phase commit
+	\end{itemize}
+
+	\vspace{7pt}
+
+	Traditionally studied for modern distributed systems:
+	\begin{itemize}
+		\item Paxos
+		\item Raft
+		\item ZAB
+	\end{itemize}
+
+	\vspace{7pt}
+	
+	Other:
+	\begin{itemize}
+		\item Lock-step (used in some multiplayer video games)
+		\item The proof-of-work from Bitcoin
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Two-phase commit}
+\frame {\frametitle{Two-phase commit}
+	Simplest protocol for consensus
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{images/2phasecommit}
+	\end{center}
+
+	\begin{itemize}
+		\item Phase 1
+		\begin{itemize}
+			\item One coordinator node \emph{C} suggests a value to the other nodes (1)
+			\item C gathers the responses (2)
+		\end{itemize}
+		\item Phase 2
+		\begin{itemize}
+			\item If all nodes agree, C sends a commit command, abort otherwise (3)
+		\end{itemize}
+	\end{itemize}
+
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Two-phase commit - Why it is not enough?}
+	Two phase commit cannot make progress if there are simple failures.
+	
+	\begin{center}
+	\includegraphics[width=0.8\textwidth]{images/2phasecommit}
+	\end{center}
+	
+	\begin{itemize}
+		\item If C fails nothing can be done until it is restarted
+		\begin{itemize}
+			\item If C fails in phase 1, it has to abort the commit and retry
+			\item If C fails in phase 2, it has to replay the outcome (commit/abort)
+			\item In both cases the outcome is uncertain until C restarts
+		\end{itemize}
+		\item If just one of the other nodes crashes, is slow or unreachable, the value cannot be committed.
+	\end{itemize}	
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Paxos}
-\subsection{Raft}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Paxos}
+}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Raft}
+\frame {\frametitle{Raft}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Implementations}
+\subsection{Overview}
+\frame {\frametitle{Some implementations}
+	\begin{itemize}
+		\item ZooKeeper (ZAB)
+		\vspace{4pt}
+		\item Consul (Raft + Serf)
+		\vspace{4pt}
+		\item etcd (Raft)
+		\vspace{4pt}
+		\item OpenReplica/ConCoord (Paxos)
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Zookeper}
 
 \begin{frame}
@@ -397,17 +473,47 @@
   \end{center}
   \end{colorblock}
 \end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{History}
 \frame {\frametitle{History}
 }
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Architecture}
 \frame {\frametitle{Architecture}
 }
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Higher-level primitives}
-\frame {\frametitle{Higher-level primitives}
+\subsection{Data model}
+\frame {\frametitle{Data model}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{API}
+\frame {\frametitle{API}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Laboratory session}
+\frame {\frametitle{Laboratory session - leader election}
+	Context:
+	\begin{itemize}
+		\item Sensors are streaming data to your cluster
+		\item Need a central node to do aggregations, the system must be highly available
+		\item Implement the leader election algorithm on top of ZooKeeper
+	\end{itemize}
+	
+	\vspace{4pt}
+	
+	Objective:
+	\begin{enumerate}
+		\item Start three processes
+		\item One of them will become the active leader
+		\item Stop/crash the leader
+		\item One of the surviving processes automatically takes the lead
+		\item The crashed node restarts without disrupting the current leadership (bonus)
+	\end{enumerate}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

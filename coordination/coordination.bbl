@@ -1,5 +1,10 @@
 \begin{thebibliography}{1}
 
+\bibitem{Berman1993}
+Piotr Berman and Juan~A. Garay.
+\newblock Cloture votes:n/4-resilient distributed consensus int + 1 rounds.
+\newblock {\em Mathematical systems theory}, 26(1):3--19, 1993.
+
 \bibitem{Gilbert02}
 Seth Gilbert and Nancy Lynch.
 \newblock Brewer's conjecture and the feasibility of consistent, available,
