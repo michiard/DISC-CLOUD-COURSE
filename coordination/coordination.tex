@@ -405,12 +405,12 @@
 	\begin{itemize}
 		\item Phase 1
 		\begin{itemize}
-			\item One coordinator node \emph{C} suggests a value to the other nodes (1)
-			\item C gathers the responses (2)
+			\item One coordinator node \emph{C} suggests a value to the other nodes
+			\item C gathers the responses
 		\end{itemize}
 		\item Phase 2
 		\begin{itemize}
-			\item If all nodes agree, C sends a commit command, abort otherwise (3)
+			\item If all nodes agree, C sends a commit command, abort otherwise
 		\end{itemize}
 	\end{itemize}
 
@@ -418,14 +418,14 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Two-phase commit - Why it is not enough?}
-	Two phase commit cannot make progress if there are simple failures.
+Two phase commit cannot make progress if there are simple failures.\cite{2PCarticle}
 	
 	\begin{center}
-	\includegraphics[width=0.8\textwidth]{images/2phasecommit}
+	\includegraphics[width=0.6\textwidth]{images/2phasecommit}
 	\end{center}
 	
 	\begin{itemize}
-		\item If C fails nothing can be done until it is restarted
+		\item If C fails, nothing can be done until it is restarted
 		\begin{itemize}
 			\item If C fails in phase 1, it has to abort the commit and retry
 			\item If C fails in phase 2, it has to replay the outcome (commit/abort)
@@ -436,11 +436,72 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{State-machine replication}
+\frame {\frametitle{State-machine replication}
+	\begin{center}
+		\includegraphics[width=0.4\textwidth]{images/dist-state-machine}
+	\end{center}
+	
+	\begin{itemize}
+		\item Paxos and Raft use distributed state machines
+		\item Committed operations are executed by all state machines in the cluster in the same order
+	\end{itemize}
 
-\subsection{Paxos}
-\frame {\frametitle{Paxos}
+	Example operation: set variable $x$ to value $5$
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Paxos}
+\frame {\frametitle{Paxos}
+	Old and well-known family of protocols for distributed consensus.
+	\begin{itemize}
+		\item first presented in 1989, paper published in 1998\cite{LamportPaxos1}
+		\item has been formally proven to be safe
+	\end{itemize}
+
+	\vspace{5pt}
+	
+	Complex and difficult to implement
+	\begin{itemize}
+		\item Basic Paxos protocol decides on a single output value
+		\item Multi-Paxos extends the Basic protocol for practical use
+		\item Many variants: cheap, fast, generalized, byzantine
+		\item No reference implementation
+		\item Many papers try to make it more approachable\cite{LampsonPaxos, PaxosMadeSimple, PaxosMadeLive}
+		\item Paxos needs a large enough subnet to be non-faulty for a long enough time, otherwise it might never terminate
+	\end{itemize}
+	
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{A Paxos round - 1}
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{images/paxos-round1}
+	\end{center}
+
+	Phase 1 of a very simplified Paxos round:
+	\begin{itemize}
+		\item A node in the cluster self-appoints leader and chooses a new ballot ID
+		\item Sends a ballot proposal to the other nodes (1)
+		\item The other nodes return the highest ballot ID they know (2)
+		\item If a majority responds with the proposed ID, the leader is confirmed for this this round
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{A Paxos round - 2}
+	\begin{center}
+		\includegraphics[width=0.7\textwidth]{images/paxos-round2}
+	\end{center}
+	
+	Phase 2 of a very simplified Paxos round:
+	\begin{itemize}
+		\item The leader proposes a new value (or a state transition) (3)
+		\item The leader receives the answers (4)
+		\item If a majority accepts the new value, the leader orders a commit (5)
+		\item Otherwise a new round must be started
+	\end{itemize}
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Raft}
 \frame {\frametitle{Raft}
@@ -521,7 +582,7 @@
 
 \section{References}
 \begin{frame}[allowframebreaks]{References}
-\bibliographystyle{plain} 
+\bibliographystyle{acm}
 \bibliography{references} 
 \end{frame}
 

@@ -1,14 +1,38 @@
 \begin{thebibliography}{1}
 
-\bibitem{Berman1993}
-Piotr Berman and Juan~A. Garay.
-\newblock Cloture votes:n/4-resilient distributed consensus int + 1 rounds.
-\newblock {\em Mathematical systems theory}, 26(1):3--19, 1993.
+\bibitem{PaxosMadeLive}
+{\sc Chandra, T.~D., Griesemer, R., and Redstone, J.}
+\newblock Paxos made live: An engineering perspective.
+\newblock In {\em Proceedings of the Twenty-sixth Annual ACM Symposium on
+  Principles of Distributed Computing\/} (New York, NY, USA, 2007), PODC '07,
+  ACM, pp.~398--407.
 
 \bibitem{Gilbert02}
-Seth Gilbert and Nancy Lynch.
+{\sc Gilbert, S., and Lynch, N.}
 \newblock Brewer's conjecture and the feasibility of consistent, available,
   partition-tolerant web services.
-\newblock {\em SIGACT News}, 33(2):51--59, June 2002.
+\newblock {\em SIGACT News 33}, 2 (June 2002), 51--59.
+
+\bibitem{LamportPaxos1}
+{\sc Lamport, L.}
+\newblock The part-time parliament.
+\newblock {\em ACM Trans. Comput. Syst. 16}, 2 (May 1998), 133--169.
+
+\bibitem{PaxosMadeSimple}
+{\sc Lamport, L.}
+\newblock Paxos made simple.
+\newblock {\em SIGACT News 32}, 4 (Dec. 2001), 51--58.
+
+\bibitem{LampsonPaxos}
+{\sc Lampson, B.~W.}
+\newblock How to build a highly available system using consensus.
+\newblock
+  \url{http://research.microsoft.com/en-us/um/people/blampson/58-Consensus/WebPage.html}.
+
+\bibitem{2PCarticle}
+{\sc Robinson, H.}
+\newblock Consensus protocols: Two-phase commit.
+\newblock
+  \url{http://the-paper-trail.org/blog/consensus-protocols-two-phase-commit/}.
 
 \end{thebibliography}
