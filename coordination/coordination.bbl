@@ -29,6 +29,12 @@
 \newblock
   \url{http://research.microsoft.com/en-us/um/people/blampson/58-Consensus/WebPage.html}.
 
+\bibitem{raft}
+{\sc Ongaro, D., and Ousterhout, J.}
+\newblock In search of an understandable consensus algorithm.
+\newblock In {\em 2014 USENIX Annual Technical Conference (USENIX ATC 14)\/}
+  (Philadelphia, PA, June 2014), USENIX Association, pp.~305--319.
+
 \bibitem{2PCarticle}
 {\sc Robinson, H.}
 \newblock Consensus protocols: Two-phase commit.

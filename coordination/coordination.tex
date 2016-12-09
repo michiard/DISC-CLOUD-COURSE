@@ -444,6 +444,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	
 	\begin{itemize}
 		\item Paxos and Raft use distributed state machines
+		\item State machines are fully deterministic
 		\item Committed operations are executed by all state machines in the cluster in the same order
 	\end{itemize}
 
@@ -502,10 +503,47 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 		\item Otherwise a new round must be started
 	\end{itemize}
 }
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Raft}
-\frame {\frametitle{Raft}
+\frame {\frametitle{Raft - introduction}
+	Modern implementation of a consensus protocol
+	\begin{itemize}
+		\item Published at Usenix 2014\cite{raft}
+		\item Has been built to be easy to understand and implement
+	\end{itemize}
+
+	\vspace{7pt}
+
+	Random facts:
+	\begin{itemize}
+		\item The authors released a reference C++ implementation (LogCabin)
+		\item Many implementations in other languages are available
+		\item Lots of educational material, lectures and assignments are available
+	\end{itemize}
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Raft - introduction}
+	
+	\begin{itemize}
+		\item Raft replicates entries in a distributed log
+		\item Each log entry is a state machine command
+		\item Once an entry has been committed, it is executed by each state machine
+		\item Raft ensures global ordering on the committed log entries
+		\item $\Rightarrow$ all state machines are synchronized on the last committed command
+		\item Snapshotting is used to keep the log size limited
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Raft - learning tools}
+	\begin{enumerate}
+		\item Raftscope: \url{http://bigfoot-m2.eurecom.fr/raftscope/}
+		\item Secret lived of Data: \url{http://thesecretlivesofdata.com/raft/}
+	\end{enumerate}
+}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
