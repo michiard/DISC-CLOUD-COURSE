@@ -504,9 +504,22 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	\end{itemize}
 }
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Raft}
-\frame {\frametitle{Raft - introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Raft}
+
+\begin{frame}
+	\begin{colorblock}{blue}{lightblue}{ }
+		\begin{center}
+			\Huge \textbf{\texttt{Raft}}
+		\end{center}
+	\end{colorblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Introduction}
+\frame {\frametitle{Introduction}
 	Modern implementation of a consensus protocol
 	\begin{itemize}
 		\item Published at Usenix 2014\cite{raft}
@@ -518,38 +531,221 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	Random facts:
 	\begin{itemize}
 		\item The authors released a reference C++ implementation (LogCabin)
-		\item Many implementations in other languages are available
-		\item Lots of educational material, lectures and assignments are available
+		\item Many implementations in other languages
+	\item Lots of educational material, lectures and assignments are available\footnote{These slides are based on the original Raft paper\cite{raft} and the slide deck from Michael Freedman (Princeton, COS-418).}
 	\end{itemize}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Raft - introduction}
+\frame {\frametitle{Introduction}
 	
 	\begin{itemize}
-		\item Raft replicates entries in a distributed log
-		\item Each log entry is a state machine command
-		\item Once an entry has been committed, it is executed by each state machine
-		\item Raft ensures global ordering on the committed log entries
-		\item $\Rightarrow$ all state machines are synchronized on the last committed command
+		\item Raft maintains a distributed log containing state machine commands
+		\item The \emph{elected leader} handles all communication with the clients\\
+		      ($\rightarrow$ no communication until a leader is elected)\\
+		      and has the control on which entries are committed to the log
+		\item The other nodes are passive replicators
 		\item Snapshotting is used to keep the log size limited
+		\item Periodic heartbeats are used to check if nodes are alive
+		\item All nodes are known in advance
 	\end{itemize}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Raft - learning tools}
+\frame {\frametitle{Node states}
+	\begin{itemize}
+		\item At any given time, each node is either:
+		\begin{itemize}
+			\item Leader: handles client requests, manages the log
+			\item Follower: passively replicates the log and the state machine
+			\item Candidate: transition state used during elections
+		\end{itemize}
+	
+		\vspace{10pt}
+		
+		\item Normal operation, with N nodes (N must be odd):
+		\begin{itemize}
+			\item 1 leader
+			\item N-1 follower
+			\item 0 candidates
+		\end{itemize}
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Leader election}
+\frame {\frametitle{Election terms}
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{images/raft-1}
+	\end{center}
+	\begin{itemize}
+		\item Time is divided into terms, each identified by a monotonically increasing ID
+		\item Each node records the term he believes to be the current one
+		\item All messages are labeled with a term ID $\Rightarrow$ term IDs are used to identify obsolete information
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Elections}
+	How an election starts:
+	\begin{itemize}
+		\item Each node has a (bounded) random timer, the \emph{election timeout}
+		\item If a node does not receive any leader heartbeat before the timeout, it starts the election
+	\end{itemize}
+
+	\vspace{12pt}
+
+	The node that starts an election:
+	\begin{itemize}
+		\item Increments the term ID, becomes \emph{Candidate} and votes for itself
+		\item Sends a request to vote to all other nodes until either:
+		\begin{itemize}
+			\item Receives a majority of votes $\rightarrow$ becomes \emph{Leader}
+			\item Receives a message from another leader $\rightarrow$ becomes \emph{Follower}
+			\item No-one wins before the election timeout expires again $\rightarrow$ starts a new election
+		\end{itemize}
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Election properties}
+	\begin{itemize}
+		\item \emph{Safety}: there is at most one winner/leader per term
+		\begin{itemize}
+			\item Each voter votes only once per term
+			\item There cannot be two majorities in the same term
+		\end{itemize}
+	
+		\vspace{12pt}
+	
+		\item \emph{Liveness}: a leader will eventually be elected
+		\begin{itemize}
+			\item The election is started after a random timeout
+			\item The randomness guarantees there will be different candidates at different times
+			\item Faults (hence new terms) happen in days/weeks/months, an election lasts milliseconds/seconds
+		\end{itemize}
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Log replication}
+\frame {\frametitle{Normal operation}
+	
+	\begin{center}
+		\includegraphics[width=0.8\textwidth]{images/raft-2}
+	\end{center}
+	
+	\begin{enumerate}
+		\item Clients send commands to the current leader
+		\item The leader logs a new (uncommitted) entry
+		\item The leader sends the new entry to all nodes in the next heartbeat
+		\item Once a majority answers, the leader commits the new entry
+		\item The leader answers the client
+		\item The leader asks all nodes to commit the entry in the next heartbeat
+		\item The nodes commit the entry in their logs
+	\end{enumerate}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Failure scenarios}
+\frame {\frametitle{What if ... the leader fails}
+
+	Short answer:\\
+	easy, after the election timeout expires a new leader is elected
+	
+	\vspace{10pt}
+	
+	What happens to uncommitted entries?
+	\begin{itemize}
+		\item The client will never receive the commit ack (will retry later)
+		\item Uncommitted entries in the followers will eventually be overwritten by the new leader
+	\end{itemize}
+
+	\vspace{5pt}
+
+	And when it restarts?
+	\begin{itemize}
+		\item It will restart as a follower
+		\item It will set its internal term ID according to the first heartbeat message it receives
+		\item The leader will send missing log entries
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{What if ... a follower fails}
+	
+	Short answer:\\
+	nothing happens
+	
+	\vspace{15pt}
+	
+	And when it restarts?
+	\begin{itemize}
+		\item Same as when the leader restarts
+		\item It will restart as a follower
+		\item It will set its internal term ID according to the first heartbeat message it receives
+		\item The leader will send missing log entries
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{What if ... there is a 50/50 vote}
+	
+	Short answer:\\
+	no leader is elected, election timeout expires, new term, new election
+	
+	\vspace{15pt}
+	
+	This case is called \emph{split majority}:
+	\begin{itemize}
+		\item An even number of voters
+		\item Two equal subsets equal in size vote for different leaders
+		\item The two candidates count the votes and see that there is no majority
+	\end{itemize}
+
+	Very low probability:
+	\begin{itemize}
+		\item two candidates at the same time (random election timeout)
+		\item messages to initiate election arrive at the same time
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{What if ... there is a network partition}
+	
+	Short answer:\\
+	the majority rule ensures only half of the partition commits new entries
+	
+	\vspace{15pt}
+	
+	What happens:
+	\begin{itemize}
+		\item The biggest partition will elect a leader, incrementing the term ID
+		\item The smaller one will be unable to do anything: all operations require a majority
+	\end{itemize}
+	
+	And when the partition is healed?
+	\begin{itemize}
+		\item The minority partition will receive heartbeats with a bigger term ID
+		\item The leader in the minority partition (if any), will immediately step down
+		\item Uncommitted log entries will be overwritten
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Learning tools}
+\frame {\frametitle{Learning tools}
 	\begin{enumerate}
 		\item Raftscope: \url{http://bigfoot-m2.eurecom.fr/raftscope/}
 		\item Secret lives of Data: \url{http://thesecretlivesofdata.com/raft/}
 	\end{enumerate}
 }
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Implementations}
 \subsection{Overview}
-\frame {\frametitle{Some implementations}
+\frame {\frametitle{Some implementations of consensus protocols}
 	\begin{itemize}
 		\item ZooKeeper (ZAB)
 		\vspace{4pt}
