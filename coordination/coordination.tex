@@ -7,6 +7,7 @@
 \usepackage{times}
 \usepackage[T1]{fontenc} 
 \usepackage{color}
+\usepackage[absolute,overlay]{textpos}
 
 \usetheme[secheader]{Boadilla}
 \usefonttheme[onlylarge]{structurebold}
@@ -733,12 +734,23 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Learning tools}
-\frame {\frametitle{Learning tools}
+\subsection{Conclusions}
+\frame {\frametitle{Learning tools and Raft summary}
+	Raft interactive demos:
 	\begin{enumerate}
 		\item Raftscope: \url{http://bigfoot-m2.eurecom.fr/raftscope/}
-		\item Secret lives of Data: \url{http://thesecretlivesofdata.com/raft/}
+		\item Secret lives of data: \url{http://thesecretlivesofdata.com/raft/}
 	\end{enumerate}
+
+	\vspace{10pt}
+
+	\begin{itemize}
+		\item Raft is a consensus protocol
+		\item Consistently replicates a distributed log of state machine commands
+		\item In each term a leader is elected
+		\item Hard timeouts bound elections and heartbeats
+		\item The leader is responsible for client communication and log replication
+	\end{itemize}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -759,7 +771,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Zookeper}
+\section{ZooKeeper}
 
 \begin{frame}
  \begin{colorblock}{blue}{lightblue}{ }
@@ -770,23 +782,149 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Motivation}
+
+	When building a distributed system you have two options:
+	
+	\begin{itemize}
+		\item Build your own coordination primitive each time
+		\begin{itemize}
+			\item Buggy and error-prone approach
+		\end{itemize}
+		\item Use an external coordination system
+		\begin{itemize}
+			\item Adds external dependencies, more complex deployments
+			\item Does not reinvent the wheel
+			\item Use a well-known and tested system
+		\end{itemize}
+	\end{itemize}
+
+	\vspace{10pt}
+
+	Recent examples of coordination systems:
+	\begin{itemize}
+		\item Chubby from Google\cite{chubby} (lock service)
+		\item Centrifuge from Microsoft\cite{Centrifuge} (Lease service)
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{History}
 \frame {\frametitle{History}
+	\begin{textblock*}{50mm}(0.88\textwidth,42mm)
+		\includegraphics[width=0.3\textwidth]{images/zk-logo}
+	\end{textblock*}
+	
+	Originally part of the Hadoop suite (2008), is now a stand-alone Apache project since 2011
+	
+	\vspace{10pt}
+	
+	Objectives\footnote{See also the Tao of ZooKeeper: \url{https://cwiki.apache.org/confluence/display/ZOOKEEPER/Tao}}:
+	\begin{itemize}
+		\item Provide common services needed by distributed systems
+		\begin{itemize}
+			\item Configuration
+			\item Group management
+			\item Naming
+			\item Presence protocols
+			\item Distributed synchronization
+		\end{itemize}
+		\item Have a simple interface
+		\item Have a highly available architecture
+	\end{itemize}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Architecture}
 \frame {\frametitle{Architecture}
+	\begin{center}
+		\includegraphics[width=0.9\textwidth]{images/zk-arch}	
+	\end{center}
+
+	\begin{itemize}
+		\item ZooKeeper itself is distributed, for performance and fault tolerance
+		\item Uses the ZAB consensus protocol
+		\item Clients can talk to any server, but all update operations handled by an elected leader
+		\item Data kept in-memory for performance
+		\item Snapshots and transaction logs on persistent storage
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Architecture - ZAB}
+	The ZAB is the consensus protocol used by ZooKeeper
+	\begin{itemize}
+		\item It does not use state machine replication like Paxos or Raft
+		\item Totally orders write requests using a majority of nodes
+		\item Leader sequences the requests and invokes ZAB atomic broadcast
+		\item Strictly ordered state updates are applied by non-leaders
+	\end{itemize}
+
+	\vspace{15pt}
+
+	ZooKeeper developers focused on strong ordering guarantees for all operations\cite{Zab}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Data model}
 \frame {\frametitle{Data model}
+	\begin{center}
+		\includegraphics[width=0.6\textwidth]{images/zk-data-model}	
+	\end{center}
+
+	\begin{itemize}
+		\item Hierarchical namespace (like a file system)
+		\item Each data node is called \emph{znode}
+		\item Any znode can contain data and have children znodes
+	\end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{znodes}
+	Znodes can be:
+	\begin{itemize}
+		\item \emph{Regular}: created and destroyed by the client
+		\item \emph{Ephemeral}: created by the client, but ZooKeeper will delete it if the client disconnects
+		\item \emph{Sequential}: created by the client, but the name is generated by ZooKeeper using a counter
+		\item \emph{Ephemeral + Sequential}: combines the two above
+	\end{itemize}
+
+	\vspace{15pt}
+
+	Znodes have version counters that are updated each time their content changes
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Watches}
+	A client can set a \emph{watch} on a znode. ZooKeeper will call back the client when:
+	\begin{itemize}
+		\item The data in the znode changes
+		\item A children node is created or destroyed
+	\end{itemize}
+
+	\vspace{15pt}
+
+	Watches are very useful to implement locks and leader elections with good performance
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{API}
 \frame {\frametitle{API}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Conclusions}
+\frame {\frametitle{Conclusions}
+	\begin{itemize}
+		\item ZooKeeper is a high-performance coordination service for distributed applications
+		\item Internally uses the ZAB consensus protocol
+		\item Clients manipulate data in form of hierarchical znodes, similar to a file system
+		\item Complex, higher level primitives can be built on top of the ZooKeeper API
+	\end{itemize}
+
+	\vspace{15pt}
+	
+	ZooKeeper documentation: \url{https://zookeeper.apache.org/doc/r3.4.9/}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -810,6 +948,16 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 		\item The crashed node restarts without disrupting the current leadership (bonus)
 	\end{enumerate}
 }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+	\begin{colorblock}{blue}{lightblue}{ }
+		\begin{center}
+			\Huge \textbf{\texttt{References}}
+		\end{center}
+	\end{colorblock}
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

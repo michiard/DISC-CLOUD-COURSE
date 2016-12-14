@@ -1,4 +1,19 @@
-\begin{thebibliography}{1}
+\begin{thebibliography}{10}
+
+\bibitem{Centrifuge}
+{\sc Adya, A., Dunagan, J., and Wolman, A.}
+\newblock Centrifuge: Integrated lease management and partitioning for cloud
+  services.
+\newblock In {\em Proceedings of the 7th USENIX Conference on Networked Systems
+  Design and Implementation\/} (Berkeley, CA, USA, 2010), NSDI'10, USENIX
+  Association, pp.~1--1.
+
+\bibitem{chubby}
+{\sc Burrows, M.}
+\newblock The chubby lock service for loosely-coupled distributed systems.
+\newblock In {\em Proceedings of the 7th Symposium on Operating Systems Design
+  and Implementation\/} (Berkeley, CA, USA, 2006), OSDI '06, USENIX
+  Association, pp.~335--350.
 
 \bibitem{PaxosMadeLive}
 {\sc Chandra, T.~D., Griesemer, R., and Redstone, J.}
@@ -12,6 +27,13 @@
 \newblock Brewer's conjecture and the feasibility of consistent, available,
   partition-tolerant web services.
 \newblock {\em SIGACT News 33}, 2 (June 2002), 51--59.
+
+\bibitem{Zab}
+{\sc Junqueira, F.~P., Reed, B.~C., and Serafini, M.}
+\newblock Zab: High-performance broadcast for primary-backup systems.
+\newblock In {\em Proceedings of the 2011 IEEE/IFIP 41st International
+  Conference on Dependable Systems\&Networks\/} (Washington, DC, USA, 2011),
+  DSN '11, IEEE Computer Society, pp.~245--256.
 
 \bibitem{LamportPaxos1}
 {\sc Lamport, L.}
