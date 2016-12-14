@@ -42,7 +42,7 @@
 	\item {\bf Large-scale clusters are expensive, so it is important to use them well}
 	\begin{itemize}
 		\item Cluster utilization and efficiency are key indicators for good resource management and scheduling decisions
-		\item Translates directly to cost arguments: better scheduling $\to$ smaller clusters
+		\item Translates directly to cost arguments: better scheduling $\to$ smaller clusters or, better, larger workloads with the same cluster size
 	\end{itemize}
 
 \vspace{10pt}
@@ -137,7 +137,7 @@
 
 \begin{frame}\frametitle{Short Taxonomy of Scheduling Design Issues}
 \begin{itemize}
-	\item {\bf Scheduling Work Partitioning:} how to distribute work across frameworks
+	\item {\bf Work Partitioning:} how to allocate work across frameworks
 	\begin{itemize}
 		\item Workload-oblivious load-balancing
 		\item Workload partitioning and specialized schedulers
@@ -150,7 +150,7 @@
 	\begin{itemize}
 		\item All resources available
 		\item A subset of cluster resources is granted (or offered)
-		\item NOTE: preemption primitives help scheduling flexibility at the cost of potentially wasting work
+		\item[] NOTE: preemption primitives help scheduling flexibility at the cost of potentially wasting work
 	\end{itemize}
 \end{itemize}
 \end{frame}
