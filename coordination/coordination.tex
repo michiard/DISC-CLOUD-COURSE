@@ -1,7 +1,6 @@
 \documentclass{beamer}
 
-\usepackage[lined,ruled]{algorithm2e}
-\usepackage{subfigure}
+\usepackage{verbatim}
 \usepackage[english]{babel}
 \usepackage[latin1]{inputenc}
 \usepackage{times}
@@ -203,8 +202,8 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Consensus examples}
-	Processes need to reach a common goal:
+\frame {\frametitle{A few examples}
+	Common functionality in distributed systems:
 	\begin{itemize}
 		\item aggregate functions: sensors calculating average temperature
 		\item synchronization: agree on a value, elect a leader
@@ -215,6 +214,19 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{The consensus problem}
+\begin{frame}
+	\begin{colorblock}{blue}{lightblue}{ }
+		\begin{center}
+			\Huge \textbf{\texttt{The CAP theorem}}
+		\end{center}
+	\end{colorblock}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{CAP theorem}
 \frame {\frametitle{Properties of a distributed system}
 	\begin{itemize}
 		\item Linearizability\footnote{The CAP theorem calls Consistency what is actually Linearizability}: a given set of operations is \emph{linearizable} if it appears to the rest of the system to occur instantaneously
@@ -309,21 +321,23 @@
 \frame {\frametitle{Consistency models}
 
 	\begin{itemize}
-		\item Eventual consistency: after a write, every read from the distributed system will \emph{eventually} return the written value, if no new updates are made to it
+		\item Eventual consistency: after a successful write, every read from the distributed system will \emph{eventually} return the written value, if no new updates are made to it
 	
 		\vspace{5pt}
 	
-		\item Strong consistency: after a write, all reads from the distributed system will return either the old or the new value
+		\item Strong consistency: after a successful write, all reads from the distributed system will return the new value
 	\end{itemize}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \frame {\frametitle{Fault tolerance in distributed systems}
-	Faults examples:
+	Fault examples:
 	\begin{itemize}
 		\item Simple: network partitions, hardware or software crashes, outdated/malicious nodes (bizantine faults)
 		\item Complex: feedback loops that overcompensate in good faith (examples in next slides)
 	\end{itemize}
+
+	\vspace{10pt}
 
 	Faults will always happen, design tolerance mechanisms:
 	\begin{itemize}
@@ -470,7 +484,6 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 		\item Many variants: cheap, fast, generalized, byzantine
 		\item No reference implementation
 		\item Many papers try to make it more approachable\cite{LampsonPaxos, PaxosMadeSimple, PaxosMadeLive}
-		\item Paxos needs a large enough subnet to be non-faulty for a long enough time, otherwise it might never terminate
 	\end{itemize}
 	
 }
@@ -486,7 +499,8 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 		\item A node in the cluster self-appoints leader and chooses a new ballot ID
 		\item Sends a ballot proposal to the other nodes (1)
 		\item The other nodes return the highest ballot ID they know (2)
-		\item If a majority responds with the proposed ID, the leader is confirmed for this this round
+		\item If a majority responds with the proposed ID, the protocol can proceed
+		\item The other nodes can include also their proposal for the value
 	\end{itemize}
 }
 
@@ -498,13 +512,28 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	
 	Phase 2 of a very simplified Paxos round:
 	\begin{itemize}
-		\item The leader proposes a new value (or a state transition) (3)
+		\item The leader resolves any conflicting proposal for the value
+		\item The leader proposes the new value (3)
 		\item The leader receives the answers (4)
-		\item If a majority accepts the new value, the leader orders a commit (5)
+		\item If a majority accepts the new value, it is final for this round (5)
 		\item Otherwise a new round must be started
 	\end{itemize}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{Paxos - conclusions}
+	\begin{itemize}
+		\item The original Paxos defines the protocol for one output value
+		\item Multiple rounds can happen at the same time, even in single Paxos
+		\item Paxos is complex to understand and implement
+		\begin{itemize}
+			\item There are five different roles (only two are shown)
+			\item The leader can decide to work with a subset of the available nodes (a quorum)
+			\item Even in the same round there can be multiple proposals, each with an identifier
+			\item ... and we haven't even mentioned the state machine ...
+		\end{itemize}
+	\end{itemize}
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -591,7 +620,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	How an election starts:
 	\begin{itemize}
 		\item Each node has a (bounded) random timer, the \emph{election timeout}
-		\item If a node does not receive any leader heartbeat before the timeout, it starts the election
+		\item If a node does not receive any leader heartbeat before the timeout, it starts an election
 	\end{itemize}
 
 	\vspace{12pt}
@@ -748,7 +777,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 		\item Raft is a consensus protocol
 		\item Consistently replicates a distributed log of state machine commands
 		\item In each term a leader is elected
-		\item Hard timeouts bound elections and heartbeats
+		\item Hard timeouts drive elections and heartbeats
 		\item The leader is responsible for client communication and log replication
 	\end{itemize}
 }
@@ -815,7 +844,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 		\includegraphics[width=0.3\textwidth]{images/zk-logo}
 	\end{textblock*}
 	
-	Originally part of the Hadoop suite (2008), is now a stand-alone Apache project since 2011
+	ZooKeeper was originally (2008) part of the Hadoop suite, since 2011 it is a stand-alone Apache project
 	
 	\vspace{10pt}
 	
@@ -844,8 +873,8 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	\begin{itemize}
 		\item ZooKeeper itself is distributed, for performance and fault tolerance
 		\item Uses the ZAB consensus protocol
-		\item Clients can talk to any server, but all update operations handled by an elected leader
-		\item Data kept in-memory for performance
+		\item Clients can talk to any server, but all update operations are handled by an elected leader
+		\item Data is kept in-memory for performance
 		\item Snapshots and transaction logs on persistent storage
 	\end{itemize}
 }
@@ -863,6 +892,27 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	\vspace{15pt}
 
 	ZooKeeper developers focused on strong ordering guarantees for all operations\cite{Zab}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frame {\frametitle{ZooKeeper and the CAP theorem}
+	ZooKeeper is AP by default:
+	\begin{itemize}
+		\item reads return local (cached) data that may be stale
+	\end{itemize}
+
+	\vspace{12pt}
+	
+	The client may use the sync command before a read:
+	\begin{itemize}
+		\item It makes ZooKeeper flush all caches
+		\item Performance penalty
+		\item Makes ZooKeeper CP
+	\end{itemize}
+
+	\vspace{12pt}
+	
+	Note: writes are always synchronized through the leader.
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -908,9 +958,78 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{API}
-\frame {\frametitle{API}
-}
+\subsection{Examples and use cases}
+\begin{frame}[fragile]
+	\frametitle{Implementing consensus}
+	Briefly:
+	\begin{itemize}
+		\item A number of processes need to agree on a value
+		\item Each one proposes a value
+		\item The decision must be unanimous
+	\end{itemize}
+
+	\vspace{7pt}
+
+	Each node proposes:
+	\begin{verbatim}
+		create(PATH, my_value, SEQUENTIAL)
+	\end{verbatim}
+
+	\vspace{7pt}
+
+	Each node decides:
+	\begin{verbatim}
+		C = getChildren(PATH)
+		> Select znode z in C with smallest sequence suffix <
+		agreed_value = getData(PATH + z)
+	\end{verbatim}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+	\frametitle{Implementing configuration management}
+	Briefly:
+	\begin{itemize}
+		\item A number of processes need to access common configuration
+		\item The config can change dynamically
+	\end{itemize}
+	
+	\vspace{7pt}
+	
+	Each node does:
+	\begin{verbatim}
+		CONFIG_PATH = /app/config
+		config = getData(CONFIG_PATH, watch=TRUE)
+		while (TRUE) {
+		    > wait for watch notification on CONFIG_PATH <
+		    config = getData(CONFIG_PATH, watch=TRUE)
+		}
+	\end{verbatim}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]
+	\frametitle{Implementing group membership}
+	Briefly:
+	\begin{itemize}
+		\item A number of processes provide the same service (load balancing)
+		\item Leverage ephemeral znodes
+	\end{itemize}
+	
+	\vspace{7pt}
+	
+	Each node does a \emph{joinGroup}:
+	\begin{verbatim}
+		create(GROUP_PATH + proc_name,
+		       [address], EPHEMERAL)
+	\end{verbatim}
+
+	Clients call \emph{getMembers}:
+	\begin{verbatim}
+		getChildren(GROUP_PATH + proc_name, watch=TRUE)
+	\end{verbatim}
+	The watch is used to get notified about membership changes
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Conclusions}
@@ -945,7 +1064,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 		\item One of them will become the active leader
 		\item Stop/crash the leader
 		\item One of the surviving processes automatically takes the lead
-		\item The crashed node restarts without disrupting the current leadership (bonus)
+		\item The crashed node restarts without disrupting the current leadership (bonus question)
 	\end{enumerate}
 }
 

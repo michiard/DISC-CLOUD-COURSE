@@ -1,0 +1,20 @@
+\frametitle{Implementing group membership}
+	Briefly:
+	\begin{itemize}
+		\item A number of processes provide the same service (load balancing)
+		\item Leverage ephemeral znodes
+	\end{itemize}
+
+	\vspace{7pt}
+
+	Each node does a \emph{joinGroup}:
+	\begin{verbatim}
+		create(GROUP_PATH + proc_name,
+		       [address], EPHEMERAL)
+	\end{verbatim}
+
+	Clients call \emph{getMembers}:
+	\begin{verbatim}
+		getChildren(GROUP_PATH + proc_name, watch=TRUE)
+	\end{verbatim}
+	The watch is used to get notified about membership changes
