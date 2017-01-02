@@ -216,7 +216,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{The consensus problem}
 \begin{frame}
 	\begin{colorblock}{blue}{lightblue}{ }
 		\begin{center}
@@ -300,7 +299,7 @@
 
 	CP-oriented systems:
 	\begin{itemize}
-		\item BigTable, Hbase, MongoDB, Redis, MemCacheDB, Scalaris, Paxos, ZooKeeper$^1$
+		\item BigTable, Hbase, MongoDB, Redis, MemCacheDB, Scalaris, ZooKeeper$^1$
 	\end{itemize}
 	
 	\vspace{5pt}
@@ -321,7 +320,7 @@
 \frame {\frametitle{Consistency models}
 
 	\begin{itemize}
-		\item Eventual consistency: after a successful write, every read from the distributed system will \emph{eventually} return the written value, if no new updates are made to it
+		\item Eventual consistency: after a successful write, \emph{eventually} every read from the distributed system will return the written value, if no new updates are made to it
 	
 		\vspace{5pt}
 	
@@ -337,7 +336,7 @@
 \frame {\frametitle{Fault tolerance in distributed systems}
 	Fault examples:
 	\begin{itemize}
-		\item Simple: network partitions, hardware or software crashes, outdated/malicious nodes (bizantine faults)
+		\item Simple: network partitions, hardware or software crashes, outdated/malicious nodes (byzantine faults)
 		\item Complex: feedback loops that overcompensate in good faith (examples in next slides)
 	\end{itemize}
 
@@ -390,7 +389,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Overview}
 \frame {\frametitle{Consensus protocols overview}
-	Simplest (but unsafe):
+	Simplest (but can hang forever):
 	\begin{itemize}
 		\item Two-phase commit
 	\end{itemize}
@@ -462,7 +461,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	\end{center}
 	
 	\begin{itemize}
-		\item Paxos and Raft use distributed state machines
+		\item Paxos and Raft implement distributed state machines
 		\item State machines are fully deterministic
 		\item Committed operations are executed by all state machines in the cluster in the same order
 	\end{itemize}
@@ -556,7 +555,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 \frame {\frametitle{Introduction}
 	Modern implementation of a consensus protocol
 	\begin{itemize}
-		\item Published at Usenix 2014\cite{raft}
+		\item Published at Usenix ATC 2014\cite{raft}
 		\item Has been built to be easy to understand and implement
 	\end{itemize}
 
