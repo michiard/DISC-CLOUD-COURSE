@@ -206,7 +206,7 @@
 	Common functionality in distributed systems:
 	\begin{itemize}
 		\item aggregate functions: sensors calculating average temperature
-		\item synchronization: agree on a value, elect a leader
+		\item synchronization: agree on a value
 		\item reliable broadcast: a message sent to a group is received by all or none
 		\item atomic commit: ensure that processes reach a common decision whether to commit or abort a transaction
 		\item leader election: ensure there is only one process in charge at a given time
@@ -231,7 +231,7 @@
 	\begin{itemize}
 		\item Linearizability\footnote{The CAP theorem calls Consistency what is actually Linearizability}: a given set of operations is \emph{linearizable} if it appears to the rest of the system to occur instantaneously
 		\begin{itemize}
-			\item Writes are linearizable operations if every read receives the most recent write or an error
+			\item Writes are linearizable operations if every read receives the most recent write
 		\end{itemize}
 		\item Availability: a system is \emph{available} if every request to a non-failing node always receives a response, eventually
 		\begin{itemize}
@@ -327,6 +327,10 @@
 	
 		\item Strong consistency: after a successful write, all reads from the distributed system will return the new value
 	\end{itemize}
+
+	\vspace{10pt}
+
+	Example: update a tag on a Facebook photo (a geo-distributed database)
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -596,7 +600,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 		\item Normal operation, with N nodes (N must be odd):
 		\begin{itemize}
 			\item 1 leader
-			\item N-1 follower
+			\item N-1 followers
 			\item 0 candidates
 		\end{itemize}
 	\end{itemize}
@@ -884,7 +888,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	The ZAB is the consensus protocol used by ZooKeeper
 	\begin{itemize}
 		\item It does not use state machine replication like Paxos or Raft
-		\item Totally orders write requests using a majority of nodes
+		\item Totally orders write requests using a majority of ZooKeeper processes
 		\item Leader sequences the requests and invokes ZAB atomic broadcast
 		\item Strictly ordered state updates are applied by non-leaders
 	\end{itemize}
@@ -970,14 +974,14 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 
 	\vspace{7pt}
 
-	Each node proposes:
+	Each process proposes:
 	\begin{verbatim}
 		create(PATH, my_value, SEQUENTIAL)
 	\end{verbatim}
 
 	\vspace{7pt}
 
-	Each node decides:
+	Each process decides:
 	\begin{verbatim}
 		C = getChildren(PATH)
 		> Select znode z in C with smallest sequence suffix <
@@ -996,7 +1000,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	
 	\vspace{7pt}
 	
-	Each node does:
+	Each process does:
 	\begin{verbatim}
 		CONFIG_PATH = /app/config
 		config = getData(CONFIG_PATH, watch=TRUE)
@@ -1018,13 +1022,13 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	
 	\vspace{7pt}
 	
-	Each node does a \emph{joinGroup}:
+	Each process joins the group:
 	\begin{verbatim}
 		create(GROUP_PATH + proc_name,
 		       [address], EPHEMERAL)
 	\end{verbatim}
 
-	Clients call \emph{getMembers}:
+	Clients list the group members:
 	\begin{verbatim}
 		getChildren(GROUP_PATH + proc_name, watch=TRUE)
 	\end{verbatim}
