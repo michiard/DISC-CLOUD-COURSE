@@ -1,0 +1,66 @@
+\begin{thebibliography}{10}
+
+\bibitem{Centrifuge}
+{\sc Adya, A., Dunagan, J., and Wolman, A.}
+\newblock Centrifuge: Integrated lease management and partitioning for cloud
+  services.
+\newblock In {\em Proceedings of the 7th USENIX Conference on Networked Systems
+  Design and Implementation\/} (Berkeley, CA, USA, 2010), NSDI'10, USENIX
+  Association, pp.~1--1.
+
+\bibitem{chubby}
+{\sc Burrows, M.}
+\newblock The chubby lock service for loosely-coupled distributed systems.
+\newblock In {\em Proceedings of the 7th Symposium on Operating Systems Design
+  and Implementation\/} (Berkeley, CA, USA, 2006), OSDI '06, USENIX
+  Association, pp.~335--350.
+
+\bibitem{PaxosMadeLive}
+{\sc Chandra, T.~D., Griesemer, R., and Redstone, J.}
+\newblock Paxos made live: An engineering perspective.
+\newblock In {\em Proceedings of the Twenty-sixth Annual ACM Symposium on
+  Principles of Distributed Computing\/} (New York, NY, USA, 2007), PODC '07,
+  ACM, pp.~398--407.
+
+\bibitem{Gilbert02}
+{\sc Gilbert, S., and Lynch, N.}
+\newblock Brewer's conjecture and the feasibility of consistent, available,
+  partition-tolerant web services.
+\newblock {\em SIGACT News 33}, 2 (June 2002), 51--59.
+
+\bibitem{Zab}
+{\sc Junqueira, F.~P., Reed, B.~C., and Serafini, M.}
+\newblock Zab: High-performance broadcast for primary-backup systems.
+\newblock In {\em Proceedings of the 2011 IEEE/IFIP 41st International
+  Conference on Dependable Systems\&Networks\/} (Washington, DC, USA, 2011),
+  DSN '11, IEEE Computer Society, pp.~245--256.
+
+\bibitem{LamportPaxos1}
+{\sc Lamport, L.}
+\newblock The part-time parliament.
+\newblock {\em ACM Trans. Comput. Syst. 16}, 2 (May 1998), 133--169.
+
+\bibitem{PaxosMadeSimple}
+{\sc Lamport, L.}
+\newblock Paxos made simple.
+\newblock {\em SIGACT News 32}, 4 (Dec. 2001), 51--58.
+
+\bibitem{LampsonPaxos}
+{\sc Lampson, B.~W.}
+\newblock How to build a highly available system using consensus.
+\newblock
+  \url{http://research.microsoft.com/en-us/um/people/blampson/58-Consensus/WebPage.html}.
+
+\bibitem{raft}
+{\sc Ongaro, D., and Ousterhout, J.}
+\newblock In search of an understandable consensus algorithm.
+\newblock In {\em 2014 USENIX Annual Technical Conference (USENIX ATC 14)\/}
+  (Philadelphia, PA, June 2014), USENIX Association, pp.~305--319.
+
+\bibitem{2PCarticle}
+{\sc Robinson, H.}
+\newblock Consensus protocols: Two-phase commit.
+\newblock
+  \url{http://the-paper-trail.org/blog/consensus-protocols-two-phase-commit/}.
+
+\end{thebibliography}
