@@ -11,12 +11,11 @@
 
     \vspace{20pt}
 
-  \item \textbf{How to recast existing algorithms in MapReduce?}
+  \item \textbf{How to recast existing algorithms in ``Map Reduce''?}
     \begin{itemize}
-   \item It is not always obvious how to express algorithms
+    \item It is not always obvious how to express algorithms
     \item Data structures play an important role
     \item Optimization is hard
-    \item[$\to$] The designer needs to ``bend'' the framework
     \end{itemize}
 
     \vspace{20pt}
@@ -65,17 +64,11 @@
 \frame {\frametitle{Algorithm Design}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
-  \item \textbf{MapReduce algorithms can be complex}
+  \item \textbf{``Map Reduce'' algorithms can be complex}
     \begin{itemize}
-    \item Many algorithms cannot be easily expressed as a single
-      MapReduce job
-    \item Decompose complex algorithms into a sequence of jobs
-      \begin{itemize}
-      \item Requires orchestrating data so that the output of one job
-        becomes the input to the next
-      \end{itemize}
-    \item Iterative algorithms require an {\color{red}external driver}
-      to check for convergence
+    \item Hadoop MapReduce requires algorithm decomposition in several jobs
+    \item Apache Spark is much simpler
+    \item In general, iterative algorithms require a {\color{red} driver}
     \end{itemize}
 
     \vspace{20pt}

@@ -78,10 +78,10 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{Functional Programming and MapReduce}
+\frame {\frametitle{Functional Programming and ``Map Reduce''}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
-  \item \textbf{Equivalence of MapReduce and Functional Programming: }
+  \item \textbf{Equivalence of ``Map Reduce'' and Functional Programming: }
     \begin{itemize}
     \item The map of MapReduce corresponds to the map operation
     \item The reduce of MapReduce corresponds to the fold operation
@@ -108,19 +108,18 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{What can we do with MapReduce?}
+\frame {\frametitle{What can we do with this Programming Model??}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
-  \item \textbf{MapReduce ``implements'' a subset of functional
-      programming}
+  \item \textbf{Introducing the Data Flow abstraction}
     \begin{itemize}
-    \item The programming model appears quite limited and strict
+    \item The ``old'' Hadoop MapReduce programming model appears quite limited and strict
+    \item Apache Spark programming model is much more flexible, and operates on a directed acyclic graph representative of the computations
     \end{itemize}
 
 \vspace{20pt}
 
-  \item \textbf{There are several important problems that can be
-      adapted to MapReduce}
+  \item \textbf{Generally, everything can be computed with the ``Map Reduce'' model}
     \begin{itemize}
     \item We will focus on illustrative cases
     \item We will see in detail ``design patterns''
@@ -139,7 +138,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
   \item \textbf{Key-value pairs are the basic data structure in
-      MapReduce}
+      ``Map Reduce''}
     \begin{itemize}
     \item Keys and values can be: integers, float, strings, raw bytes
     \item They can also be \textbf{arbitrary data structures}
@@ -147,7 +146,7 @@
 
     \vspace{20pt}
 
-  \item \textbf{The design of MapReduce algorithms involves}:
+  \item \textbf{The design of ``Map Reduce'' algorithms involves}:
     \begin{itemize}
     \item Imposing the key-value structure on arbitrary datasets\footnote{There's more about it: here we only look at the input to the map function.}
       \begin{itemize}
@@ -162,7 +161,7 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{A Generic MapReduce Algorithm}
+\frame {\frametitle{A Generic ``Map Reduce'' Algorithm}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \begin{itemize}
   \item \textbf{The programmer defines a mapper and a reducer as
@@ -204,7 +203,7 @@
     \begin{itemize}
     \item The output may consist of $r$ distinct files, where $r$ is
       the number of reducers
-    \item Such output may be the input to a subsequent MapReduce phase\footnote{Think of \textbf{iterative algorithms}.}
+    \item Such output may be the input to a subsequent phase\footnote{Think of \textbf{iterative algorithms}.}
     \end{itemize}
 
     \vspace{20pt}
@@ -219,7 +218,7 @@
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\frame {\frametitle{``Hello World'' in MapReduce}
+\frame {\frametitle{``Hello World'' in ``Map Reduce''}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{algorithm}[H]
@@ -262,7 +261,7 @@
   \end{figure}
 }
 
-\frame {\frametitle{``Hello World'' in MapReduce}
+\frame {\frametitle{``Hello World'' in ``Map Reduce''}
   \begin{itemize}
 
   \item \textbf{Input:}
@@ -333,6 +332,7 @@
     \item In Hadoop, they are optional: the correctness of the
       algorithm cannot depend on computation (or even execution) of
       the combiners
+    \item In Apache Spark, they're mostly automatic
     \end{itemize}
 
     \vspace{20pt}
