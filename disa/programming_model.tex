@@ -83,8 +83,8 @@
   \begin{itemize}
   \item \textbf{Equivalence of ``Map Reduce'' and Functional Programming: }
     \begin{itemize}
-    \item The map of MapReduce corresponds to the map operation
-    \item The reduce of MapReduce corresponds to the fold operation
+    \item The map of Hadoop MapReduce corresponds to the map operation
+    \item The reduce of Hadoop MapReduce corresponds to the fold operation
     \end{itemize}
 
     \vspace{20pt}
@@ -199,7 +199,7 @@
     \vspace{20pt}
 
   \item \textbf{Output keys from reducers are written back to the
-      distributed filesystem}
+      distributed filesystem\footnote{This is true for Hadoop MapReduce. Apache Spark instead keeps in memory intermediate data.}}
     \begin{itemize}
     \item The output may consist of $r$ distinct files, where $r$ is
       the number of reducers
