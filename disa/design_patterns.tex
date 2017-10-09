@@ -529,10 +529,9 @@
   \item \textbf{The mapper:}
     \begin{itemize}
     \item Same two nested loops structure as before
-    \item Co-occurrence information is first stored in an associative
-      array
+    \item Co-occurrence information is first stored in a hash map
     \item Emit key-value pairs with {\color{red}words} as keys and the
-      corresponding arrays as values
+      corresponding hash maps as values
     \end{itemize}
 
     \vspace{20pt}
@@ -542,7 +541,7 @@
     \item Receives all hash maps related to the same word
     \item Performs an element-wise sum of all hash maps with
       the same key
-    \item Emits key-value output in the form of word, hash map
+    \item Emits key-value output in the form of (word, hash map)
       \begin{itemize}
       \item Basically, reducers emit \textbf{rows} of the co-occurrence matrix
       \end{itemize}
