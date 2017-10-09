@@ -135,9 +135,10 @@
 
     \vspace{20pt}
 
-  \item \textbf{Use an associative array to cumulate intermediate
+  \item \textbf{Use a hash map to cumulate intermediate
       results}
     \begin{itemize}
+    \item The data structure is also know as ``associative array'' or ``dictionary''
     \item The array is used to tally up term counts within a single ``document''
     \item The \texttt{Emit} method is called only after all \texttt{InputRecords} have been processed
     \end{itemize}
@@ -162,7 +163,7 @@
   \begin{algorithmic}[1]
     \Function{Mapper}{}
     \Procedure{Map}{offset $a$, line $l$}
-    \State $H \gets$  new AssociativeArray
+    \State $H \gets$  new HashMap
     \ForAll{term $t \in$ line $l$}
       \State $H\{t\} \gets H\{t\} + 1$
     \EndFor
@@ -208,7 +209,7 @@
   \begin{algorithmic}[1]
     \Function{Mapper}{}
       \Procedure{Initialize}{}
-        \State $H \gets$  new AssociativeArray
+        \State $H \gets$  new HashMap
       \EndProcedure
       \Procedure{Map}{offset $a$, line $l$}
         \ForAll{term $t \in$ line $l$}
@@ -318,8 +319,8 @@
   \begin{algorithmic}[1]
     \Function{Mapper}{}
       \Procedure{Initialize}{}
-        \State $S \gets$  new AssociativeArray
-        \State $C \gets$  new AssociativeArray
+        \State $S \gets$  new HashMap
+        \State $C \gets$  new HashMap
       \EndProcedure
       \Procedure{Map}{term $t$, integer $r$}
         \State $S\{t\} \gets S\{t\} + r$
@@ -538,11 +539,10 @@
 
   \item \textbf{The reducer:}
     \begin{itemize}
-    \item Receives all associative arrays related to the same word
-    \item Performs an element-wise sum of all associative arrays with
+    \item Receives all hash maps related to the same word
+    \item Performs an element-wise sum of all hash maps with
       the same key
-    \item Emits key-value output in the form of word, associative
-      array
+    \item Emits key-value output in the form of word, hash map
       \begin{itemize}
       \item Basically, reducers emit \textbf{rows} of the co-occurrence matrix
       \end{itemize}
@@ -562,7 +562,7 @@
     \Function{Mapper}{}
       \Procedure{Map}{offset $a$, line $l$}
         \ForAll{term $w \in$ line $l$}
-        \State $H \gets$ new AssociativeArray
+        \State $H \gets$ new HashMap
           \ForAll{term $u \in \textsc{Neighbors}(w)$}
             \State $H\{u\} \gets H\{u\}+1$
           \EndFor
@@ -573,7 +573,7 @@
 
     \Function{Reducer}{}
       \Procedure{Reduce}{term $w$, Stripes $[H_1,H_2,H_3 \cdots ]$}
-        \State $H_f \gets$ new AssociativeArray
+        \State $H_f \gets$ new HashMap
         \ForAll{Stripe $H \in \textrm{Stripes }[H_1,H_2,H_3 \cdots ]$}
           \State $\textsc{Sum}(H_f,H)$
         \EndFor
@@ -666,7 +666,7 @@
     \begin{itemize}
     \item In the reducer, the counts of all words that co-occur with
       the conditioning variable ($w_i$) are available in the
-      associative array
+      hash map
     \item Hence, the sum of all those counts gives the marginal
     \item Then we divide the joint counts by the marginal and
       we're done
@@ -684,7 +684,7 @@
       \begin{itemize}
       \item We can buffer in memory all the words that co-occur with
         $w_i$ and their counts
-      \item This is basically building the associative array in the
+      \item This is basically building the hash map in the
         stripes method
       \end{itemize}
     \end{itemize}
