@@ -27,7 +27,7 @@
 \begin{lstlisting}
 	val lines = sc.textFile("input")
 	val words = lines.flatMap(_.split(" ")) 
-	val ones = words.map(_ -> 1)
+	val ones = words.map(w => (w, 1))
 	val counts = ones.reduceByKey(_ + _) 
 	val result = counts.collectAsMap()
 \end{lstlisting}
@@ -104,7 +104,7 @@
 \begin{lstlisting}
 	val lines = sc.textFile("input")
 	val words = lines.flatMap(_.split(" ")) 
-	val ones = words.map(_ -> 1)
+	val ones = words.map(w => (w, 1))
 	val counts = ones.reduceByKey(_ + _) 
 	val result = counts.collectAsMap()
 \end{lstlisting}
