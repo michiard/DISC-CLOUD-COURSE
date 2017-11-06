@@ -12,7 +12,7 @@
 \begin{itemize}
 	\item {\bf Hide the details of resource management}
 	\begin{itemize}
-		\item Let users instead focus on application developlemt
+		\item Let users instead focus on application development
 	\end{itemize}
 
 \vspace{20pt}
@@ -44,7 +44,7 @@
 	
 \vspace{20pt}
 
-	\item {\bf Jobs consists in one or more {\it tasks}}
+	\item {\bf Jobs consists of one or more {\it tasks}}
 
 \vspace{20pt}
 
@@ -113,7 +113,7 @@
 	\item {\bf Job Definition}
 	\begin{itemize}
 		\item Name, owner and number of tasks
-		\item {\it Constraints} to force tasks run on machines with particular {\it attributes}
+		\item {\it Constraints} to force tasks to run on machines with particular {\it attributes}
 		\item Constraints can be {\bf hard} or {\bf soft} ({\it i.e.}, preferences)
 		\item Each task maps to a set of UNIX processes running in a container on a Borg machine in a Borg Cell
 	\end{itemize}
@@ -547,7 +547,7 @@
 
 	\item {\bf The link shard mechanism}
 	\begin{itemize}
-		\item Each borgmaster replica communicates with a subset of the cell Borglets
+		\item Each Borgmaster replica communicates with a subset of the cell Borglets
 		\item Partitioning is computed at each leader election
 		\item Borglets report full state, but the link shard mechanism aggregate state information
 		\item[$\to$] Differential state update, to reduce the load at the master
@@ -558,7 +558,7 @@
 \begin{frame}
 \frametitle{Scalability}
 \begin{itemize}
-	\item {\bf A typical Borgmaster resource requirements}
+	\item {\bf A typical Borgmaster's resource requirements}
 	\begin{itemize}
 		\item Manages 1000s of machines in a cell
 		\item Arrival rates of 10,000 tasks per minute
@@ -719,7 +719,7 @@
 \begin{frame}
 \frametitle{System Utilization: Fine-grained Resource Requests}
 \begin{itemize}
-	\item {\bf Would fixed size containers (or slot) be good?}
+	\item {\bf Would fixed size containers (or slots) be good?}
 	\begin{itemize}
 		\item No! It would require more machines in a cell!
 	\end{itemize}
@@ -821,7 +821,7 @@
 	\item {\bf Addressing services is critical}
 	\begin{itemize}
 		\item One IP address implies managing ports as a resource, which complicates tasks
-		\item Kubernetes uses Linux name-spaces, such that each pod has its own IP address
+		\item Kubernetes uses Linux namespaces, such that each pod has its own IP address
 	\end{itemize}
 	\item {\bf Power or casual users?}
 	\begin{itemize}
