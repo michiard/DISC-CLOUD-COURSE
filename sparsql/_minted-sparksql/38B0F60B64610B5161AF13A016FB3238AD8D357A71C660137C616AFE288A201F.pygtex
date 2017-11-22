@@ -1,0 +1,5 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{SELECT} \PYG{n}{name}\PYG{p}{,} \PYG{k}{avg}\PYG{p}{(}\PYG{n}{age}\PYG{p}{)}
+\PYG{k}{FROM} \PYG{n}{people}
+\PYG{k}{GROUP} \PYG{k}{BY} \PYG{n}{name}
+\end{Verbatim}

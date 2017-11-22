@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{rite} \PYGZbs{}
+\PYG{n}{mat}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{parquet}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)} \PYGZbs{}
+\PYG{n}{e}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{append}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)} \PYGZbs{}
+\PYG{n}{titionBy}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{year}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)} \PYGZbs{}
+\PYG{n}{eAsTable}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{myData}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)}
+\end{Verbatim}

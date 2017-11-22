@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{data} \PYG{o}{=} \PYG{n}{sc}\PYG{o}{.}\PYG{n}{textFile}\PYG{p}{(}\PYG{o}{...}\PYG{p}{)}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}} \PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)}
+\PYG{n}{data}\PYG{o}{.}\PYG{n}{map}\PYG{p}{(}\PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{p}{(}\PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]),} \PYG{l+m+mi}{1}\PYG{p}{]))} \PYGZbs{}
+  \PYG{o}{.}\PYG{n}{reduceByKey}\PYG{p}{(}\PYG{k}{lambda} \PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{:} \PYG{p}{[}\PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{+} \PYG{n}{y}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{+} \PYG{n}{y}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]])} \PYGZbs{}
+  \PYG{o}{.}\PYG{n}{map}\PYG{p}{(}\PYG{k}{lambda} \PYG{n}{x}\PYG{p}{:} \PYG{p}{[}\PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{/} \PYG{n}{x}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{l+m+mi}{1}\PYG{p}{]])} \PYGZbs{}
+  \PYG{o}{.}\PYG{n}{collect}\PYG{p}{()}
+\end{Verbatim}
