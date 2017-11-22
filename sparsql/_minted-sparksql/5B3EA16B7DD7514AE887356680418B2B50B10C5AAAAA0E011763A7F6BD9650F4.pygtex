@@ -1,6 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n}{df} \PYG{o}{=} \PYG{n}{sqlContext}\PYG{o}{.}\PYG{n}{read} \PYGZbs{}
-  \PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{json}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)} \PYGZbs{}
-  \PYG{o}{.}\PYG{n}{option}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{samplingRatio}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{,} \PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{l+m+mf}{0.1}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)} \PYGZbs{}
-  \PYG{o}{.}\PYG{n}{load}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{data}\PYG{o}{.}\PYG{n}{json}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)}
-\end{Verbatim}

@@ -1,7 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n}{df}\PYG{o}{.}\PYG{n}{write} \PYGZbs{}
-  \PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{parquet}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)} \PYGZbs{}
-  \PYG{o}{.}\PYG{n}{mode}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{append}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)} \PYGZbs{}
-  \PYG{o}{.}\PYG{n}{partitionBy}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{year}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)} \PYGZbs{}
-  \PYG{o}{.}\PYG{n}{saveAsTable}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{myData}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)}
-\end{Verbatim}

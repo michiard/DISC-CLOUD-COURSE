@@ -1,6 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n}{sqlContext}\PYG{o}{.}\PYG{n}{table}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{people}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)} \PYGZbs{}
-  \PYG{o}{.}\PYG{n}{groupBy}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{name}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)} \PYGZbs{}
-  \PYG{o}{.}\PYG{n}{agg}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{name}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{,} \PYG{n}{avg}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{n}{age}\PYG{l+s}{\PYGZsq{}\PYGZsq{}}\PYG{p}{))} \PYGZbs{}
-  \PYG{o}{.}\PYG{n}{collect}\PYG{p}{()}
-\end{Verbatim}
