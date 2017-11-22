@@ -26,7 +26,7 @@
 
 	\item {\bf General ``workflow''}
 	\begin{itemize}
-		\item Spark application creates \texttt{SparkContext}, which initializes the \texttt{DriverProgram}
+		\item The Spark application creates a \texttt{SparkContext}, which initializes the \texttt{DriverProgram}
 		\item Registers to the \texttt{ClusterManager}
 		\item Ask resources to allocate Executors
 		\item Schedule Task execution
@@ -55,14 +55,14 @@
 	\item {\bf Executors run tasks}
 	\begin{itemize}
 		\item Run in child JVM (= 1 UNIX process)
-		\item Execute one or more task using threads in a \texttt{ThreadPool}
+		\item Execute one or more tasks using threads in a \texttt{ThreadPool}
 	\end{itemize}
 \end{itemize}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-\frametitle{Comparison to Hadoop MapReduce}
+\frametitle{Comparison with Hadoop MapReduce}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{columns}[t, onlytextwidth]
 	\column[T]{.5\textwidth}

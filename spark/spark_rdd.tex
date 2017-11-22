@@ -184,7 +184,7 @@
 	\item {\bf Narrow dependencies}
 	\begin{itemize}
 		\item Each partition of the parent RDD is used by at most one partition of the child RDD
-		\item Task can be executed locally and we don't have to shuffle. (Eg: \texttt{map}, \texttt{flatMap}, \texttt{filter}, \texttt{sample})
+		\item Task can be executed locally and we don't have to shuffle. (E.g. \texttt{map}, \texttt{flatMap}, \texttt{filter}, \texttt{sample})
 	\end{itemize}
 
 	\vspace{20pt}
@@ -192,7 +192,7 @@
 	\item {\bf Wide Dependencies}
 	\begin{itemize}
 		\item Multiple child partitions may depend on one partition of the parent RDD 
-		\item This means we have to shuffle data \textbf{unless the parents are hash-partitioned} (Eg: \texttt{sortByKey}, \texttt{reduceByKey}, \texttt{groupByKey}, \texttt{cogroupByKey}, \texttt{join}, \texttt{cartesian})
+		\item This means we have to shuffle data \textbf{unless the parents are hash-partitioned} (E.g. \texttt{sortByKey}, \texttt{reduceByKey}, \texttt{groupByKey}, \texttt{cogroupByKey}, \texttt{join}, \texttt{cartesian})
 	\end{itemize}
 \end{itemize}
 }
@@ -205,7 +205,7 @@
 	\begin{itemize}
 		\item Examples:
 		\begin{itemize}
-			\item \textbf{Piplining} narrow dependencies within a Stage
+			\item \textbf{Pipelining} narrow dependencies within a Stage
 			\item \textbf{Join plan selection} based on partitioning
 			\item \textbf{Cache reuse}
 		\end{itemize}
@@ -225,9 +225,9 @@
 \begin{itemize}
 	\item {\bf Transformations}
 	\begin{itemize}
-		\item Set of operations on a RDD that define how they should be transformed
+		\item Set of operations on an RDD that define how they should be transformed
 		\item As in relational algebra, the application of a transformation to an RDD yields a new RDD (because RDDs are \emph{immutable})
-		\item Transformations are lazily evaluated, which allow for optimizations to take place before execution
+		\item Transformations are lazily evaluated, which allows optimizations to take place before execution
 	\end{itemize}
 
 	\vspace{10pt}
@@ -235,7 +235,7 @@
 	\item {\bf Examples} (not exhaustive)
 	\begin{itemize}
 		\item \texttt{map(func)}, \texttt{flatMap(func)}, \texttt{filter(func)}
-		\item \texttt{grouByKey()}
+		\item \texttt{groupByKey()}
 		\item \texttt{reduceByKey(func)}, \texttt{mapValues(func)}, \texttt{distinct()}, \texttt{sortByKey(func)}
 		\item \texttt{join(other)}, \texttt{union(other)}
 		\item \texttt{sample()}
