@@ -217,7 +217,7 @@
 \frame {\frametitle{The consensus problem - Summary}
 	\begin{itemize}
 		\item The traffic analogy
-		\item The weeding: an example of a consensus protocol
+		\item The wedding: an example of a consensus protocol
 		\item Failure modes
 		\item The two generals: a first hint that the consensus problem is hard
 	\end{itemize}
@@ -309,7 +309,7 @@
 
 	CP-oriented systems:
 	\begin{itemize}
-		\item BigTable, Hbase, MongoDB, Redis, MemCacheDB, Scalaris, ZooKeeper
+		\item BigTable, Hbase, MongoDB, Redis, MemCacheDB, Scalaris, ZooKeeper$^2$
 	\end{itemize}
 	
 	\vspace{5pt}
@@ -606,7 +606,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	
 		\vspace{10pt}
 		
-		\item Normal operation, with N nodes (N must be odd):
+		\item Normal operation, with N nodes:
 		\begin{itemize}
 			\item 1 leader
 			\item N-1 followers
@@ -742,7 +742,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	This case is called \emph{split majority}:
 	\begin{itemize}
 		\item An even number of voters
-		\item Two equal subsets equal in size vote for different leaders
+		\item Two subsets equal in size vote for different leaders
 		\item The two candidates count the votes and see that there is no majority
 	\end{itemize}
 
@@ -781,6 +781,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	Raft interactive demos:
 	\begin{enumerate}
 		\item Raftscope: \url{http://bigfoot-m2.eurecom.fr/raftscope/}
+		\item Runway: \url{https://runway.systems/?model=github.com/ongardie/runway-model-raft}
 		\item Secret lives of data: \url{http://thesecretlivesofdata.com/raft/}
 	\end{enumerate}
 
@@ -962,7 +963,7 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 	A client can set a \emph{watch} on a znode. ZooKeeper will call back the client when:
 	\begin{itemize}
 		\item The data in the znode changes
-		\item A children node is created or destroyed
+		\item A child node is created or destroyed
 	\end{itemize}
 
 	\vspace{15pt}
@@ -1060,26 +1061,26 @@ Two phase commit cannot make progress if there are simple failures.\cite{2PCarti
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Laboratory session}
-\frame {\frametitle{Laboratory session - leader election}
-	Context:
-	\begin{itemize}
-		\item Sensors are streaming data to your cluster
-		\item Need a central node to do aggregations, the system must be highly available
-		\item Implement the leader election algorithm on top of ZooKeeper
-	\end{itemize}
-	
-	\vspace{4pt}
-	
-	Objective:
-	\begin{enumerate}
-		\item Start three processes
-		\item One of them will become the active leader
-		\item Stop/crash the leader
-		\item One of the surviving processes automatically takes the lead
-		\item The crashed node restarts without disrupting the current leadership (bonus question)
-	\end{enumerate}
-}
+%\subsection{Laboratory session}
+%\frame {\frametitle{Laboratory session - leader election}
+%	Context:
+%	\begin{itemize}
+%		\item Sensors are streaming data to your cluster
+%		\item Need a central node to do aggregations, the system must be highly available
+%		\item Implement the leader election algorithm on top of ZooKeeper
+%	\end{itemize}
+%	
+%	\vspace{4pt}
+%	
+%	Objective:
+%	\begin{enumerate}
+%		\item Start three processes
+%		\item One of them will become the active leader
+%		\item Stop/crash the leader
+%		\item One of the surviving processes automatically takes the lead
+%		\item The crashed node restarts without disrupting the current leadership (bonus question)
+%	\end{enumerate}
+%}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
