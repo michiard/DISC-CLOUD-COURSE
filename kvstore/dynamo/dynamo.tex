@@ -307,7 +307,7 @@
 \begin{itemize}
 	\item {\bf Load balancing} [Karger97]
 	\begin{itemize}
-		\item Each node is responsible for at most $(1+ \epsilon)K/N$ keys
+		\item Each node is responsible for at most $(1+ \epsilon)K/n$ keys
 		\item When a new node joins, only $O(K/n)$ keys must be moved (optimal)
 	\end{itemize}
 
@@ -364,7 +364,7 @@
 	\begin{itemize}
 		\item ``Add to cart'' should not be rejected but also not forgotten
 		\item If it is performed when the latest version is not available, then it is performed on a stale version of the data
-		\item[$\to$] We may have different version of a key/value pair
+		\item[$\to$] We may have different versions of a key/value pair
 	\end{itemize}
 \end{itemize}
 }
@@ -377,15 +377,14 @@
 	\begin{itemize}
 		\item Once a partition heals, versions are merged
 		\item New versions subsume previous ones
-		\item Applications {\color{red}must be designed} with data versionin in mind
+		\item Applications {\color{red}must be designed} with data versioning in mind
 	\end{itemize}
 
 	\vspace{40pt}
 
 	\item {\bf Key technique for versioning}
 	\begin{itemize}
-		\item Vector clocks
-		\item Capture causality between different versions of an object
+		\item Vector clocks, to capture causality between different versions of an object
 	\end{itemize}
 \end{itemize}
 }
